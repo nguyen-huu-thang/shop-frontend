@@ -9,4 +9,6 @@
 :root {
     --color-navigation :  rgb(245, 245, 220);
     --color-icon : rgb(8,8,8);
+    --color-background : rgb(25,25,25);
+    --color-text : rgb(45, 56, 45);
 }
