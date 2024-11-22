@@ -1,14 +1,4 @@
-* {
-    border: 0;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    vertical-align: baseline;
+.custom-navbar {
+    background-color: red;
 }
-
-:root {
-    --color-navigation :  rgb(245, 245, 220);
-    --color-icon : rgb(8,8,8);
-    --color-background : rgb(25,25,25);
-    --color-text : rgb(45, 56, 45);
-}
+  
