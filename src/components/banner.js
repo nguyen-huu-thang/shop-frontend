@@ -27,7 +27,7 @@ const Banner = () => {
     };
     return (
         <div>
-            <div className="relative w-full h-128 overflow-hidden group">
+            <div className="relative w-full h-128 overflow-hidden group mt-3">
                 <div
                 className="flex transition-transform duration-500 ease-in-out"
                 style={{
