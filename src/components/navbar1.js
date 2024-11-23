@@ -3,24 +3,17 @@ import Logo from "../assets/logo1.png";
 import { MdSearch } from "react-icons/md";
 import { CiShoppingCart } from "react-icons/ci";
 import { AiOutlineUser } from "react-icons/ai";
-import {
-  Navbar,
-  Nav,
-  Container,
-  Dropdown,
-  InputGroup,
-  FormControl,
-  Button,
-  Offcanvas,
-} from "react-bootstrap";
+import {Navbar,Nav,Container,Dropdown,InputGroup,FormControl,Button,Offcanvas,} from "react-bootstrap";
+import "../App.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+
 
 function CustomNavbar() {
   const [sidebarVisible, setSidebarVisible] = useState(false);
-
   return (
     <Navbar bg="light" expand="lg" fixed="top" className="shadow-sm">
       <Container fluid>
-        {/* Logo */}
         <Navbar.Brand href="/">
           <img src={Logo} alt="Logo" style={{ width: "80px" }} />
         </Navbar.Brand>
@@ -31,26 +24,29 @@ function CustomNavbar() {
         <Navbar.Collapse id="navbarScroll">
           {/* Links */}
           <Nav className="me-auto">
-            <Dropdown>
-              <Dropdown.Toggle variant="link" id="dropdown-basic">
-                Danh mục
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {[
-                  "Thời trang",
-                  "Giày dép - Túi sách",
-                  "Điện tử - Công nghệ",
-                  "Sức khỏe - Làm đẹp",
-                  "Đồ gia dụng",
-                  "Đồ trang trí",
-                  "Mẹ và bé",
-                  "Sách - Văn phòng phẩm",
-                ].map((item, idx) => (
-                  <Dropdown.Item key={idx} href="/">
-                    {item}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
+            <Dropdown className="hover-dropdown">
+                {/* Tiêu đề danh mục */}
+                <Dropdown.Toggle id="dropdown-basic" variant="link" className="dropdown-title">
+                    Danh mục
+                </Dropdown.Toggle>
+
+                {/* Menu dropdown */}
+                <Dropdown.Menu>
+                    {[
+                    "Thời trang",
+                    "Giày dép - Túi sách",
+                    "Điện tử - Công nghệ",
+                    "Sức khỏe - Làm đẹp",
+                    "Đồ gia dụng",
+                    "Đồ trang trí",
+                    "Mẹ và bé",
+                    "Sách - Văn phòng phẩm",
+                    ].map((item, idx) => (
+                    <Dropdown.Item key={idx} href="/">
+                        {item}
+                    </Dropdown.Item>
+                    ))}
+                </Dropdown.Menu>
             </Dropdown>
             <Nav.Link href="/">Giá ưu đãi</Nav.Link>
             <Nav.Link href="/">Sản phẩm bán chạy</Nav.Link>
