@@ -7,7 +7,7 @@ import { AiOutlineUser } from "react-icons/ai";
 function Navbar() {
     const [sidebarVisible, setSidebarVisible] = useState(false);
     return (
-        <div className="w-full h-24 sticky top-0 bg-gray-200 text-black z-50">
+        <div className="w-full h-24 sticky top-0 bg-gray-200 text-black z-50 shadow-lg">
             <div className="flex justify-between items-center px-12 h-full">
                 {/* Logo */}
                 <div className="w-24 cursor-pointer">
