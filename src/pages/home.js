@@ -5,11 +5,6 @@ import { products } from '../product';
 import ProductCart from '../components/productcart';
 import ConnectWidget from '../components/connectwidget';
 function Home() {
-  // const categories = [
-  //   { title: 'SẢN PHẨM BÁN CHẠY', filter: 'SẢN PHẨM BÁN CHẠY' },
-  //   { title: 'GIÁ ƯU ĐÃI', filter: 'GIÁ ƯU ĐÃI' },
-  //   { title: 'GỢI Ý HÔM NAY', filter: 'GỢI Ý HÔM NAY' },
-  // ];
   return (
     <div>
       <Navbar />
