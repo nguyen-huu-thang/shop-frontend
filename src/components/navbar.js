@@ -39,9 +39,9 @@ function Navbar() {
 
                 <div className="flex items-center space-x-6">
                     <div className="relative">
-                        <input
-                            type="text"
-                            placeholder="Search"
+                        <input 
+                            type="text" 
+                            placeholder="Search" 
                             className="w-80 h-10 px-4 pr-10 rounded-full border border-gray-400 focus:border-gray-300 focus:outline-none"
                         />
                         <MdSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
@@ -51,7 +51,7 @@ function Navbar() {
                     </div>
                     <div className="relative">
                         <div className="flex text-xl cursor-pointer" onClick={() => setSidebarVisible(true)}>
-                            <CiShoppingCart size={25} color="black" />
+                            <CiShoppingCart size={25} color="black"/>
                             <span className="absolute h-4 w-4 left-4 top-[-20%] bg-gray-600 text-white text-sm rounded-full flex justify-center items-center ">0</span>
                         </div>
                         {sidebarVisible && (
