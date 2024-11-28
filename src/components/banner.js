@@ -26,8 +26,8 @@ const Banner = () => {
         }, 500); // Transition duration
     };
     return (
-        <div>
-            <div className="relative w-full h-128 overflow-hidden group mt-3">
+        <div className='container mx-auto flex justify-center'>
+            <div className="relative w-108 h-96 overflow-hidden group mt-3">
                 <div
                 className="flex transition-transform duration-500 ease-in-out"
                 style={{
