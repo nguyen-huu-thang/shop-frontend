@@ -4,6 +4,7 @@ import Home from './pages/home';
 import Login from './pages/login';
 import Register from './pages/register'
 import Details from './pages/details';
+import StoreManager from './pages/storemanager';
 function App() {
   return (
     <BrowserRouter>
@@ -12,6 +13,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/:slug" element={<Details />} />
+        <Route path="/storemanager/*" element={<StoreManager />} />
       </Routes>
     </BrowserRouter>
   );

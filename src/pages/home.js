@@ -22,7 +22,7 @@ function Home() {
       <h1 className="text-2xl my-5 text-center font-bold relative before:content-['']
       before:absolute before:top-1/2 before:left-0 before:w-1/4 before:h-0.5 before:bg-gray-300 
       before:translate-y-[-50%] after:content-[''] after:absolute after:top-1/2 
-      after:right-0 after:w-1/4 after:h-0.5 after:bg-gray-300 after:translate-y-[-50%]">Giá ƯU ĐÃI</h1>
+      after:right-0 after:w-1/4 after:h-0.5 after:bg-gray-300 after:translate-y-[-50%]">GIÁ ƯU ĐÃI</h1>
       <div className='grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 m-20'>
         {products.map((product, key) => (
           <ProductCart key={key} data={product} />
