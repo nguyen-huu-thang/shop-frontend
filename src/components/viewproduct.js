@@ -1,11 +1,8 @@
 import React from "react";
+import { products } from "../product";
 
 function ViewProduct() {
-  const [productList, setProductList] = React.useState([
-    // Mock data for testing
-    { name: "Product 1", price: "100", category: "Electronics", description: "Description for Product 1", image: "image1.jpg" },
-    { name: "Product 2", price: "200", category: "Clothing", description: "Description for Product 2", image: "image2.jpg" },
-  ]);
+  const [productList, setProductList] = React.useState(products);
 
   const handleDelete = (index) => {
     const newProductList = [...productList];
@@ -14,7 +11,7 @@ function ViewProduct() {
   };
 
   const handleEdit = (index) => {
-    // Logic to edit product (e.g., show a modal with pre-filled data)
+    // Logic để chỉnh sửa sản phẩm (ví dụ: hiển thị modal với dữ liệu đã điền sẵn)
     alert(`Editing product ${productList[index].name}`);
   };
 
@@ -33,7 +30,7 @@ function ViewProduct() {
         </thead>
         <tbody>
           {productList.map((product, index) => (
-            <tr key={index}>
+            <tr key={product.id}>
               <td className="border p-2">{product.name}</td>
               <td className="border p-2">{product.price}</td>
               <td className="border p-2">{product.category}</td>

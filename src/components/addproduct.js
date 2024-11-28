@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import postProduct from "../api/postProduct";
 function AddProduct() {
   const [formData, setFormData] = useState({
     name: "",
@@ -7,50 +7,94 @@ function AddProduct() {
     category: "",
     description: "",
     image: null,
+    interfaceImage: null,
+  });
+
+  const [errors, setErrors] = useState({
+    price: "",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    if (name === "price") {
+      const regex = /^\d+(\.\d{1,2})?$/;
+      
+      if (value === "") {
+        setErrors({
+          ...errors,
+          price: "",
+        });
+      } else if (regex.test(value)) {
+        setErrors({
+          ...errors,
+          price: "",
+        });
+        setFormData({
+          ...formData,
+          [name]: value,
+        });
+      } else {
+        setErrors({
+          ...errors,
+          price: "Giá không hợp lệ. Vui lòng nhập số hợp lệ với tối đa 2 chữ số thập phân.",
+        });
+      }
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
-
+  
   const handleImageChange = (e) => {
-    setFormData({
-      ...formData,
-      image: e.target.files[0],
-    });
-  };
+    const { name, files } = e.target;
+    
+    if (name === "interfaceImage") {
+      setFormData({
+        ...formData,
+        interfaceImage: files[0],
+      });
+    } else if (name === "productImages") {
+      setFormData({
+        ...formData,
+        productImages: Array.from(files),
+      });
+    }
+  };  
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.price || !formData.category || !formData.description || !formData.image) {
-      alert("Please fill all fields before submitting.");
+    let formErrors = {};
+
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
       return;
     }
-
-    // Send data to backend or local mock for testing
-    console.log("Product data submitted:", formData);
-    alert("Product added successfully!");
-
-    // Reset form
-    setFormData({
-      name: "",
-      price: "",
-      category: "",
-      description: "",
-      image: null,
-    });
+    //Tạo form sumbit và gửi lên server
+    const response = await postProduct(formData);
+    if (response.success) {
+      alert("Product added successfully!");
+      setFormData({
+        name: "",
+        price: "",
+        category: "",
+        description: "",
+        image: null,
+        interfaceImage: null,
+      });
+      setErrors({});
+    } else {
+      alert("There was an error: " + response.message);
+    }
   };
 
   return (
     <div>
-      <h2 className="text-2xl font-semibold mb-6">Add New Product</h2>
+      <h2 className="text-2xl font-semibold mb-6">Thêm sản phẩm</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium">Product Name</label>
+          <label className="block text-sm font-medium">Tên</label>
           <input
             type="text"
             name="name"
@@ -62,19 +106,21 @@ function AddProduct() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium">Price</label>
+          <label className="block text-sm font-medium">Giá</label>
           <input
-            type="number"
+            type="text"
             name="price"
             value={formData.price}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded"
             required
           />
+          {/* Hiển thị thông báo lỗi dưới ô nhập giá nếu có */}
+          {errors.price && <p className="text-red-500 text-sm">{errors.price}</p>}
         </div>
 
         <div>
-          <label className="block text-sm font-medium">Category</label>
+          <label className="block text-sm font-medium">Loại sản phẩm</label>
           <select
             name="category"
             value={formData.category}
@@ -82,7 +128,7 @@ function AddProduct() {
             className="w-full p-2 border border-gray-300 rounded"
             required
           >
-            <option value="">Select Category</option>
+            <option value="" disabled selected>Select Category</option>
             <option value="fashion">Thời trang</option>
             <option value="shoes-bags">Giày dép - Túi sách</option>
             <option value="electronics">Điện tử - Công nghệ</option>
@@ -95,7 +141,7 @@ function AddProduct() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium">Description</label>
+          <label className="block text-sm font-medium">Mô tả</label>
           <textarea
             name="description"
             value={formData.description}
@@ -106,8 +152,21 @@ function AddProduct() {
           ></textarea>
         </div>
 
+        {/* Phần chọn ảnh giao diện */}
         <div>
-          <label className="block text-sm font-medium">Product Image</label>
+          <label className="block text-sm font-medium">Ảnh giao diện</label>
+          <input
+            type="file"
+            name="interfaceImage"
+            onChange={handleImageChange}
+            className="w-full p-2 border border-gray-300 rounded"
+            required
+          />
+        </div>
+
+        {/* Phần chọn ảnh sản phẩm */}
+        <div>
+          <label className="block text-sm font-medium">Ảnh giới thiệu</label>
           <input
             type="file"
             name="image"
@@ -118,7 +177,7 @@ function AddProduct() {
         </div>
 
         <button type="submit" className="w-full p-2 bg-blue-600 text-white rounded">
-          Add Product
+          Thêm sản phẩm
         </button>
       </form>
     </div>
