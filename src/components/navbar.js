@@ -65,10 +65,11 @@ function Navbar() {
                             </>
                         )}
                     </div>
-
-                    <div className="text-xl cursor-pointer">
-                        <AiOutlineUser />
-                    </div>
+                    <Link to="/login">
+                        <div className="text-xl cursor-pointer">
+                            <AiOutlineUser />
+                        </div>
+                    </Link>
                 </div>
             </div>
         </div>
