@@ -8,11 +8,25 @@ import DeleteCategory from "./DeleteCategory";
 const Category = () => {
   return (
     <div>
-      <AddCategory />
-      <GetCategories />
-      <GetCategoryById />
-      <UpdateCategory />
-      <DeleteCategory />
+      <section>
+        <AddCategory />
+      </section>
+
+      <section>
+        <GetCategories />
+      </section>
+
+      <section>
+        <GetCategoryById />
+      </section>
+
+      <section>
+        <UpdateCategory />
+      </section>
+
+      <section>
+        <DeleteCategory />
+      </section>
     </div>
   );
 };

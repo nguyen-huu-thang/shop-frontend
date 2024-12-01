@@ -21,7 +21,7 @@ const categoryApi = {
 
     createCategory: async (data) => {
         try {
-            const response = await api.post("/", data);
+            const response = await api.post("/categories", data);
             return response.data;
         } catch (error) {
             handleError(error);

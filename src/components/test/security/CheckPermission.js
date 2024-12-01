@@ -16,6 +16,7 @@ const CheckPermission = () => {
   return (
     <div>
       <h2>Check Permissions</h2>
+      <p>đây là tính năng chỉ để test</p>
       <button onClick={handleCheck}>Check</button>
       {message && <p>{message}</p>}
     </div>

@@ -1,28 +1,25 @@
 import React, { useEffect, useState } from "react";
 import fileApi from "../../../api/fileApi";
 
-const FileList = ({ page, limit }) => {
+const AllFiles = () => {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchFiles = async () => {
+    const fetchAllFiles = async () => {
       try {
-        const response = await fileApi.getFilesPaginated(page, limit);
-        if (response.length === 0) {
-          setError("No files available");
-        }
+        const response = await fileApi.getAllFiles();
         setFiles(response);
       } catch (err) {
-        setError("Failed to fetch files");
+        setError("Failed to fetch all files");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchFiles();
-  }, [page, limit]);
+    fetchAllFiles();
+  }, []);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -34,14 +31,21 @@ const FileList = ({ page, limit }) => {
 
   return (
     <div>
-      <h2>Paginated File List</h2>
+      <h2>All Files</h2>
       {files.length > 0 ? (
         <table border="1" style={{ width: "100%", textAlign: "left" }}>
           <thead>
             <tr>
               <th>ID</th>
+              <th>User ID</th>
               <th>File Name</th>
+              <th>File Path</th>
+              <th>File Size</th>
+              <th>Sort</th>
               <th>Uploaded At</th>
+              <th>Active</th>
+              <th>Product ID</th>
+              <th>Review ID</th>
               <th>Description</th>
             </tr>
           </thead>
@@ -49,18 +53,25 @@ const FileList = ({ page, limit }) => {
             {files.map((file) => (
               <tr key={file.id}>
                 <td>{file.id}</td>
+                <td>{file.userId}</td>
                 <td>{file.fileName}</td>
+                <td>{file.filePath}</td>
+                <td>{file.fileSize}</td>
+                <td>{file.sort || "-"}</td>
                 <td>{file.uploadedAt}</td>
+                <td>{file.isActive ? "Yes" : "No"}</td>
+                <td>{file.productId || "-"}</td>
+                <td>{file.reviewId || "-"}</td>
                 <td>{file.description || "No description"}</td>
               </tr>
             ))}
           </tbody>
         </table>
       ) : (
-        <p>No files to display</p>
+        <p>No files available</p>
       )}
     </div>
   );
 };
 
-export default FileList;
+export default AllFiles;

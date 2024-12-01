@@ -15,12 +15,10 @@ const User = () => {
       </section>
 
       <section>
-        <h2>Get All Users</h2>
         <GetAllUsers />
       </section>
 
       <section>
-        <h2>Get Current User</h2>
         <GetCurrentUser />
       </section>
 
@@ -30,7 +28,6 @@ const User = () => {
       </section>
 
       <section>
-        <h2>Update User</h2>
         <UpdateUser />
       </section>
 

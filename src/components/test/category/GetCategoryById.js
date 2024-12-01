@@ -31,7 +31,7 @@ const GetCategoryById = () => {
         <div>
           <h3>{category.name}</h3>
           <p>Description: {category.description || "No description"}</p>
-          {category.parent && <p>Parent ID: {category.parent.id}</p>}
+          {category.hierarchyPath}
         </div>
       )}
     </div>

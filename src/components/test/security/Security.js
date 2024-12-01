@@ -9,12 +9,29 @@ import CheckPermission from "./CheckPermission";
 const Security = () => {
   return (
     <div>
-      <Login />
-      <RefreshToken />
-      <Logout />
-      <ChangePassword />
-      <VerifyPassword />
-      <CheckPermission />
+      <section>
+        <Login />
+      </section>
+
+      <section>
+        <RefreshToken />
+      </section>
+
+      <section>
+        <Logout />
+      </section>
+
+      <section>
+        <ChangePassword />
+      </section>
+
+      <section>
+        <VerifyPassword />
+      </section>
+
+      <section>
+        <CheckPermission />
+      </section>
     </div>
   );
 };

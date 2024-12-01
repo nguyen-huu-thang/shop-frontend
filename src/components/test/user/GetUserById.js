@@ -11,6 +11,7 @@ const GetUserById = () => {
     try {
       const data = await userApi.getUserById(id);
       setUser(data);
+      console.log(data);
       setError(null);
     } catch (err) {
       setUser(null);
@@ -30,8 +31,19 @@ const GetUserById = () => {
         />
         <button type="submit">Get User</button>
       </form>
-      {error && <p>{error}</p>}
-      {user && <p>{user.username} ({user.email})</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {user && (
+        <div>
+          <h3>User Details:</h3>
+          <ul>
+            {Object.entries(user).map(([key, value]) => (
+              <li key={key}>
+                <strong>{key}:</strong> {value ?? 'N/A'}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

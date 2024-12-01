@@ -31,6 +31,12 @@ const GetProductById = () => {
         <div>
           <h3>{product.name}</h3>
           <p>Price: ${product.price}</p>
+          <p>Stock: {product.stock}</p>
+          <p>Description: {product.description}</p>
+          <p>Unique Features: {product.uniqueFeatures}</p>
+          <p>Featured: {product.isFeatured ? "Yes" : "No"}</p>
+          <p>Location: {product.city}, {product.district}</p>
+          <p>Category: {product.category ? product.category.name : "N/A"}</p>
         </div>
       )}
     </div>

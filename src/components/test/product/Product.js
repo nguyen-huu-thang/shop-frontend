@@ -8,11 +8,25 @@ import DeleteProduct from "./DeleteProduct";
 const Product = () => {
   return (
     <div>
-      <AddProduct />
-      <GetProducts />
-      <GetProductById />
-      <UpdateProduct />
-      <DeleteProduct />
+      <section>
+        <AddProduct />
+      </section>
+
+      <section>
+        <GetProducts />
+      </section>
+
+      <section>
+        <GetProductById />
+      </section>
+
+      <section>
+        <UpdateProduct />
+      </section>
+
+      <section>
+        <DeleteProduct />
+      </section>
     </div>
   );
 };

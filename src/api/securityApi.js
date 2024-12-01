@@ -9,13 +9,41 @@ const securityApi = {
    */
   login: async (username, password) => {
     try {
-      const response = await api.post('/login', {
-        username,
-        password,
-      });
+      const response = await api.post(
+        "/login",
+        {
+          username,
+          password,
+        }
+      );
+      const { accessToken, refreshToken } = response.data;
+
+      // Lưu token vào localStorage
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+
       return response.data;
     } catch (error) {
-      handleError(error);
+      return handleError(error);
+    }
+  },
+
+  /**
+   * Đăng xuất người dùng
+   * @returns {Promise<Object>} Phản hồi từ server
+   */
+  logout: async () => {
+    try {
+      // Gửi yêu cầu logout tới server
+      const response = await api.get("/logout");
+
+      // Xóa token khỏi localStorage
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+
+      return response.data;
+    } catch (error) {
+      return handleError(error);
     }
   },
 
@@ -26,25 +54,19 @@ const securityApi = {
    */
   refreshToken: async (refreshToken) => {
     try {
-      const response = await api.post('/refresh-token', {
-        refreshToken,
-      });
-      return response.data;
-    } catch (error) {
-      handleError(error);
-    }
-  },
+      const response = await api.post(
+        "/refresh-token",
+        { refreshToken },
+        { skipAuth: true }
+      );
+      const { accessToken } = response.data;
 
-  /**
-   * Đăng xuất người dùng (xóa token phía client)
-   * @returns {Promise<Object>} Phản hồi từ server
-   */
-  logout: async () => {
-    try {
-      const response = await api.post('/logout');
+      // Cập nhật accessToken vào localStorage
+      localStorage.setItem("accessToken", accessToken);
+
       return response.data;
     } catch (error) {
-      handleError(error);
+      return handleError(error);
     }
   },
 
@@ -56,13 +78,13 @@ const securityApi = {
    */
   changePassword: async (currentPassword, newPassword) => {
     try {
-      const response = await api.post('/change-password', {
+      const response = await api.post("/change-password", {
         currentPassword,
         newPassword,
       });
       return response.data;
     } catch (error) {
-      handleError(error);
+      return handleError(error);
     }
   },
 
@@ -73,12 +95,12 @@ const securityApi = {
    */
   verifyPassword: async (password) => {
     try {
-      const response = await api.post('/verify-password', {
+      const response = await api.post("/verify-password", {
         password,
       });
       return response.data;
     } catch (error) {
-      handleError(error);
+      return handleError(error);
     }
   },
 
@@ -88,10 +110,10 @@ const securityApi = {
    */
   checkPermission: async () => {
     try {
-      const response = await api.get('/cp');
+      const response = await api.get("/cp");
       return response.data;
     } catch (error) {
-      handleError(error);
+      return handleError(error);
     }
   },
 };

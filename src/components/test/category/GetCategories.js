@@ -9,6 +9,7 @@ const GetCategories = () => {
     const fetchCategories = async () => {
       try {
         const data = await categoryApi.getAllCategories();
+        console.log(data);
         setCategories(data);
       } catch (error) {
         setMessage("Failed to fetch categories.");
@@ -21,14 +22,32 @@ const GetCategories = () => {
     <div>
       <h2>Category List</h2>
       {message && <p>{message}</p>}
-      <ul>
-        {categories.map((category) => (
-          <li key={category.id}>
-            <strong>{category.name}</strong> - {category.description || "No description"}
-            {category.parent && <p>Parent ID: {category.parent.id}</p>}
-          </li>
-        ))}
-      </ul>
+      {categories.length > 0 ? (
+        <table border="1" style={{ width: "100%", textAlign: "left" }}>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Parent Category</th>
+            </tr>
+          </thead>
+          <tbody>
+            {categories.map((category) => (
+              <tr key={category.id}>
+                <td>{category.id}</td>
+                <td>{category.name}</td>
+                <td>{category.description || "No description"}</td>
+                <td>
+                  {category.hierarchyPath}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <p>No categories found.</p>
+      )}
     </div>
   );
 };

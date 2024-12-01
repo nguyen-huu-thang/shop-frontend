@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import userApi from '../../../api/userApi';
+import './GetAllUsers.css'; // Import CSS
 
 const GetAllUsers = () => {
   const [users, setUsers] = useState([]);
@@ -10,6 +11,7 @@ const GetAllUsers = () => {
       try {
         const data = await userApi.getAllUsers();
         setUsers(data);
+        setError(null);
       } catch (err) {
         setError(`Failed to fetch users: ${err.message}`);
       }
@@ -20,10 +22,19 @@ const GetAllUsers = () => {
   return (
     <div>
       <h2>User List</h2>
-      {error && <p>{error}</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       <ul>
         {users.map((user) => (
-          <li key={user.id}>{user.username} ({user.email})</li>
+          <li className="user-item" key={user.id}>
+            <h3>User ID: {user.id}</h3>
+            <ul>
+              {Object.entries(user).map(([key, value]) => (
+                <li key={key}>
+                  <strong>{key}:</strong> {value ?? 'N/A'}
+                </li>
+              ))}
+            </ul>
+          </li>
         ))}
       </ul>
     </div>

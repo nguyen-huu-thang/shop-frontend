@@ -6,10 +6,12 @@ import Register from './pages/register';
 import Details from './pages/details';
 import StoreManager from './pages/storemanager';
 import Test from './pages/test';
+import TokenRefresher from './utils/tokenRefresher'; // Thêm TokenRefresher
 
 function App() {
   return (
     <BrowserRouter>
+      <TokenRefresher />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
