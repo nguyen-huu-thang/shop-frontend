@@ -37,6 +37,28 @@ const fileApi = {
         }
     },
 
+    getFilesByProduct: async (productId, onlyActive = true) => {
+        try {
+            const response = await api.get("/files/product/"+productId, {
+                params: { onlyActive },
+            });
+            return response.data;
+        } catch (error) {
+            handleError(error);
+        }
+    },
+
+    getFilesByReview: async (reviewId, onlyActive = true) => {
+        try {
+            const response = await api.get("/files/review/"+reviewId, {
+                params: { onlyActive },
+            });
+            return response.data;
+        } catch (error) {
+            handleError(error);
+        }
+    },
+
     uploadFile: async (file, data) => {
         try {
             const formData = new FormData();

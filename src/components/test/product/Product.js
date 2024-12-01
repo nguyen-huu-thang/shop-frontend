@@ -4,6 +4,8 @@ import GetProducts from "./GetProducts";
 import GetProductById from "./GetProductById";
 import UpdateProduct from "./UpdateProduct";
 import DeleteProduct from "./DeleteProduct";
+import GetProductsByCategory from "./GetProductsByCategory";
+
 
 const Product = () => {
   return (
@@ -27,6 +29,11 @@ const Product = () => {
       <section>
         <DeleteProduct />
       </section>
+
+      <section>
+        <GetProductsByCategory />
+      </section>
+
     </div>
   );
 };

@@ -36,7 +36,7 @@ const GetProductById = () => {
           <p>Unique Features: {product.uniqueFeatures}</p>
           <p>Featured: {product.isFeatured ? "Yes" : "No"}</p>
           <p>Location: {product.city}, {product.district}</p>
-          <p>Category: {product.category ? product.category.name : "N/A"}</p>
+          <p>Category: {product.categoryId}</p>
         </div>
       )}
     </div>

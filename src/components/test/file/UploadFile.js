@@ -6,6 +6,8 @@ const UploadFile = () => {
   const [description, setDescription] = useState("");
   const [sort, setSort] = useState("");
   const [isActive, setIsActive] = useState(true);
+  const [productId, setProductId] = useState(""); // Thêm state cho productId
+  const [reviewId, setReviewId] = useState(""); // Thêm state cho reviewId
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [uploadedFilePath, setUploadedFilePath] = useState(null); // Đường dẫn file đã tải lên
@@ -23,6 +25,14 @@ const UploadFile = () => {
     setSort(e.target.value);
   };
 
+  const handleProductIdChange = (e) => {
+    setProductId(e.target.value); // Xử lý thay đổi productId
+  };
+
+  const handleReviewIdChange = (e) => {
+    setReviewId(e.target.value); // Xử lý thay đổi reviewId
+  };
+
   const handleUpload = async () => {
     if (!file) {
       setError("Please select a file");
@@ -33,6 +43,8 @@ const UploadFile = () => {
       description: description.trim(),
       sort: sort ? parseInt(sort, 10) : null,
       isActive,
+      productId: productId.trim() || null, // Truyền productId nếu có
+      reviewId: reviewId.trim() || null, // Truyền reviewId nếu có
     };
 
     try {
@@ -45,6 +57,8 @@ const UploadFile = () => {
       setFile(null);
       setDescription("");
       setSort("");
+      setProductId("");
+      setReviewId("");
       setError(null);
     } catch (err) {
       setError("File upload failed: " + (err.message || ""));
@@ -69,6 +83,18 @@ const UploadFile = () => {
         value={sort}
         onChange={handleSortChange}
         placeholder="Sort Order (optional)"
+      />
+      <input
+        type="text"
+        value={productId}
+        onChange={handleProductIdChange}
+        placeholder="Product ID (optional)"
+      />
+      <input
+        type="text"
+        value={reviewId}
+        onChange={handleReviewIdChange}
+        placeholder="Review ID (optional)"
       />
       <label>
         <input

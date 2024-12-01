@@ -70,6 +70,21 @@ const productApi = {
       handleError(error);
     }
   },
+
+  /**
+   * Lấy danh sách sản phẩm theo danh mục.
+   * @param {number} categoryId - ID của danh mục.
+   * @returns {Promise<Array>} Danh sách sản phẩm trong danh mục.
+   */
+  getProductsByCategoryId: async (categoryId) => {
+    try {
+      const response = await api.get(`/products/by-category/${categoryId}`);
+      return response.data; // Trả về danh sách sản phẩm
+    } catch (error) {
+      handleError(error);
+    }
+  },
+
 };
 
 export default productApi;

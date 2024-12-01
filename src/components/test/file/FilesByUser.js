@@ -1,39 +1,51 @@
 import React, { useEffect, useState } from "react";
 import fileApi from "../../../api/fileApi";
 
-const FilesByUser = ({ userId }) => {
+const FilesByUser = () => {
+  const [userId, setUserId] = useState("");
   const [files, setFiles] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchFilesByUser = async () => {
-      try {
-        const response = await fileApi.getFilesByUser(userId);
-        setFiles(response);
-      } catch (err) {
-        setError("Failed to fetch files for this user.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchFilesByUser = async () => {
+    if (!userId.trim()) {
+      setError("User ID cannot be empty");
+      return;
+    }
 
-    fetchFilesByUser();
-  }, [userId]);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div style={{ color: "red" }}>{error}</div>;
-  }
+    try {
+      setLoading(true);
+      const response = await fileApi.getFilesByUser(userId);
+      setFiles(response);
+      setError(null);
+    } catch (err) {
+      setError("Failed to fetch files for this user.");
+      setFiles([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div>
-      <h2>Files for User ID: {userId}</h2>
+      <h2>Fetch Files by User</h2>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      <div>
+        <label>
+          User ID:
+          <input
+            type="text"
+            value={userId}
+            onChange={(e) => setUserId(e.target.value)}
+            placeholder="Enter User ID"
+          />
+        </label>
+        <button onClick={fetchFilesByUser} disabled={loading}>
+          {loading ? "Loading..." : "Fetch Files"}
+        </button>
+      </div>
       {files.length > 0 ? (
-        <table border="1" style={{ width: "100%", textAlign: "left" }}>
+        <table border="1" style={{ width: "100%", textAlign: "left", marginTop: "20px" }}>
           <thead>
             <tr>
               <th>ID</th>
@@ -62,7 +74,9 @@ const FilesByUser = ({ userId }) => {
           </tbody>
         </table>
       ) : (
-        <p>No files found for this user.</p>
+        <p style={{ marginTop: "20px" }}>
+          {files.length === 0 && !loading && !error ? "No files found for this user." : ""}
+        </p>
       )}
     </div>
   );
