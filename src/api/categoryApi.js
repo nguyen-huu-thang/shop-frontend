@@ -45,6 +45,20 @@ const categoryApi = {
             handleError(error);
         }
     },
+
+    /**
+     * Lấy danh sách subcategories của một category.
+     * @param {number} categoryId - ID của category.
+     * @returns {Promise<Array>} Danh sách subcategories.
+     */
+    getSubcategories: async (categoryId) => {
+        try {
+            const response = await api.get(`/categories/${categoryId}/subcategories`);
+            return response.data; // Trả về danh sách subcategories
+        } catch (error) {
+            handleError(error);
+        }
+    },
 };
 
 export default categoryApi;

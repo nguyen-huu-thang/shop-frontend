@@ -49,7 +49,7 @@ const GetProducts = () => {
                 <td>{product.isFeatured ? "Yes" : "No"}</td>
                 <td>{product.city}</td>
                 <td>{product.district}</td>
-                <td>{product.category ? product.category.name : "N/A"}</td>
+                <td>{product.categoryId}</td>
               </tr>
             ))}
           </tbody>

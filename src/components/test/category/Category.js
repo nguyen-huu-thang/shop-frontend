@@ -4,6 +4,7 @@ import GetCategories from "./GetCategories";
 import GetCategoryById from "./GetCategoryById";
 import UpdateCategory from "./UpdateCategory";
 import DeleteCategory from "./DeleteCategory";
+import GetSubcategories from "./GetSubcategories";
 
 const Category = () => {
   return (
@@ -25,8 +26,13 @@ const Category = () => {
       </section>
 
       <section>
+        <GetSubcategories />
+      </section>
+
+      <section>
         <DeleteCategory />
       </section>
+
     </div>
   );
 };
