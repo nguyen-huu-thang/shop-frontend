@@ -7,7 +7,7 @@ import Details from './pages/details';
 import StoreManager from './pages/storemanager';
 import Test from './pages/test';
 import TokenRefresher from './utils/tokenRefresher'; // Thêm TokenRefresher
-
+import Account from './pages/account';
 function App() {
   return (
     <BrowserRouter>
@@ -19,6 +19,7 @@ function App() {
         <Route path="/:slug" element={<Details />} />
         <Route path="/storemanager/*" element={<StoreManager />} />
         <Route path="/test" element={<Test />} />
+        <Route path="/account/*" element={<Account />} />
       </Routes>
     </BrowserRouter>
   );

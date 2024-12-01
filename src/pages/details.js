@@ -59,7 +59,7 @@ const Details = () => {
         <div className="grid md:grid-cols-2 gap-4">
           {/* Hình ảnh sản phẩm */}
           <div className="flex flex-col items-center">
-            <img src={product.image} alt={product.name} className="w-full h-auto border border-2"/>
+            <img src={product.interfaceImage} alt={product.name} className="w-full h-auto border border-2"/>
             <div className="mt-4 flex gap-3">
               <button onClick={handleShare} className="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 transition">
                 Chia sẻ
@@ -89,7 +89,7 @@ const Details = () => {
               </div>
 
               {/* Giá sản phẩm */}
-              <p className="text-xl text-red-500 my-3">Giá: đ{product.price}</p>
+              <p className="text-xl text-red-500 my-3">Giá: {product.price}đ</p>
               <p className="text-gray-700">{product.description}</p>
             </div>
             <div className="mt-4 flex items-center space-x-3">

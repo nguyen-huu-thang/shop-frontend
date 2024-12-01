@@ -6,7 +6,6 @@ import AddProduct from "../components/addproduct";
 function StoreManager() {
   return (
     <div className="flex p-6">
-      {/* Left Sidebar */}
       <div className="w-1/4 p-4 bg-gray-100 border-r">
         <h2 className="text-2xl font-semibold mb-6">Quản lý gian hàng</h2>
         <div>
@@ -19,7 +18,6 @@ function StoreManager() {
         </div>
       </div>
 
-      {/* Right Content (Switching between components) */}
       <div className="w-3/4 p-4">
         <Routes>
           <Route path="/view" element={<ViewProduct />} />

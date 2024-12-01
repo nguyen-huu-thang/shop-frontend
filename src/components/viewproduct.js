@@ -1,19 +1,47 @@
-import React from "react";
-import { products } from "../product";
+import React, { useEffect, useState } from "react";
+import productApi from "../api/productApi";  // Import API đã tạo trước đó
 
 function ViewProduct() {
-  const [productList, setProductList] = React.useState(products);
+  const [productList, setProductList] = useState([]);  // Khởi tạo productList là một mảng rỗng
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  // Gọi API để lấy danh sách sản phẩm khi component render
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const products = await productApi.getProducts();  // Gọi API getProducts
+        setProductList(products);  // Cập nhật danh sách sản phẩm
+        setLoading(false);  // Đánh dấu là đã tải xong dữ liệu
+      } catch (err) {
+        setError("Failed to fetch products.");  // Nếu có lỗi, hiển thị thông báo lỗi
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();  // Gọi hàm fetchProducts
+  }, []);  // [] để chỉ gọi một lần khi component được render lần đầu
+
+  // Hàm xử lý xóa sản phẩm
   const handleDelete = (index) => {
     const newProductList = [...productList];
     newProductList.splice(index, 1);
     setProductList(newProductList);
   };
 
+  // Hàm chỉnh sửa sản phẩm
   const handleEdit = (index) => {
-    // Logic để chỉnh sửa sản phẩm (ví dụ: hiển thị modal với dữ liệu đã điền sẵn)
     alert(`Editing product ${productList[index].name}`);
   };
+
+  // Hiển thị loading hoặc lỗi nếu có
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div>
@@ -29,28 +57,34 @@ function ViewProduct() {
           </tr>
         </thead>
         <tbody>
-          {productList.map((product, index) => (
-            <tr key={product.id}>
-              <td className="border p-2">{product.name}</td>
-              <td className="border p-2">{product.price}</td>
-              <td className="border p-2">{product.category}</td>
-              <td className="border p-2">{product.description}</td>
-              <td className="border p-2">
-                <button
-                  onClick={() => handleEdit(index)}
-                  className="text-blue-600 hover:underline mr-2"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(index)}
-                  className="text-red-600 hover:underline"
-                >
-                  Delete
-                </button>
-              </td>
+          {productList && productList.length > 0 ? (
+            productList.map((product, index) => (
+              <tr key={product.id}>
+                <td className="border p-2">{product.name}</td>
+                <td className="border p-2">{product.price}</td>
+                <td className="border p-2">{product.category}</td>
+                <td className="border p-2">{product.description}</td>
+                <td className="border p-2">
+                  <button
+                    onClick={() => handleEdit(index)}
+                    className="text-blue-600 hover:underline mr-2"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(index)}
+                    className="text-red-600 hover:underline"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="5" className="border p-2 text-center">No products found.</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
     </div>

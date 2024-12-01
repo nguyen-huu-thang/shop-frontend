@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
 const ProductCart = (props) => {
-    const { id, name, price, image, slug } = props.data;
+    const { id, name, price, interfaceImage, slug } = props.data;
     const [isFavorite, setIsFavorite] = useState(false);
 
     const toggleFavorite = () => {
@@ -22,7 +22,7 @@ const ProductCart = (props) => {
 
             <Link to={slug} className="block overflow-hidden rounded-lg">
                 <img 
-                    src={image} 
+                    src={interfaceImage} 
                     alt={name} 
                     className="w-60 h-30 object-cover transition-transform duration-300 hover:scale-110"
                 />
