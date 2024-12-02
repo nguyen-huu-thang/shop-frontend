@@ -140,10 +140,22 @@ export const handleError = (error) => {
   } else if (error.request) {
     // Xử lý lỗi không nhận được phản hồi từ server
     const httpMethod = error.config?.method?.toUpperCase() || 'UNKNOWN';
+    const errorObject = {
+      success: false,
+      message: 'Không có phản hồi từ máy chủ.',
+      url: fullURL,
+      method: httpMethod,
+      status: null, // Vì không có phản hồi, không có mã trạng thái HTTP
+    };
+
+    // In lỗi ra console
     console.error(`API Error:
     URL: ${fullURL}
-    API Error: Không có phản hồi từ máy chủ.
-    Method: ${httpMethod}`);
+    Method: ${httpMethod}
+    Message: Không có phản hồi từ máy chủ.`);
+
+    // Trả về đối tượng lỗi
+    throw errorObject;
   } else {
     throw error; // Đẩy lỗi lên tầng trên mà không bắt lại trong hàm này
   }
