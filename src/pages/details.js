@@ -4,8 +4,13 @@ import { products } from '../product';
 import Navbar from '../components/navbar';
 import { LiaCartPlusSolid } from "react-icons/lia";
 import { AiOutlineDollarCircle } from "react-icons/ai";
+import { useSelector, useDispatch} from 'react-redux';
+import { addToCart } from '../redux/cartSlice';
 const Details = () => {
-  const [quantity, setQuantity] = useState(0);
+  const carts = useSelector((store) => store.cart.items);
+  console.log(carts);
+  const dispatch = useDispatch();
+  const [quantity, setQuantity] = useState(1);
 
   const increaseQuantity = () => {
     if (quantity < product.stock) setQuantity(quantity + 1);
@@ -30,6 +35,10 @@ const Details = () => {
   };
 
   const handleAddToCart = () => {
+    dispatch(addToCart({
+      productId: product.id,
+      quantity: quantity,
+    }));
     showNotification(`${product.name} đã được thêm vào giỏ hàng!`);
   };
 

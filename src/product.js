@@ -13,6 +13,7 @@ export const products = [
     name: 'Product 1',
     price: 100,
     category: 'fashion',
+    stock: 100,
     description: 'This is a description of Product 1.',
     interfaceImage: imageProdcut1,
     productImages: [imageProdcut1, imageProdcut2],

@@ -1,4 +1,4 @@
-import { createSlice} from '@reducjs/toolkit';
+import { createSlice} from '@reduxjs/toolkit';
 const intiStage = {
     items : [],
 }

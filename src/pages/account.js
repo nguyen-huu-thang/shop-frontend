@@ -9,12 +9,12 @@ const Account = () => {
   return (
     <div className='bg-gray-100'>
         <Navbar />
-        <div className="flex h-screen w-4/5 px-6 pt-10 mx-20">
+        <div className="flex w-4/5 px-6 pt-10 mx-20" style={{ minHeight: 'calc(100vh - 96px)' }}>
         {/* Left Section */}
             <div className="w-1/4 p-6 mr-6">
                 <div className="flex items-center mb-8">
                     <div className="text-4xl mr-2">
-                    <   LuUserCircle />
+                        <LuUserCircle/>
                     </div>
                     <span className="font-bold text-lg">Nguyễn Xuân An</span>
                 </div>
