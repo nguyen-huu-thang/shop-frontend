@@ -1,12 +1,26 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-
+import { products } from '../product';
 const Payments = () => {
   const carts = useSelector((state) => state.cart.items);
 
   // Tổng số tiền trong giỏ hàng
-  const totalPrice = carts.reduce((total, item) => total + item.price * item.quantity, 0);
+  const totalPrice = carts.reduce((total, item) => {
+    const productDetail = products.find(product => product.id === item.productId);
+    if (!productDetail) {
+      console.log("Không tìm thấy chi tiết sản phẩm cho productId:", item.productId);
+      return total;
+    }
+    const price = parseFloat(productDetail.price);
+    const quantity = parseInt(item.quantity, 10);
+
+    if (isNaN(price) || isNaN(quantity)) {
+      return total;
+    }
+
+    return total + price * quantity;
+  }, 0);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -39,19 +53,38 @@ const Payments = () => {
       <div className="p-4 bg-gray-100 space-y-4">
         <h2 className="text-lg font-semibold">Thông tin giỏ hàng</h2>
         <div>
-          {carts.length > 0 ? (
-            carts.map((item) => (
-              <div key={item.id} className="flex justify-between items-center py-2 border-b-2 border-gray-200">
-                <div className="flex items-center gap-4">
-                  <img src={item.image} alt={item.name} className="w-16 h-16 object-cover" />
-                  <div>
-                    <h3 className="font-medium">{item.name}</h3>
-                    <p className="text-sm text-gray-600">Giá: ${item.price}</p>
+        {carts.length > 0 ? (
+          carts.map((item) => {
+            // Tìm thông tin chi tiết sản phẩm dựa trên productId
+            const productDetail = products.find((product) => product.id === item.productId);
+
+            if (!productDetail) return null; // Nếu không tìm thấy sản phẩm trong danh sách products
+
+            const totalPrice = productDetail.price * item.quantity; // Tính tổng giá của sản phẩm (giá * số lượng)
+
+            return (
+                <div key={item.productId} className="flex justify-between items-center py-2 border-b-2 border-gray-200">
+                  <div className="flex items-center gap-4">
+                    {/* Hình ảnh sản phẩm */}
+                    <img
+                      src={productDetail.interfaceImage}
+                      alt={productDetail.name}
+                      className="w-16 h-16 object-cover"
+                    />
+                    {/* Tên sản phẩm và giá */}
+                    <div>
+                      <h3 className="font-medium">{productDetail.name}</h3>
+                      <p className="text-sm text-gray-600">Giá: ${productDetail.price}</p>
+                    </div>
+                  </div>
+                  {/* Số lượng và tổng tiền */}
+                  <div className="text-lg">
+                    <p>Số lượng: {item.quantity}</p>
+                    <p className="font-semibold">Tổng tiền: ${totalPrice.toFixed(2)}</p>
                   </div>
                 </div>
-                <p className="text-lg">${item.price * item.quantity}</p>
-              </div>
-            ))
+              );
+            })
           ) : (
             <p className="text-gray-600">Giỏ hàng của bạn trống</p>
           )}

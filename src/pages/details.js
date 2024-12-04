@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { products } from '../product';
 import Navbar from '../components/navbar';
@@ -123,9 +124,11 @@ const Details = () => {
             </div>
             {/* Các nút chức năng */}
             <div className="mt-5 flex gap-2">
-              <button onClick={handleBuyNow} className="flex bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
-              <AiOutlineDollarCircle className="mr-2 text-white text-2xl"/>Mua ngay
-              </button>
+              <Link to="/payments">
+                <button onClick={handleBuyNow} className="flex bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+                <AiOutlineDollarCircle className="mr-2 text-white text-2xl"/>Mua ngay
+                </button>
+              </Link>
               <button onClick={handleAddToCart} className="flex bg-red-800 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
                 <LiaCartPlusSolid className="mr-2 text-white text-2xl"/>Thêm vào giỏ hàng
               </button>

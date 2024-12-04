@@ -68,12 +68,16 @@ function Navbar() {
                                     <button className="absolute top-4 right-4 text-white text-xl" onClick={() => setSidebarVisible(false)}>X</button>
                                     <h3 className="text-xl border-b border-gray-700 pb-2">Giỏ hàng của bạn</h3>
                                     <p className="mt-4 text-gray-400">Danh sách sản phẩm</p>
-                                    <div className="grid grid-rows p-1">
+                                    <div className="grid grid-rows p-1 gap-1">
                                         {carts.map((item, key) => <ShoppingCart key={key} data={item}/>)}
                                     </div>
                                     <div className="grid grid-cols-2 gap-2 absolute bottom-10 left-0 w-full p-4">
-                                        <button className="bg-red-500 text-white py-2 px-2 rounded-md">Xem giỏ hàng</button>
-                                        <button className="bg-red-500 text-white py-2 px-2 rounded-md">Thanh toán</button>
+                                        <Link to="/cart">
+                                            <button className="bg-red-500 text-white py-2 px-2 rounded-md w-full">Xem giỏ hàng</button>
+                                        </Link>
+                                        <Link to="/payments">
+                                            <button className="bg-red-500 text-white py-2 px-2 rounded-md w-full">Thanh toán</button>
+                                        </Link>
                                     </div>
                                 </div>
                             </>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import postProduct from "../api/postProduct";
+import productApi from "../api/productApi"; // Import hàm createProduct từ API (đảm bảo API này được export đúng cách)
+
 function AddProduct() {
   const [formData, setFormData] = useState({
     name: "",
@@ -13,6 +14,10 @@ function AddProduct() {
   const [errors, setErrors] = useState({
     price: "",
   });
+
+  const [loading, setLoading] = useState(false);  // Để theo dõi trạng thái đang gửi
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,7 +51,7 @@ function AddProduct() {
       });
     }
   };
-  
+
   const handleImageChange = (e) => {
     const { name, files } = e.target;
     
@@ -55,37 +60,54 @@ function AddProduct() {
         ...formData,
         interfaceImage: files[0],
       });
-    } else if (name === "productImages") {
+    } else if (name === "image") {
       setFormData({
         ...formData,
-        productImages: Array.from(files),
+        image: files[0],
       });
     }
-  };  
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     let formErrors = {};
 
+    // Kiểm tra nếu giá trị không hợp lệ trước khi gửi
+    if (!formData.name || !formData.price || !formData.category || !formData.description || !formData.image || !formData.interfaceImage) {
+      formErrors.general = "Vui lòng điền đầy đủ thông tin sản phẩm!";
+    }
+
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
       return;
     }
-    //Tạo form sumbit và gửi lên server
-    const response = await postProduct(formData);
-    if (response.success) {
-      alert("Product added successfully!");
-      setFormData({
-        name: "",
-        price: "",
-        category: "",
-        description: "",
-        image: null,
-        interfaceImage: null,
-      });
-      setErrors({});
-    } else {
-      alert("There was an error: " + response.message);
+
+    try {
+      setLoading(true);
+      setSuccessMessage("");
+      setErrorMessage("");
+
+      // Gửi dữ liệu đến API createProduct
+      const response = await productApi.createProduct(formData);
+
+      if (response.success) {
+        setSuccessMessage("Sản phẩm đã được thêm thành công!");
+        setFormData({
+          name: "",
+          price: "",
+          category: "",
+          description: "",
+          image: null,
+          interfaceImage: null,
+        });
+        setErrors({});
+      } else {
+        setErrorMessage("Đã có lỗi xảy ra: " + response.message);
+      }
+    } catch (error) {
+      setErrorMessage("Lỗi kết nối với server: " + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -93,6 +115,7 @@ function AddProduct() {
     <div>
       <h2 className="text-2xl font-semibold mb-6">Thêm sản phẩm</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Tên sản phẩm */}
         <div>
           <label className="block text-sm font-medium">Tên</label>
           <input
@@ -105,6 +128,7 @@ function AddProduct() {
           />
         </div>
 
+        {/* Giá */}
         <div>
           <label className="block text-sm font-medium">Giá</label>
           <input
@@ -115,10 +139,10 @@ function AddProduct() {
             className="w-full p-2 border border-gray-300 rounded"
             required
           />
-          {/* Hiển thị thông báo lỗi dưới ô nhập giá nếu có */}
           {errors.price && <p className="text-red-500 text-sm">{errors.price}</p>}
         </div>
 
+        {/* Loại sản phẩm */}
         <div>
           <label className="block text-sm font-medium">Loại sản phẩm</label>
           <select
@@ -128,7 +152,7 @@ function AddProduct() {
             className="w-full p-2 border border-gray-300 rounded"
             required
           >
-            <option value="" disabled selected>Select Category</option>
+            <option value="" disabled>Chọn loại sản phẩm</option>
             <option value="fashion">Thời trang</option>
             <option value="shoes-bags">Giày dép - Túi sách</option>
             <option value="electronics">Điện tử - Công nghệ</option>
@@ -140,6 +164,7 @@ function AddProduct() {
           </select>
         </div>
 
+        {/* Mô tả */}
         <div>
           <label className="block text-sm font-medium">Mô tả</label>
           <textarea
@@ -152,7 +177,7 @@ function AddProduct() {
           ></textarea>
         </div>
 
-        {/* Phần chọn ảnh giao diện */}
+        {/* Ảnh giao diện */}
         <div>
           <label className="block text-sm font-medium">Ảnh giao diện</label>
           <input
@@ -164,7 +189,7 @@ function AddProduct() {
           />
         </div>
 
-        {/* Phần chọn ảnh sản phẩm */}
+        {/* Ảnh sản phẩm */}
         <div>
           <label className="block text-sm font-medium">Ảnh giới thiệu</label>
           <input
@@ -175,6 +200,11 @@ function AddProduct() {
             required
           />
         </div>
+
+        {/* Hiển thị trạng thái gửi */}
+        {loading && <p>Đang gửi sản phẩm...</p>}
+        {successMessage && <p className="text-green-500">{successMessage}</p>}
+        {errorMessage && <p className="text-red-500">{errorMessage}</p>}
 
         <button type="submit" className="w-full p-2 bg-blue-600 text-white rounded">
           Thêm sản phẩm
