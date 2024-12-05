@@ -1,7 +1,11 @@
 import axios from 'axios';
 
+// Định nghĩa baseURL duy nhất
+const BASE_URL = 'http://localhost:8000/api';
+
+// Tạo instance của Axios với baseURL
 const api = axios.create({
-  baseURL: 'http://localhost:8000/api',
+  baseURL: BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -56,8 +60,9 @@ api.interceptors.response.use((response) => response, async (error) => {
       isRefreshing = true;
 
       try {
-        const response = await axios.post(
-            'http://localhost:8000/api/refresh-token', {refreshToken});
+        const response = await axios.post(`${BASE_URL}/refresh-token`, {
+          refreshToken,
+        });
 
         const newAccessToken = response.data.accessToken;
 
