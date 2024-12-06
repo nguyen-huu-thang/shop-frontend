@@ -7,9 +7,12 @@ import { LiaCartPlusSolid } from "react-icons/lia";
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import { useSelector, useDispatch} from 'react-redux';
 import { addToCart } from '../redux/cartSlice';
+import {addToLove, removeFromLove} from '../redux/loveSlice';
 const Details = () => {
   const carts = useSelector((store) => store.cart.items);
+  const lovedItems = useSelector((store) => store.love.items);
   console.log(carts);
+  console.log(lovedItems);
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
 
@@ -23,7 +26,8 @@ const Details = () => {
 
   const { slug } = useParams();
   const product = products.find((item) => item.slug === slug);
-
+  const isFavorite = lovedItems.findIndex(item => item.productId === product.id) !== -1;
+  console.log(isFavorite);
   const [notification, setNotification] = useState({ show: false, message: '' });
 
   if (!product) {
@@ -48,9 +52,14 @@ const Details = () => {
   };
 
   const handleToggleFavorite = () => {
-    showNotification(`${product.name} đã được thêm vào danh sách yêu thích!`);
+    if (isFavorite) {
+      dispatch(removeFromLove({productId : product.id})); // Xóa khỏi yêu thích
+      showNotification(`${product.name} đã được xóa khỏi yêu thích!`);
+    } else {
+      dispatch(addToLove({ productId : product.id })); // Thêm vào yêu thích
+      showNotification(`${product.name} đã được thêm vào yêu thích!`);
+    }
   };
-
   const handleShare = () => {
     navigator.share
       ? navigator.share({
@@ -74,8 +83,12 @@ const Details = () => {
               <button onClick={handleShare} className="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 transition">
                 Chia sẻ
               </button>
-              <button onClick={handleToggleFavorite} className="flex items-center px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition">
-                <span className="text-red-500 mr-2">♥</span> Yêu thích
+              <button 
+                onClick={handleToggleFavorite} 
+                className={`flex items-center px-4 py-2 rounded-lg border transition ${isFavorite ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-800'}`}
+              >
+                <span className={`mr-2 ${isFavorite ? 'text-white' : 'text-red-500'}`}>♥</span>
+                Yêu thích
               </button>
             </div>
           </div>

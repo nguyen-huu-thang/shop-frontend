@@ -2,6 +2,8 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { products } from '../product';
+import Navbar from '../components/navbar';
+import { AiOutlineDollarCircle } from "react-icons/ai";
 const Payments = () => {
   const carts = useSelector((state) => state.cart.items);
 
@@ -23,10 +25,15 @@ const Payments = () => {
   }, 0);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div>
+      <Navbar />
+      <div className="flex flex-col min-h-screen">
       {/* Header */}
-      <div className="bg-blue-500 text-white p-4 flex justify-between items-center">
-        <h1 className="text-xl font-semibold">Thanh toán</h1>
+      <div className="bg-blue-700 text-white p-4 flex justify-between items-center">
+        <div className='flex items-center'>
+          <AiOutlineDollarCircle className="mr-2 text-white text-2xl"/>
+          <h1 className="text-2xl font-semibold">Thanh toán</h1>
+        </div>
         <Link to="/cart" className="text-white hover:text-gray-300">Quay lại giỏ hàng</Link>
       </div>
 
@@ -124,6 +131,8 @@ const Payments = () => {
         <button className="bg-green-500 px-8 py-2 rounded-md hover:bg-green-600">Xác nhận thanh toán</button>
       </div>
     </div>
+    </div>
+    
   );
 };
 

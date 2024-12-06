@@ -10,6 +10,7 @@ import TokenRefresher from './utils/tokenRefresher'; // Thêm TokenRefresher
 import Account from './pages/account';
 import Cart from './pages/cart';
 import Payments from './pages/payments';
+import Love from './pages/love';
 function App() {
   return (
     <BrowserRouter>
@@ -24,6 +25,7 @@ function App() {
         <Route path="/account/*" element={<Account />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/payments" element={<Payments />} />
+        <Route path="/love" element={<Love />} />
       </Routes>
     </BrowserRouter>
   );

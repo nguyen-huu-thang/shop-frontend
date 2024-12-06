@@ -53,9 +53,11 @@ function Navbar() {
                         />
                         <MdSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
                     </div>
-                    <div className="text-xl cursor-pointer">
-                        <CiHeart />
-                    </div>
+                    <Link to="/love">
+                        <div className="text-xl cursor-pointer">
+                            <CiHeart />
+                        </div>
+                    </Link>
                     <div className="relative">
                         <div className="flex text-xl cursor-pointer" onClick={() => setSidebarVisible(true)}>
                             <CiShoppingCart size={25} color="black"/>
