@@ -10,7 +10,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await userApi.getCurrentUser(); // Giả sử có API gọi này
+        const response = await userApi.getCurrentUser();
         setUser(response); // Lưu thông tin người dùng vào state
         setLoading(false);
       } catch (err) {
