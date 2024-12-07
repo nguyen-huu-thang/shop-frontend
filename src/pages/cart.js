@@ -74,7 +74,7 @@ const Cart = () => {
             <table className="w-full table-auto text-left">
               <thead>
                 <tr className="bg-gray-200">
-                  <th className="px-4 py-2">Tên sản phẩm</th>
+                  <th className="px-4 py-2">Sản phẩm</th>
                   <th className="px-4 py-2">Giá</th>
                   <th className="px-4 py-2">Số lượng</th>
                   <th className="px-4 py-2">Tổng tiền</th>
@@ -89,7 +89,14 @@ const Cart = () => {
                     const totalPrice = product.price * item.quantity;
                     return (
                       <tr key={item.productId} className="border-b">
-                        <td className="px-4 py-2">{product.name}</td>
+                        <Link to={`/${product.slug}`}>
+                        <td className="px-4 py-2 flex items-center cursor-pointer">
+                            {/* Hiển thị ảnh sản phẩm */}
+                            <img src={product.interfaceImage} alt={product.name} className="w-12 h-12 object-cover mr-4" />
+                            {/* Hiển thị tên sản phẩm */}
+                            <span>{product.name}</span>
+                        </td>
+                        </Link>
                         <td className="px-4 py-2">{product.price} $</td>
                         <td className="px-4 py-2">
                           <div className="flex items-center space-x-2">
