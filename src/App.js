@@ -11,6 +11,7 @@ import Account from './pages/account';
 import Cart from './pages/cart';
 import Payments from './pages/payments';
 import Love from './pages/love';
+import Category from './pages/category';
 function App() {
   return (
     <BrowserRouter>
@@ -19,13 +20,14 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/:slug" element={<Details />} />
+        <Route path="/details/:slug" element={<Details />} />
         <Route path="/storemanager/*" element={<StoreManager />} />
         <Route path="/test" element={<Test />} />
         <Route path="/account/*" element={<Account />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/payments" element={<Payments />} />
         <Route path="/love" element={<Love />} />
+        <Route path="/category/:category" element={<Category />} />
       </Routes>
     </BrowserRouter>
   );

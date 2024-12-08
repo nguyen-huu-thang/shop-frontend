@@ -31,13 +31,20 @@ function Navbar() {
                         <a href="/" className="text-lg hover:text-gray-300 ">Danh mục</a>
                         {/* Dropdown */}
                         <div className="hidden group-hover:block absolute top-[60%] left-0 w-80 bg-white border border-gray-300 mt-2 shadow-lg">
-                        {["Thời trang", "Giày dép - Túi sách", "Điện tử - Công nghệ", 
-                            "Sức khỏe - Làm đẹp", "Đồ gia dụng", "Đồ trang trí", 
-                            "Mẹ và bé", "Sách - Văn phòng phẩm"].map((item, idx) => (
-                            <a key={idx} href="/" className="block px-4 py-2 hover:bg-gray-600 hover:text-gray-100">
-                                {item}
-                            </a>
-                        ))}
+                            {[
+                            { name: "Thời trang", path: "fashion" },
+                            { name: "Giày dép - Túi sách", path: "Giày dép - Túi sách" },
+                            { name: "Điện tử - Công nghệ", path: "Điện tử - Công nghệ" },
+                            { name: "Sức khỏe - Làm đẹp", path: "Sức khỏe - Làm đẹp" },
+                            { name: "Đồ gia dụng", path: "Đồ gia dụng" },
+                            { name: "Đồ trang trí", path: "Đồ trang trí" },
+                            { name: "Mẹ và bé", path: "Mẹ và bé" },
+                            { name: "Sách - Văn phòng phẩm", path: "Sách - Văn phòng phẩm" },
+                            ].map((item, idx) => (
+                            <Link key={idx} to={`/category/${item.path}`} className="block px-4 py-2 hover:bg-gray-600 hover:text-gray-100">
+                                {item.name}
+                            </Link>
+                            ))}
                         </div>
                     </div>
                     <a href="/" className="text-lg hover:text-gray-300">Giá ưu đãi</a>
