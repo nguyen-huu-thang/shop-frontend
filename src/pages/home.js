@@ -4,6 +4,7 @@ import Banner from '../components/banner';
 import { products } from '../product';
 import ProductCart from '../components/productcart';
 import ConnectWidget from '../components/connectwidget';
+import Footer from '../components/footer';
 function Home() {
   return (
     <div>
@@ -37,6 +38,7 @@ function Home() {
           <ProductCart key={key} data={product} />
         ))}
       </div>
+        <Footer/>
     </div>
   );
 }
