@@ -2,20 +2,32 @@ import React, { useState } from 'react';
 
 const Filter = ({ categories, onFilterChange }) => {
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [priceRange, setPriceRange] = useState([0, 1000000]);
+  const [priceRange, setPriceRange] = useState({ min: '', max: '' });
 
   // Hàm xử lý khi thay đổi category
   const handleCategoryChange = (event) => {
-    const value = event.target.value;
-    setSelectedCategory(value);
-    onFilterChange(value, priceRange);
+    setSelectedCategory(event.target.value);
   };
 
-  // Hàm xử lý khi thay đổi giá
-  const handlePriceChange = (event) => {
-    const value = event.target.value.split(',').map(Number);
-    setPriceRange(value);
-    onFilterChange(selectedCategory, value);
+  // Hàm xử lý khi thay đổi giá trị min/max
+  const handlePriceInputChange = (event) => {
+    const { name, value } = event.target;
+
+    // Chỉ cho phép nhập ký tự số
+    if (/^\d*$/.test(value)) {
+      setPriceRange({
+        ...priceRange,
+        [name]: value, // Không chuyển thành số để giữ giá trị rỗng khi nhập
+      });
+    }
+  };
+
+  // Hàm xử lý khi nhấn nút Lọc
+  const handleApplyFilter = () => {
+    const min = priceRange.min === '' ? 0 : parseInt(priceRange.min, 10);
+    const max = priceRange.max === '' ? Number.MAX_SAFE_INTEGER : parseInt(priceRange.max, 10);
+
+    onFilterChange(selectedCategory, [min, max]);
   };
 
   return (
@@ -38,23 +50,38 @@ const Filter = ({ categories, onFilterChange }) => {
         </select>
       </div>
 
-      {/* Lọc theo giá */}
-      <div>
-        <label htmlFor="price" className="block text-gray-700 font-medium">Giá</label>
-        <input
-          type="range"
-          id="price"
-          min="0"
-          max="1000000"
-          step="10000"
-          value={priceRange.join(',')}
-          onChange={handlePriceChange}
-          className="w-full"
-        />
-        <div className="flex justify-between text-gray-600 mt-1">
-          <span>{priceRange[0]}đ</span>
-          <span>{priceRange[1]}đ</span>
+      {/* Lọc theo Giá (Min - Max) */}
+      <div className="mb-3">
+        <label className="block text-gray-700 font-medium">Khoảng giá</label>
+        <div className="flex space-x-2">
+          <input
+            type="text"
+            name="min"
+            value={priceRange.min}
+            onChange={handlePriceInputChange}
+            placeholder="Từ"
+            className="w-full p-2 border rounded-lg"
+          />
+          <input
+            type="text"
+            name="max"
+            value={priceRange.max}
+            onChange={handlePriceInputChange}
+            placeholder="Đến"
+            className="w-full p-2 border rounded-lg"
+          />
         </div>
+        <p className="text-gray-500 text-sm mt-2"></p>
+      </div>
+
+      {/* Nút áp dụng */}
+      <div className="mt-3">
+        <button 
+          onClick={handleApplyFilter} 
+          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+        >
+          Áp dụng
+        </button>
       </div>
     </div>
   );

@@ -20,7 +20,7 @@ const ProductCart = (props) => {
                 {isFavorite ? <FaHeart size={24} /> : <FaRegHeart size={24} />}
             </div>
 
-            <Link to={slug} className="block overflow-hidden rounded-lg">
+            <Link to={`/details/${slug}`} className="block overflow-hidden rounded-lg">
                 <img 
                     src={interfaceImage} 
                     alt={name} 
