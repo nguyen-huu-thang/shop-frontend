@@ -1,5 +1,3 @@
-// src/components/ConfirmationModal.js
-
 import React from 'react';
 
 const Confirm = ({ message, onConfirm, onCancel }) => {

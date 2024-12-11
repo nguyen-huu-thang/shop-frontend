@@ -2,20 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {products} from '../product';
 import Navbar from '../components/navbar';
+import ProductCart from '../components/productcart';
 const Category = () => {
   const { category } = useParams(); // Lấy category từ URL
   const [filteredProducts, setFilteredProducts] = useState([]);
-
-  // Bảng ánh xạ category -> Tiếng Việt
+  
   const categoryMap = {
-    fashion: "Thời trang",
-    "shoes-bags": "Giày dép - Túi sách",
-    electronics: "Điện tử - Công nghệ",
-    beauty: "Sức khỏe - Làm đẹp",
-    "home-appliances": "Đồ gia dụng",
-    decoration: "Đồ trang trí",
-    "mom-baby": "Mẹ và bé",
-    books: "Sách - Văn phòng phẩm",
+    "fashion": "Thời trang",
+    "shoes": "Giày dép",
+    "book bag": "Túi sách",
+    "electronics": "Điện tử - Công nghệ",
+    "health-and-beauty": "Sức khỏe - Làm đẹp",
+    "housewares" : "Đồ gia dụng",
+    "decoration": "Đồ trang trí",
+    "mother-and-baby": "Mẹ và bé",
+    "book": "Sách",
+    "stationery": "Văn phòng phẩm"
   };
 
   // Lấy tên tiếng Việt từ category

@@ -6,7 +6,6 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);  // Để xử lý trạng thái tải dữ liệu
   const [error, setError] = useState(null);  // Để xử lý lỗi nếu có
 
-  // Fetch dữ liệu người dùng khi component mount
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -29,6 +28,8 @@ const Profile = () => {
   if (error) {
     return <div>{error}</div>;  // Hiển thị khi có lỗi
   }
+
+  console.log(user);
 
   return (
     <div className="p-6 max-w-4xl mx-auto">

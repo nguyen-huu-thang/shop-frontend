@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import productApi from "../api/productApi";  // Import API đã tạo trước đó
-
+import categoryApi from "../api/categoryApi"; // Import API
 function ViewProduct() {
   const [productList, setProductList] = useState([]);  // Khởi tạo productList là một mảng rỗng
   const [loading, setLoading] = useState(true);
@@ -45,15 +45,15 @@ function ViewProduct() {
 
   return (
     <div>
-      <h2 className="text-2xl font-semibold mb-4">Product List</h2>
+      <h2 className="text-2xl font-semibold mb-4">Danh sách sản phẩm</h2>
       <table className="min-w-full border-collapse">
         <thead>
           <tr>
-            <th className="border p-2 text-left">Name</th>
-            <th className="border p-2 text-left">Price</th>
-            <th className="border p-2 text-left">Category</th>
-            <th className="border p-2 text-left">Description</th>
-            <th className="border p-2 text-left">Actions</th>
+            <th className="border p-2 text-left">Tên</th>
+            <th className="border p-2 text-left">Giá tiền</th>
+            <th className="border p-2 text-left">Loại sản phẩm</th>
+            <th className="border p-2 text-left">Mô tả</th>
+            <th className="border p-2 text-left">Hành động</th>
           </tr>
         </thead>
         <tbody>
@@ -82,7 +82,7 @@ function ViewProduct() {
             ))
           ) : (
             <tr>
-              <td colSpan="5" className="border p-2 text-center">No products found.</td>
+              <td colSpan="5" className="border p-2 text-center">Không có sản phẩm nào.</td>
             </tr>
           )}
         </tbody>

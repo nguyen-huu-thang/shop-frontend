@@ -153,14 +153,16 @@ function AddProduct() {
             required
           >
             <option value="" disabled>Chọn loại sản phẩm</option>
-            <option value="fashion">Thời trang</option>
-            <option value="shoes-bags">Giày dép - Túi sách</option>
-            <option value="electronics">Điện tử - Công nghệ</option>
-            <option value="health-beauty">Sức khỏe - Làm đẹp</option>
-            <option value="home-goods">Đồ gia dụng</option>
-            <option value="decor">Đồ trang trí</option>
-            <option value="mother-baby">Mẹ và bé</option>
-            <option value="books-stationery">Sách - Văn phòng phẩm</option>
+            <option value="Fashion">Thời trang</option>
+            <option value="Shoes">Giày dép</option>
+            <option value="Book bag">Túi sách</option>
+            <option value="Electronics">Điện tử - Công nghệ</option>
+            <option value="Health and beauty">Sức khỏe - Làm đẹp</option>
+            <option value="Housewares">Đồ gia dụng</option>
+            <option value="Decoration">Đồ trang trí</option>
+            <option value="Mother and baby">Mẹ và bé</option>
+            <option value="Book">Sách</option>
+            <option value="Stationery">Văn phòng phẩm</option>
           </select>
         </div>
 
