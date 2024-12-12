@@ -3,7 +3,8 @@ import { Link, Route, Routes } from "react-router-dom";
 import ViewProduct from "../components/viewproduct";
 import AddProduct from "../components/addproduct";
 import Logo from "../assets/logo1.png";
-
+import { HiChevronRight } from "react-icons/hi";
+import { FaStore } from "react-icons/fa";
 function StoreManager() {
   return (
     <div>
@@ -19,17 +20,18 @@ function StoreManager() {
 
         {/* Links */}
         <div className="flex space-x-4 h-full items-center">
-          <Link to="/" className="hover:text-gray-400 text-2xl px-4 transition-colors duration-200">
+          <Link to="/" className="flex hover:text-gray-400 text-xl px-4 transition-colors duration-200 justify-between items-center">
             Về Trang Chủ
+            <HiChevronRight/>
           </Link>
         </div>
       </nav>
 
       {/* Main Content */}
-      <div className="flex p-6">
+      <div className="flex w-full" style={{ minHeight: 'calc(100vh - 96px)' }}>
         {/* Sidebar */}
-        <div className="w-1/4 p-4 bg-gray-300 border-r">
-          <h2 className="text-2xl font-semibold mb-6">Quản lý gian hàng</h2>
+        <div className="w-1/5 p-3 bg-gray-800">
+          <h2 className="flex items-center text-2xl font-semibold px-3 mb-4 text-white justify-content-between"><FaStore /> Quản lý gian hàng</h2>
           <div>
             <Link
               to="/storemanager/view"
@@ -47,7 +49,7 @@ function StoreManager() {
         </div>
 
         {/* Routes */}
-        <div className="w-3/4 p-4">
+        <div className="w-4/5 bg-white p-6">
           <Routes>
             <Route path="/view" element={<ViewProduct />} />
             <Route path="/add" element={<AddProduct />} />

@@ -4,7 +4,7 @@ const initialState = {
   items: localStorage.getItem("carts") ? JSON.parse(localStorage.getItem("carts")) : [],
   statusTab: false,
   isConfirmingRemove: false,  // Trạng thái hiển thị thông báo xác nhận
-  productToRemove: null, // Sản phẩm cần xóa khi người dùng xác nhận
+  productToRemove: null,
 };
 
 const cartSlice = createSlice({
