@@ -1,22 +1,43 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../redux/userSlice';
+import securityApi from '../api/securityApi';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "./login.css"
-import Navbar2 from '../components/navbar2'
+import './login.css';
+import Navbar2 from '../components/navbar2';
 import Footer from '../components/footer';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberPassword, setRememberPassword] = useState(false);
+  const [error, setError] = useState(null);
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle sign-in logic
-  };
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+
+    try {
+      const data = await securityApi.login(username, password); // Gọi API đăng nhập
+      setMessage('AccessToken: ' + data.accessToken + '\nRefreshToken: ' + data.refreshToken);
+      dispatch(setUser(data)); // Lưu thông tin user vào Redux
+      if (rememberPassword) {
+        // Nếu chọn "Remember Password", lưu thông tin vào localStorage
+        localStorage.setItem('user', JSON.stringify(data));
+      }
+      navigate('/'); // Chuyển hướng sau khi đăng nhập thành công
+    } catch (err) {
+      setError('Login failed. Please check your username and password.');
+    }
   };
   return (
     <div>
@@ -30,14 +51,15 @@ const Login = () => {
                 <form onSubmit={handleSubmit}>
                   <div className="form-floating mb-3">
                     <input
-                      type="email"
+                      type="text"
                       className="form-control"
-                      id="floatingInput"
-                      placeholder="name@example.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      id="floatingUsername"
+                      placeholder="Username"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      required
                     />
-                    <label htmlFor="floatingInput">Email address</label>
+                    <label htmlFor="floatingUsername">Username</label>
                   </div>
                   <div className="form-floating mb-3 position-relative">
                     <input
@@ -45,6 +67,9 @@ const Login = () => {
                       className="form-control"
                       id="password"
                       placeholder="Password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
                     />
                     <label htmlFor="password">Password</label>
                     <span
@@ -59,7 +84,8 @@ const Login = () => {
                       )}
                     </span>
                   </div>
-
+                  {error && <p className="text-danger">{error}</p>}
+                  {message && <p className="text-success">{message}</p>}
                   <div className="form-check mb-3">
                     <input
                       className="form-check-input"

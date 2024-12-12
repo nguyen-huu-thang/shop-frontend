@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Logo from '../assets/logo1.png';
 import { MdSearch } from "react-icons/md";
 import { CiShoppingCart } from "react-icons/ci";
 import { AiOutlineUser } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { CiHeart } from "react-icons/ci";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import ShoppingCart from "./shoppingcart";
 import { CiMenuBurger } from "react-icons/ci";
 import { BsChevronDown, BsChevronRight } from "react-icons/bs";
+import { logout, fetchCurrentUser } from '../redux/userSlice';
 
 function Testpage() {
     const [sidebarVisible, setSidebarVisible] = useState(false);
@@ -34,6 +35,41 @@ function Testpage() {
     };
 
     const toggleSearchSidebar = () => setSearchSidebarOpen(!searchSidebarOpen);
+    const { isLoggedIn, user } = useSelector((state) => state.user);
+    const dispatch = useDispatch();
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Trạng thái dropdown
+
+    const dropdownRef = useRef(null); // Tham chiếu đến phần tử dropdown
+    const toggleDropdown = () => {
+        setIsDropdownOpen((prev) => !prev); // Bật/Tắt dropdown
+    };
+    // Đóng dropdown khi nhấn bên ngoài
+    useEffect(() => {
+        const handleOutsideClick = (e) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+                setIsDropdownOpen(false); // Đóng dropdown
+            }
+        };
+
+        // Lắng nghe sự kiện click toàn cục
+        document.addEventListener("mousedown", handleOutsideClick);
+
+        return () => {
+            document.removeEventListener("mousedown", handleOutsideClick);
+        };
+    }, []);
+    useEffect(() => {
+        if (isLoggedIn && !user) {
+            // Lấy thông tin người dùng nếu đã đăng nhập
+            dispatch(fetchCurrentUser());
+        }
+    }, [isLoggedIn, user, dispatch]);
+    const handleLogout = () => {
+        dispatch(logout()); // Cập nhật trạng thái đăng xuất  
+    };
+
+
+    
     return (
         <div className="w-full h-24 sticky top-0 bg-white text-black z-50 shadow-lg">
             <div className="flex justify-between items-center px-12 h-full">
@@ -86,9 +122,9 @@ function Testpage() {
                         <MdSearch />
                     </button>
                     <div className="relative hidden lg:block">
-                        <input 
-                            type="text" 
-                            placeholder="Search" 
+                        <input
+                            type="text"
+                            placeholder="Search"
                             className="w-80 h-10 px-4 pr-10 rounded-full border border-gray-400 focus:border-gray-300 focus:outline-none"
                         />
                         <MdSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
@@ -104,7 +140,7 @@ function Testpage() {
                     {/* Cart */}
                     <div className="relative">
                         <div className="flex text-xl cursor-pointer" onClick={() => setSidebarVisible(true)}>
-                            <CiShoppingCart size={25} color="black"/>
+                            <CiShoppingCart size={25} color="black" />
                             <span className="absolute h-4 w-4 left-4 top-[-20%] bg-gray-600 text-white text-sm rounded-full flex justify-center items-center ">{totalQuantity}</span>
                         </div>
                         {sidebarVisible && (
@@ -115,7 +151,7 @@ function Testpage() {
                                     <h3 className="text-xl border-b border-gray-700 pb-2">Giỏ hàng của bạn</h3>
                                     <p className="mt-4 text-gray-400">Danh sách sản phẩm</p>
                                     <div className="grid grid-rows p-1 gap-1">
-                                        {carts.map((item, key) => <ShoppingCart key={key} data={item}/>)}
+                                        {carts.map((item, key) => <ShoppingCart key={key} data={item} />)}
                                     </div>
                                     <div className="grid grid-cols-2 gap-2 absolute bottom-10 left-0 w-full p-4">
                                         <Link to="/cart">
@@ -130,18 +166,69 @@ function Testpage() {
                         )}
                     </div>
 
-                    {/* User Login */}
-                    <Link to="/login">
-                        <div className="text-xl cursor-pointer">
-                            <AiOutlineUser />
+                    <div className="relative" ref={dropdownRef}>
+                        {/* Biểu tượng tài khoản */}
+                        <div
+                            className="flex items-center cursor-pointer"
+                            onClick={toggleDropdown} // Nhấn để bật/tắt dropdown
+                        >
+                            <AiOutlineUser className="text-xl" />
+                            {isLoggedIn && user?.username && (
+                                <span className="ml-2">{user.username}</span>
+                            )}
                         </div>
-                    </Link>
+                        {/* Dropdown */}
+                        {isDropdownOpen && (
+                            <div
+                                className="absolute top-[120%] -left-3 transform -translate-x-1/2 w-40 bg-white border border-gray-300 mt-2 shadow-lg z-10"
+                                onClick={(e) => e.stopPropagation()} // Ngăn sự kiện click thoát dropdown
+                            >
+                                {!isLoggedIn ? (
+                                    <>
+                                        <Link
+                                            to="/login"
+                                            className="block px-4 py-2 hover:bg-gray-600 hover:text-white"
+                                            onClick={() => setIsDropdownOpen(false)} // Đóng dropdown khi chuyển trang
+                                        >
+                                            Đăng nhập
+                                        </Link>
+                                        <Link
+                                            to="/register"
+                                            className="block px-4 py-2 hover:bg-gray-600 hover:text-white"
+                                            onClick={() => setIsDropdownOpen(false)} // Đóng dropdown khi chuyển trang
+                                        >
+                                            Đăng ký
+                                        </Link>
+                                    </>
+                                ) : (
+                                    <div>
+                                        <Link
+                                            to="/account"
+                                            onClick={() => {
+                                                setIsDropdownOpen(false); // Đóng dropdown khi chuyển trang
+                                            }}
+                                            className="block px-4 py-2 hover:bg-gray-600 hover:text-white cursor-pointer"
+                                        >
+                                            Thông tin tài khoản
+                                        </Link>
+                                        <span
+                                            onClick={handleLogout}
+                                            className="block px-4 py-2 hover:bg-gray-600 hover:text-white cursor-pointer"
+                                        >
+                                            Đăng xuất
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 
+
             {/* Sidebar menu (menu that slides in from the right) */}
             {isMenuOpen && (
-                <>
+                <div>
                     <div className="fixed inset-0 bg-black bg-opacity-50 z-40 h-full" onClick={closeMenu}></div>
                     <div className="fixed top-0 left-0 w-2/5 h-full bg-white text-black z-50 shadow-lg p-4 transform transition-transform duration-300 ease-in-out" style={{ transform: isMenuOpen ? 'translateX(0)' : 'translateX(100%)' }}>
                         <button className="absolute top-4 right-4 text-black text-xl" onClick={closeMenu}>X</button>
@@ -156,8 +243,8 @@ function Testpage() {
                             </div>
                             {/* Category with dropdown */}
                             <div>
-                                <div 
-                                    className="flex items-center justify-between text-lg cursor-pointer hover:text-gray-300" 
+                                <div
+                                    className="flex items-center justify-between text-lg cursor-pointer hover:text-gray-300"
                                     onClick={toggleCategory}
                                 >
                                     <span>Danh mục</span>
@@ -184,15 +271,15 @@ function Testpage() {
                             </div>
                         </div>
                     </div>
-                </>
+                </div>
             )}
             {searchSidebarOpen && (
                 <>
                     <div className="fixed inset-0 bg-black bg-opacity-50 z-40 h-full" onClick={toggleSearchSidebar}></div>
                     <div className="fixed top-0 right-0 w-2/5 h-full bg-white text-black z-50 shadow-lg p-4 transform transition-transform duration-300 ease-in-out" style={{ transform: searchSidebarOpen ? 'translateX(0)' : 'translateX(100%)' }}>
-                        <input 
-                            type="text" 
-                            placeholder="Search" 
+                        <input
+                            type="text"
+                            placeholder="Search"
                             className="w-full h-10 px-4 rounded-full border border-gray-400 focus:border-gray-300 focus:outline-none"
                         />
                     </div>
@@ -200,6 +287,6 @@ function Testpage() {
             )}
         </div>
     );
-}
+};
 
 export default Testpage;
