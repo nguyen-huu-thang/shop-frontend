@@ -5,6 +5,8 @@ import ChangePassword from '../components/changepassword';
 import PurchaseHistory from '../components/purchasehistory';
 import { LuUserCircle } from "react-icons/lu";
 import Navbar from '../components/navbar';
+import ChangeProfile from '../components/changeprofile';
+import userApi from '../api/userApi';
 const Account = () => {
   return (
     <div className='bg-gray-100'>
@@ -21,6 +23,7 @@ const Account = () => {
                 <hr></hr>
                 <div className="flex flex-col space-y-4 pt-6">
                     <Link to="/account/profile" className="text-gray-800 text-lg font-semibold hover:bg-gray-200 p-2">Hồ sơ</Link>
+                    <Link to="/account/change-profile" className="text-gray-800 text-lg font-semibold hover:bg-gray-200 p-2">Thay đổi thông tin cá nhân</Link>
                     <Link to="/account/change-password" className="text-gray-800 text-lg font-semibold hover:bg-gray-200 p-2">Đổi mật khẩu</Link>
                     <Link to="/account/purchase-history" className="text-gray-800 text-lg font-semibold hover:bg-gray-200 p-2">Lịch sử mua hàng</Link>
                 </div>
@@ -32,6 +35,7 @@ const Account = () => {
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/change-password" element={<ChangePassword />} />
                     <Route path="/purchase-history" element={<PurchaseHistory />} />
+                    <Route path="/change-profile" element={<ChangeProfile />} />
                 </Routes>
             </div>
         </div>

@@ -62,7 +62,7 @@ const Love = () => {
         {/* Hiển thị Filter nếu showFilter là true */}
         {showFilter && (
           <Filter 
-            categories={['fashion', 'shoes-bags', 'electronics']}
+            categories={['fashion', 'shoes', 'electronics','health and beauty','housewares','decoration','book','stationery','mother and baby','book bag']}
             onFilterChange={handleFilterChange} 
           />
         )}
