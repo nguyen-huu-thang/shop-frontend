@@ -7,30 +7,37 @@ import { LuUserCircle } from "react-icons/lu";
 import Navbar from '../components/navbar';
 import ChangeProfile from '../components/changeprofile';
 import userApi from '../api/userApi';
+import { HiChevronRight } from "react-icons/hi";
 const Account = () => {
   return (
     <div className='bg-gray-100'>
         <Navbar />
-        <div className="flex w-4/5 px-6 pt-10 mx-20" style={{ minHeight: 'calc(100vh - 96px)' }}>
+        <div className="flex w-full" style={{ minHeight: 'calc(100vh - 96px)' }}>
         {/* Left Section */}
-            <div className="w-1/4 p-6 mr-6">
+            <div className="w-1/5 p-6 bg-gray-800">
                 <div className="flex items-center mb-8">
-                    <div className="text-4xl mr-2">
+                    <div className="text-4xl mr-2 text-gray-100">
                         <LuUserCircle/>
                     </div>
-                    <span className="font-bold text-lg">Nguyễn Xuân An</span>
+                    <span className="font-bold text-lg text-gray-100">Quản Lý Người Dùng</span>
                 </div>
-                <hr></hr>
+                <hr className='text-white'></hr>
                 <div className="flex flex-col space-y-4 pt-6">
-                    <Link to="/account/profile" className="text-gray-800 text-lg font-semibold hover:bg-gray-200 p-2">Hồ sơ</Link>
-                    <Link to="/account/change-profile" className="text-gray-800 text-lg font-semibold hover:bg-gray-200 p-2">Thay đổi thông tin cá nhân</Link>
-                    <Link to="/account/change-password" className="text-gray-800 text-lg font-semibold hover:bg-gray-200 p-2">Đổi mật khẩu</Link>
-                    <Link to="/account/purchase-history" className="text-gray-800 text-lg font-semibold hover:bg-gray-200 p-2">Lịch sử mua hàng</Link>
+                    <Link to="/account/profile" className="flex text-gray-100 text-base font-semibold hover:bg-gray-200 p-2 justify-between items-center">
+                        Hồ sơ
+                        <HiChevronRight/>
+                    </Link>
+                    <Link to="/account/change-profile" className="flex text-gray-100 text-base font-semibold hover:bg-gray-200 p-2 justify-between items-center">
+                        Thay đổi thông tin cá nhân 
+                        <HiChevronRight/>
+                    </Link>
+                    <Link to="/account/change-password" className="flex text-gray-100 text-base font-semibold hover:bg-gray-200 p-2 justify-between items-center">Đổi mật khẩu <HiChevronRight/></Link>
+                    <Link to="/account/purchase-history" className="flex text-gray-100 text-base font-semibold hover:bg-gray-200 p-2 justify-between items-center">Lịch sử mua hàng <HiChevronRight/></Link>
                 </div>
             </div>
 
             {/* Right Section */}
-            <div className="w-3/4 bg-white">
+            <div className="w-4/5 bg-white p-6">
                 <Routes>
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/change-password" element={<ChangePassword />} />
