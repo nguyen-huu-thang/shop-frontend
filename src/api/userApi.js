@@ -54,7 +54,7 @@ const userApi = {
   createUser: async (data) => {
     try {
       const response = await api.post("/users", data);
-      return response.data;
+      return response.data; 
     } catch (error) {
       handleError(error);
     }

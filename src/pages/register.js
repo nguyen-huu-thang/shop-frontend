@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './register.css'
 import Footer from '../components/footer';
 import Navbar2 from '../components/navbar2';
-import { registerUser } from "../redux/userSlice";
+import { registerUser, fetchCurrentUser } from "../redux/userSlice";
 
 const Register = () => {
     const navigate = useNavigate();
@@ -55,12 +55,15 @@ const Register = () => {
                     address: formData.address,
                 })
             ).unwrap();
+            // Gọi API lấy thông tin user
+            await dispatch(fetchCurrentUser());
             // Chuyển hướng tới trang đăng nhập
             setTimeout(() => navigate('/'), 2000);
         } catch (error) {
             setMessage(`Registration failed: ${error.response?.data?.message || error.message}`);
         }
     };
+    
 
     return (
         <div>

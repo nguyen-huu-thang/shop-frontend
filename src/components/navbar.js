@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import ShoppingCart from "./shoppingcart";
 import { CiMenuBurger } from "react-icons/ci";
 import { BsChevronDown, BsChevronRight } from "react-icons/bs";
-import { logout, fetchCurrentUser } from '../redux/userSlice';
+import { logout, fetchCurrentUser, setUser } from '../redux/userSlice';
 
 function Testpage() {
     const [sidebarVisible, setSidebarVisible] = useState(false);
@@ -37,17 +37,17 @@ function Testpage() {
     const categories = [
         { name: "Thời trang", path: "fashion" },
         { name: "Giày dép - Túi sách", path: "shoes" },
-        { name: "Điện tử", path: "electronics" }, 
-        { name: "Sức khỏe - Làm đẹp", path: "health-and-beauty" }, 
+        { name: "Điện tử", path: "electronics" },
+        { name: "Sức khỏe - Làm đẹp", path: "health-and-beauty" },
         { name: "Đồ gia dụng", path: "housewares" },
         { name: "Đồ trang trí", path: "decoration" },
         { name: "Mẹ và bé", path: "mother-and-baby" },
         { name: "Sách", path: "book" },
         { name: "Văn phòng phẩm", path: "stationery" }
-      ];
+    ];
 
     const toggleSearchSidebar = () => setSearchSidebarOpen(!searchSidebarOpen);
-    const { isLoggedIn, user } = useSelector((state) => state.user);
+    const { accessToken, user } = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Trạng thái dropdown
 
@@ -71,17 +71,40 @@ function Testpage() {
         };
     }, []);
     useEffect(() => {
-        if (isLoggedIn && !user) {
-            // Lấy thông tin người dùng nếu đã đăng nhập
+        if (accessToken && !user) {
+            console.log("Fetching current user...");
             dispatch(fetchCurrentUser());
         }
-    }, [isLoggedIn, user, dispatch]);
+    }, [accessToken, user, dispatch]);
     const handleLogout = () => {
         dispatch(logout()); // Cập nhật trạng thái đăng xuất  
     };
 
+    console.log("AccessToken:", accessToken);
+    console.log("User:", user); // Đảm bảo `user` được log đầy đủ
+    if (user?.username) {
+        console.log("Username:", user.username);
+    }
+    useEffect(() => {
+        const restoreUser = async () => {
+            const accessToken = localStorage.getItem("accessToken");
+            const user = localStorage.getItem("user");
 
-    
+            if (accessToken && user) {
+                dispatch(setUser({
+                    accessToken,
+                    refreshToken: localStorage.getItem("refreshToken"),
+                    user: user,
+                }));
+            } else if (accessToken) {
+                // Gọi API lấy thông tin user nếu chỉ có accessToken
+                await dispatch(fetchCurrentUser());
+            }
+        };
+
+        restoreUser();
+    }, [dispatch]);
+
     return (
         <div className="w-full h-24 sticky top-0 bg-white text-black z-50 shadow-lg">
             <div className="flex justify-between items-center px-12 h-full">
@@ -176,7 +199,7 @@ function Testpage() {
                             onClick={toggleDropdown} // Nhấn để bật/tắt dropdown
                         >
                             <AiOutlineUser className="text-xl" />
-                            {isLoggedIn && user?.username && (
+                            {accessToken && user?.username && (
                                 <span className="ml-2">{user.username}</span>
                             )}
                         </div>
@@ -186,7 +209,7 @@ function Testpage() {
                                 className="absolute top-[120%] -left-3 transform -translate-x-1/2 w-40 bg-white border border-gray-300 mt-2 shadow-lg z-10"
                                 onClick={(e) => e.stopPropagation()} // Ngăn sự kiện click thoát dropdown
                             >
-                                {!isLoggedIn ? (
+                                {!accessToken ? (
                                     <>
                                         <Link
                                             to="/login"

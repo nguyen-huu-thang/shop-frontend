@@ -14,10 +14,11 @@ export const refreshAccessToken = createAsyncThunk(
 // Thunk để lấy thông tin người dùng hiện tại
 export const fetchCurrentUser = createAsyncThunk(
   "user/fetchCurrentUser",
-  async (_, { rejectWithValue }) => {
+  async (_, { getState, rejectWithValue }) => {
     try {
-      const user = await userApi.getCurrentUser();
-      return user;
+      const { accessToken } = getState().user;
+      const user = await userApi.getCurrentUser(accessToken); // Gửi token để lấy thông tin
+      console.log("Fetched current user:", user);
     } catch (error) {
       return rejectWithValue(error.response?.data || "Failed to fetch user");
     }
@@ -29,7 +30,8 @@ export const registerUser = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await userApi.createUser(data);
-      return response; // Trả về thông tin người dùng mới tạo
+      console.log("API Response:", response); // Debug dữ liệu
+      return response;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Failed to register user");
     }
@@ -40,24 +42,17 @@ const userSlice = createSlice({
   initialState: {
     accessToken: localStorage.getItem("accessToken") || null,
     refreshToken: localStorage.getItem("refreshToken") || null,
-    isLoggedIn: false, 
     user: null,
   },
   reducers: {
     setUser: (state, action) => {
-      state.isLoggedIn = true
       state.user = action.payload.user;
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
       localStorage.setItem("accessToken", state.accessToken);
       localStorage.setItem("refreshToken", state.refreshToken);
     },
-    login: (state, action) => {
-      state.isLoggedIn = true;
-      state.user = action.payload.user; // Lưu thông tin người dùng
-    },
     logout: (state) => {
-      state.isLoggedIn = false;
       state.user = null;
       state.accessToken = null;
       state.refreshToken = null;
@@ -67,18 +62,30 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(refreshAccessToken.fulfilled, (state, action) => {
-      state.accessToken = action.payload;
+        console.log("Access token refreshed:", action.payload);
+        state.accessToken = action.payload;
+        localStorage.setItem("accessToken", action.payload);
       })
       .addCase(fetchCurrentUser.fulfilled, (state, action) => {
-        state.user = action.payload;
-        state.isLoggedIn = true;
+        console.log("Fetch current user fulfilled:", action.payload);
+        state.user = action.payload; // Gán toàn bộ đối tượng làm user
+        state.accessToken = localStorage.getItem("accessToken");
+        localStorage.setItem("user", action.payload);
       })
       .addCase(registerUser.fulfilled, (state, action) => {
-        state.isLoggedIn = true;
-        state.user = action.payload; // Lưu thông tin người dùng mới
+        // const { accessToken, refreshToken, user } = action.payload;
+
+        // Lưu Access Token, Refresh Token và User vào Redux và LocalStorage
+        state.accessToken = action.payload;
+        state.refreshToken = action.payload;
+        state.user = action.payload;
+
+        localStorage.setItem("accessToken", state.accessToken);
+        localStorage.setItem("refreshToken", state.refreshToken);
+        localStorage.setItem("user", state.user);
       });
   },
 });
 
-export const { setUser, logout, login } = userSlice.actions;
+export const { setUser, logout } = userSlice.actions;
 export default userSlice.reducer;
