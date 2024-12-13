@@ -62,27 +62,13 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(refreshAccessToken.fulfilled, (state, action) => {
-        console.log("Access token refreshed:", action.payload);
         state.accessToken = action.payload;
-        localStorage.setItem("accessToken", action.payload);
       })
       .addCase(fetchCurrentUser.fulfilled, (state, action) => {
-        console.log("Fetch current user fulfilled:", action.payload);
         state.user = action.payload; // Gán toàn bộ đối tượng làm user
-        state.accessToken = localStorage.getItem("accessToken");
-        localStorage.setItem("user", action.payload);
       })
       .addCase(registerUser.fulfilled, (state, action) => {
-        // const { accessToken, refreshToken, user } = action.payload;
-
-        // Lưu Access Token, Refresh Token và User vào Redux và LocalStorage
-        state.accessToken = action.payload;
-        state.refreshToken = action.payload;
         state.user = action.payload;
-
-        localStorage.setItem("accessToken", state.accessToken);
-        localStorage.setItem("refreshToken", state.refreshToken);
-        localStorage.setItem("user", state.user);
       });
   },
 });

@@ -5,8 +5,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './register.css'
 import Footer from '../components/footer';
 import Navbar2 from '../components/navbar2';
-import { registerUser, fetchCurrentUser } from "../redux/userSlice";
-
+import { registerUser, setUser } from "../redux/userSlice";
+import securityApi from "../api/securityApi";
 const Register = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -55,11 +55,21 @@ const Register = () => {
                     address: formData.address,
                 })
             ).unwrap();
-            // Gọi API lấy thông tin user
-            await dispatch(fetchCurrentUser());
-            // Chuyển hướng tới trang đăng nhập
-            setTimeout(() => navigate('/'), 2000);
-        } catch (error) {
+            // Sau khi đăng ký thành công, tự động đăng nhập
+            const loginResponse = await securityApi.login(formData.username, formData.password);
+
+            // Kiểm tra nếu API trả về token
+            if (loginResponse.accessToken && loginResponse.refreshToken) {
+                // Lưu token vào Redux hoặc localStorage
+                dispatch(setUser(loginResponse)); // Lưu thông tin người dùng vào Redux
+                console.log(loginResponse);
+                setMessage('Registration and login successful!');
+                setTimeout(() => navigate('/'), 2000);
+            } else {
+                setMessage('Registration successful, but login failed.');
+            }
+        }
+        catch (error) {
             setMessage(`Registration failed: ${error.response?.data?.message || error.message}`);
         }
     };

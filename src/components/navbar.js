@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import ShoppingCart from "./shoppingcart";
 import { CiMenuBurger } from "react-icons/ci";
 import { BsChevronDown, BsChevronRight } from "react-icons/bs";
-import { logout, fetchCurrentUser, setUser } from '../redux/userSlice';
+import { logout, fetchCurrentUser } from '../redux/userSlice';
 
 function Testpage() {
     const [sidebarVisible, setSidebarVisible] = useState(false);
@@ -85,25 +85,6 @@ function Testpage() {
     if (user?.username) {
         console.log("Username:", user.username);
     }
-    // useEffect(() => {
-    //     const restoreUser = async () => {
-    //         const accessToken = localStorage.getItem("accessToken");
-    //         const user = localStorage.getItem("user");
-
-    //         if (accessToken && user) {
-    //             dispatch(setUser({
-    //                 accessToken,
-    //                 refreshToken: localStorage.getItem("refreshToken"),
-    //                 user: user,
-    //             }));
-    //         } else if (accessToken) {
-    //             // Gọi API lấy thông tin user nếu chỉ có accessToken
-    //             await dispatch(fetchCurrentUser());
-    //         }
-    //     };
-
-    //     restoreUser();
-    // }, [dispatch]);
 
     return (
         <div className="w-full h-24 sticky top-0 bg-white text-black z-50 shadow-lg">
