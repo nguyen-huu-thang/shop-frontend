@@ -14,11 +14,11 @@ export const refreshAccessToken = createAsyncThunk(
 // Thunk để lấy thông tin người dùng hiện tại
 export const fetchCurrentUser = createAsyncThunk(
   "user/fetchCurrentUser",
-  async (_, { getState, rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const { accessToken } = getState().user;
-      const user = await userApi.getCurrentUser(accessToken); // Gửi token để lấy thông tin
+      const user = await userApi.getCurrentUser(); // Gửi token để lấy thông tin
       console.log("Fetched current user:", user);
+      return user;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Failed to fetch user");
     }
