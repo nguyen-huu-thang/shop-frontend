@@ -48,6 +48,7 @@ function Testpage() {
 
     const toggleSearchSidebar = () => setSearchSidebarOpen(!searchSidebarOpen);
     const { isLoggedIn, user } = useSelector((state) => state.user);
+    console.log(user, isLoggedIn)
     const dispatch = useDispatch();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Trạng thái dropdown
 
