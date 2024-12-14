@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './register.css'
 import Footer from '../components/footer';
 import Navbar2 from '../components/navbar2';
-import { registerUser,setUser } from "../redux/userSlice";
+import { registerUser, setUser } from "../redux/userSlice";
 import securityApi from "../api/securityApi";
 const Register = () => {
     const navigate = useNavigate();
@@ -73,6 +73,7 @@ const Register = () => {
             setMessage(`Registration failed: ${error.response?.data?.message || error.message}`);
         }
     };
+    
 
     return (
         <div>
