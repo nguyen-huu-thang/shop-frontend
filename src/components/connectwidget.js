@@ -4,7 +4,7 @@ import { SiZalo } from 'react-icons/si';
 
 const ConnectWidget = () => {
     return (
-        <div className="fixed bottom-4 right-4 flex flex-col items-center space-y-3 z-50">
+        <div className="fixed bottom-4 right-4 flex flex-col items-center space-y-3 z-40">
             <a
                 href="https://zalo.me/0911936588"
                 target="_blank"

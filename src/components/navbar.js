@@ -36,9 +36,12 @@ function Testpage() {
 
     const categories = [
         { name: "Thời trang", path: "fashion" },
-        { name: "Giày dép - Túi sách", path: "shoes" },
+        { name: "Giày dép", path: "shoes" },
+        { name: "Túi sách", path: "book-bag"},
         { name: "Điện tử", path: "electronics" },
-        { name: "Sức khỏe - Làm đẹp", path: "health-and-beauty" },
+        { name: "Điện thoại",path: "mobile-and-accessories"},
+        { name: "Máy tính", path: "computers-and-accessories"},
+        { name: "Sức khỏe - Làm đẹp", path: "health-and-beauty"},
         { name: "Đồ gia dụng", path: "housewares" },
         { name: "Đồ trang trí", path: "decoration" },
         { name: "Mẹ và bé", path: "mother-and-baby" },
@@ -47,8 +50,8 @@ function Testpage() {
     ];
 
     const toggleSearchSidebar = () => setSearchSidebarOpen(!searchSidebarOpen);
-    const { isLoggedIn, user } = useSelector((state) => state.user);
-    console.log(user, isLoggedIn)
+    const { accessToken, user } = useSelector((state) => state.user);
+    console.log(user, accessToken)
     const dispatch = useDispatch();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Trạng thái dropdown
 
@@ -71,6 +74,7 @@ function Testpage() {
             document.removeEventListener("mousedown", handleOutsideClick);
         };
     }, []);
+
     useEffect(() => {
         if (accessToken && !user) {
             console.log("Fetching current user...");
@@ -238,7 +242,7 @@ function Testpage() {
             {isMenuOpen && (
                 <div>
                     <div className="fixed inset-0 bg-black bg-opacity-50 z-40 h-full" onClick={closeMenu}></div>
-                    <div className="fixed top-0 left-0 w-2/5 h-full bg-white text-black z-50 shadow-lg p-4 transform transition-transform duration-300 ease-in-out" style={{ transform: isMenuOpen ? 'translateX(0)' : 'translateX(100%)' }}>
+                    <div className="fixed top-0 left-0 w-4/5 h-full bg-white text-black z-50 shadow-lg p-4 transform transition-transform duration-300 ease-in-out" style={{ transform: isMenuOpen ? 'translateX(0)' : 'translateX(100%)' }}>
                         <button className="absolute top-4 right-4 text-black text-xl" onClick={closeMenu}>X</button>
                         {/* Menu Header */}
                         <div className="text-xl font-semibold mb-2">Menu</div>

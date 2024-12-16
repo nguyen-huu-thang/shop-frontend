@@ -6,17 +6,19 @@ import Register from './pages/register';
 import Details from './pages/details';
 import StoreManager from './pages/storemanager';
 import Test from './pages/test';
-import TokenRefresher from './utils/tokenRefresher'; // Thêm TokenRefresher
+import TokenRefresher from './utils/tokenRefresher'; 
 import Account from './pages/account';
 import Cart from './pages/cart';
 import Payments from './pages/payments';
 import Love from './pages/love';
 import Category from './pages/category';
 import Testpage from './components/testpage';
+import ScrollToTop from './components/scroll';
 function App() {
   return (
     <BrowserRouter>
       <TokenRefresher />
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
