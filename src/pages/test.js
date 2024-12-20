@@ -5,6 +5,9 @@ import Product from "../components/test/product/Product";
 import Category from "../components/test/category/Category";
 import Security from "../components/test/security/Security";
 import File from "../components/test/file/File";
+import Cart from "../components/test/cart/Cart";
+import Order from "../components/test/order/Order";
+import OrderDetail from "../components/test/orderDetail/OrderDetail";
 
 
 const Test = () => {
@@ -21,6 +24,12 @@ const Test = () => {
       <Category />
       <h2 class="xxx">File</h2>
       <File />
+      <h2 class="xxx">Cart</h2>
+      <Cart />
+      <h2 class="xxx">Order</h2>
+      <Order />
+      <h2 class="xxx">OrderDetail</h2>
+      <OrderDetail />
       
     </div>
   );
