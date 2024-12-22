@@ -8,6 +8,7 @@ import FilesByUser from "./FilesByUser"; // Lấy danh sách file theo user
 import UpdateFile from "./UpdateFile"; // Cập nhật thông tin file
 import FilesByProduct from "./FilesByProduct";
 import FilesByReview from "./FilesByReview";
+import MigrateFile from "./MigrateFile";
 
 
 const File = () => {
@@ -16,6 +17,9 @@ const File = () => {
 
   return (
     <div>
+      <section>
+        <MigrateFile />
+      </section>
       <section>
         <AllFiles />
       </section>
