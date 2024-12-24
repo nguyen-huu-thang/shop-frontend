@@ -5,6 +5,7 @@ function AddProduct() {
   const [formData, setFormData] = useState({
     name: "",
     price: "",
+    stock: "",
     category: "",
     description: "",
     image: null,
