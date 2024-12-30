@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import productApi from "../../../api/productApi";
 
-const MigrateProduct = () => {
+const MigrateProductOption = () => {
   const [bulkData, setBulkData] = useState([]);
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState([]);
-  const [isLoading, setIsLoading] = useState(false); // Thêm state để quản lý trạng thái loading
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Hàm xử lý tải file
+  // Handle file upload
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -19,7 +19,7 @@ const MigrateProduct = () => {
             setMessage("File JSON phải chứa một mảng các đối tượng sản phẩm.");
             return;
           }
-          setBulkData(parsedData); // Lưu dữ liệu vào state
+          setBulkData(parsedData);
           setMessage(`Đã tải thành công file ${file.name}.`);
         } catch (error) {
           setMessage("File JSON không hợp lệ.");
@@ -29,7 +29,7 @@ const MigrateProduct = () => {
     }
   };
 
-  // Hàm xử lý gửi dữ liệu
+  // Handle data submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (bulkData.length === 0) {
@@ -37,28 +37,30 @@ const MigrateProduct = () => {
       return;
     }
 
-    setIsLoading(true); // Bắt đầu trạng thái loading
+    setIsLoading(true);
     const results = [];
     for (const product of bulkData) {
       try {
-        const response = await productApi.createProduct({
-          ...product,
-          // price: parseFloat(product.price),
-          // stock: parseInt(product.stock),
-        });
-        results.push({ name: product.name, status: "Thành công" });
+        const response = await productApi.updateProductAttributes(
+          product.productId,
+          {
+            attribute: product.attribute,
+            value: product.value,
+          }
+        );
+        results.push({ id: product.id, status: "Thành công" });
       } catch (error) {
-        results.push({ name: product.name, status: "Thất bại" });
+        results.push({ id: product.id, status: "Thất bại" });
       }
     }
     setStatus(results);
-    setMessage("Quá trình thêm sản phẩm hoàn tất.");
-    setIsLoading(false); // Kết thúc trạng thái loading
+    setMessage("Quá trình cập nhật sản phẩm hoàn tất.");
+    setIsLoading(false);
   };
 
   return (
     <div>
-      <h2>Migrate Product</h2>
+      <h2>Migrate Product Options</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="fileInput" className="block mb-2 font-medium text-gray-700">
@@ -75,9 +77,9 @@ const MigrateProduct = () => {
         <button
           type="submit"
           className="mt-2 bg-blue-500 text-white p-2 rounded"
-          disabled={isLoading} // Không cho phép gửi form khi đang loading
+          disabled={isLoading}
         >
-          {isLoading ? "Processing..." : "Add Products"}
+          {isLoading ? "Processing..." : "Update Product Options"}
         </button>
       </form>
       {isLoading && (
@@ -92,7 +94,7 @@ const MigrateProduct = () => {
           <ul>
             {status.map((result, index) => (
               <li key={index}>
-                {result.name}: {result.status}
+                Sản phẩm ID {result.id}: {result.status}
               </li>
             ))}
           </ul>
@@ -102,4 +104,4 @@ const MigrateProduct = () => {
   );
 };
 
-export default MigrateProduct;
+export default MigrateProductOption;

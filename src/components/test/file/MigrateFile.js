@@ -36,7 +36,7 @@ const MigrateFile = () => {
     try {
       // Tải ảnh từ URL
       const response = await axios.get(url, { responseType: "blob" });
-      const file = new File([response.data], "image.jpg", { type: response.data.type });
+      const file = new File([response.data], `${url}`, { type: response.data.type });
 
       // Chuẩn bị dữ liệu upload
       const formData = {
@@ -77,7 +77,6 @@ const MigrateFile = () => {
         sort: 1,
         isActive: true,
         productId: `${productId}`, // Thêm Product ID nếu có
-        reviewId: null, // Thêm Review ID nếu có
       };
 
       // Upload ảnh

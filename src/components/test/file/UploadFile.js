@@ -50,6 +50,7 @@ const UploadFile = () => {
     try {
       setLoading(true);
       const response = await fileApi.uploadFile(file, formData);
+      console.log(file);
       alert(response.message || "File uploaded successfully");
       const fullPath = `https://localhost:8000/data/${response.file.replace(/\\/g, "/")}`;
       setUploadedFilePath(fullPath); // Lưu đường dẫn đầy đủ

@@ -6,7 +6,7 @@ import UpdateProduct from "./UpdateProduct";
 import DeleteProduct from "./DeleteProduct";
 import GetProductsByCategory from "./GetProductsByCategory";
 import MigrateProduct from "./MigrateProduct";
-
+import MigrateProductOption from "./MigrateProductOption";
 
 const Product = () => {
   return (
@@ -16,6 +16,9 @@ const Product = () => {
       </section>
       <section>
         <MigrateProduct />
+      </section>
+      <section>
+        <MigrateProductOption />
       </section>
       <section>
         <GetProducts />

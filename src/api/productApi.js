@@ -85,6 +85,22 @@ const productApi = {
     }
   },
 
+    /**
+   * Cập nhật thuộc tính sản phẩm theo ID.
+   * @param {number} id - ID của sản phẩm cần cập nhật.
+   * @param {Object} attributeData - Dữ liệu thuộc tính sản phẩm.
+   * @returns {Promise<Object>} Kết quả cập nhật thuộc tính sản phẩm.
+   */
+  updateProductAttributes: async (id, attributeData) => {
+    try {
+      console.log(attributeData);
+      const response = await api.put(`/products/${id}/attribute`, attributeData);
+      return response.data; // Trả về kết quả cập nhật
+    } catch (error) {
+      handleError(error);
+    }
+  },
+
 };
 
 export default productApi;

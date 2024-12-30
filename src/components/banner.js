@@ -1,10 +1,11 @@
 import React, {useState} from 'react'
-import Banner1 from '../assets/banner1.jpg';
-import Banner2 from '../assets/banner2.jpg';
-import Banner3 from '../assets/banner3.jpg';
+import Banner4 from '../assets/banner4.jpg';
+import Banner6 from '../assets/banner6.jpg';
+import Banner7 from '../assets/banner7.jpg';
+import Banner8 from '../assets/banner8.jpg';
 
 const Banner = () => {
-    const bannerAds = [Banner1, Banner2, Banner3];
+    const bannerAds = [Banner4, Banner6, Banner7, Banner8];
     const [currentAdIndex, setCurrentAdIndex] = useState(0);
     const [transitioning, setTransitioning] = useState(false);
 
