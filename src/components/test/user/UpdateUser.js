@@ -9,7 +9,6 @@ const UpdateUser = () => {
     password: '',
     phone: '',
     address: '',
-    isActive: false,
   });
   const [message, setMessage] = useState(null);
 
@@ -86,15 +85,6 @@ const UpdateUser = () => {
             type="text"
             name="address"
             value={formData.address}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Is Active:</label>
-          <input
-            type="checkbox"
-            name="isActive"
-            checked={formData.isActive}
             onChange={handleChange}
           />
         </div>
