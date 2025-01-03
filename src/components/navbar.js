@@ -224,6 +224,17 @@ function Testpage() {
                                         >
                                             Thông tin tài khoản
                                         </Link>
+                                        {user?.username === "superadmin" && (
+                                            <Link
+                                                to="/storemanager"
+                                                onClick={() => {
+                                                    setIsDropdownOpen(false); // Đóng dropdown khi chuyển trang
+                                                }}
+                                                className="block px-4 py-2 hover:bg-gray-600 hover:text-white cursor-pointer"
+                                            >
+                                                Quản lý gian hàng
+                                            </Link>
+                                        )}
                                         <span
                                             onClick={handleLogout}
                                             className="block px-4 py-2 hover:bg-gray-600 hover:text-white cursor-pointer"

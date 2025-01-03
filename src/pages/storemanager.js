@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, Route, Routes } from "react-router-dom";
-import ViewProduct from "../components/viewproduct";
-import AddProduct from "../components/addproduct";
+import ViewProduct from "../components/storemanager/viewproduct";
+import AddProduct from "../components/storemanager/addproduct";
 import Logo from "../assets/logo1.png";
 import { HiChevronRight } from "react-icons/hi";
 import { FaStore } from "react-icons/fa";

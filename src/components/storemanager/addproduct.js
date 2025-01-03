@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import productApi from "../api/productApi"; // Import hàm createProduct từ API (đảm bảo API này được export đúng cách)
+import productApi from "../../api/productApi"; // Import hàm createProduct từ API (đảm bảo API này được export đúng cách)
 
 function AddProduct() {
   const [formData, setFormData] = useState({
