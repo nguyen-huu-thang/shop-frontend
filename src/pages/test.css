@@ -63,3 +63,8 @@
   margin: 50px 10px 10px 10px;
   font-size: calc(1.325rem + .9vw);
 }
+
+textarea {
+  height: 10%;
+  width: 100%;
+}

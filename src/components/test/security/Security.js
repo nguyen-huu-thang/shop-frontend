@@ -1,6 +1,7 @@
 import React from "react";
 import Login from "./Login";
 import RefreshToken from "./RefreshToken";
+import RefreshRefreshToken from "./RefreshRefreshToken";
 import Logout from "./Logout";
 import ChangePassword from "./ChangePassword";
 import VerifyPassword from "./VerifyPassword";
@@ -15,6 +16,10 @@ const Security = () => {
 
       <section>
         <RefreshToken />
+      </section>
+
+      <section>
+        <RefreshRefreshToken />
       </section>
 
       <section>

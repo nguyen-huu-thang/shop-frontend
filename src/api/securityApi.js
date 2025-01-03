@@ -71,6 +71,29 @@ const securityApi = {
   },
 
   /**
+   * Cấp lại Refresh Token từ Refresh Token
+   * @param {string} refreshToken - Refresh token
+   * @returns {Promise<Object>} Đối tượng chứa referesh token mới
+   */
+  referesh_refreshToken: async (refreshToken) => {
+    try {
+      const response = await api.post(
+        "/refresh-refresh-token",
+        { refreshToken },
+        { skipAuth: true }
+      );
+      const { refereshRefereshToken } = response.data;
+
+      // Cập nhật refereshRefereshToken vào localStorage
+      localStorage.setItem("refereshRefereshToken", refereshRefereshToken);
+
+      return response.data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
    * Thay đổi mật khẩu
    * @param {string} currentPassword - Mật khẩu hiện tại
    * @param {string} newPassword - Mật khẩu mới
