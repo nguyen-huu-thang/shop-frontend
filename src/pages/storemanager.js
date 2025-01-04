@@ -30,7 +30,7 @@ function StoreManager() {
       {/* Main Content */}
       <div className="flex w-full" style={{ minHeight: 'calc(100vh - 96px)' }}>
         {/* Sidebar */}
-        <div className="w-1/5 p-3 bg-gray-800">
+        <div className="w-1/5 p-3 h-screen bg-gray-800 sticky top-24">
           <h2 className="flex items-center text-2xl font-semibold px-3 mb-4 text-white justify-content-between"><FaStore /> Quản lý gian hàng</h2>
           <div>
             <Link

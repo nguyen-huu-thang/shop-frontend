@@ -93,7 +93,7 @@ const Attributes = ({ initialData = [], onChange }) => {
               onClick={() => handleAddColumn(rowIdx)}
               className="border p-2 text-gray-500 bg-gray-100 hover:bg-gray-200 rounded ml-2"
             >
-              +
+              + Giá trị
             </button>
             {/* Nút xóa hàng */}
             <button

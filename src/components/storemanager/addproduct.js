@@ -14,7 +14,7 @@ const AddProduct = () => {
     price: "",
     stock: "",
     categoryId: "",
-    attributes: {}, // Lưu thuộc tính ở đây
+    attribute: {}, // Lưu thuộc tính ở đây
   });
 
   const [errors, setErrors] = useState({});
@@ -40,7 +40,7 @@ const AddProduct = () => {
       return acc;
     }, {});
   
-    setFormData((prev) => ({ ...prev, attributes: attributesObject }));
+    setFormData((prev) => ({ ...prev, attribute: attributesObject }));
   };
   
 
@@ -59,7 +59,7 @@ const AddProduct = () => {
         price: "",
         stock: "",
         categoryId: "",
-        attributes: {}, // Reset attributes
+        attribute: {}, // Reset attributes
       });
     } catch (error) {
       setMessage("Lỗi khi tạo sản phẩm: " + error.message);
@@ -79,7 +79,7 @@ const AddProduct = () => {
       
       {/* Component Attributes */}
       <Attributes
-        initialData={Object.entries(formData.attributes)} // Chuyển attributes thành mảng
+        initialData={Object.entries(formData.attribute)} // Chuyển attributes thành mảng
         onChange={handleAttributesChange} // Xử lý khi dữ liệu thuộc tính thay đổi
       />
 

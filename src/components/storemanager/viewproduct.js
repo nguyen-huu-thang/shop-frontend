@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import productApi from "../../api/productApi";  // Import API đã tạo trước đó
 import categoryApi from "../../api/categoryApi"; // Import API
+import EditProduct from "./editproduct";
+import DeleteProduct from "./deleteproduct";
 function ViewProduct() {
   const [productList, setProductList] = useState([]);  // Khởi tạo productList là một mảng rỗng
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [expandedProducts, setExpandedProducts] = useState({});
   const [categoryMap, setCategoryMap] = useState({});
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -23,20 +26,21 @@ function ViewProduct() {
     fetchProducts();
   }, []);
 
-  const fetchCategoryName = async (categoryId) => {
-    if (categoryMap[categoryId]) {
-      return; // Nếu danh mục đã có trong map, không cần gọi API
-    }
-    try {
-      const category = await categoryApi.getCategoryById(categoryId);
-      setCategoryMap((prev) => ({
-        ...prev,
-        [categoryId]: category.description, // Lưu tên danh mục vào map
-      }));
-    } catch (error) {
-      console.error(`Failed to fetch category for ID ${categoryId}:`, error);
-    }
-  };
+  const fetchCategoryName = useCallback(
+    async (categoryId) => {
+      if (categoryMap[categoryId]) return; // Nếu danh mục đã tồn tại, không cần gọi API
+      try {
+        const category = await categoryApi.getCategoryById(categoryId);
+        setCategoryMap((prev) => ({
+          ...prev,
+          [categoryId]: category.description, // Lưu thông tin danh mục
+        }));
+      } catch (error) {
+        console.error(`Failed to fetch category for ID ${categoryId}:`, error);
+      }
+    },
+    [categoryMap] // Phụ thuộc vào categoryMap
+  );
 
   useEffect(() => {
     if (productList.length > 0) {
@@ -56,17 +60,23 @@ function ViewProduct() {
   };
   
   // Hàm xử lý xóa sản phẩm
-  const handleDelete = (index) => {
-    const newProductList = [...productList];
-    newProductList.splice(index, 1);
-    setProductList(newProductList);
+  const handleDelete = (productId) => {
+    // Xóa sản phẩm khỏi danh sách sau khi xóa thành công
+    setProductList((prev) => prev.filter((product) => product.id !== productId));
   };
 
   // Hàm chỉnh sửa sản phẩm
-  const handleEdit = (index) => {
-    alert(`Editing product ${productList[index].name}`);
+  const handleEdit = (product) => {
+    setSelectedProduct(product); // Mở modal chỉnh sửa
   };
 
+  const handleUpdateProduct = (updatedProduct) => {
+    setProductList((prev) =>
+      prev.map((product) =>
+        product.id === updatedProduct.id ? updatedProduct : product
+      )
+    );
+  };
   // Hiển thị loading hoặc lỗi nếu có
   if (loading) {
     return <div>Loading...</div>;
@@ -78,7 +88,7 @@ function ViewProduct() {
 
   return (
     <div>
-      <h2 className="text-2xl font-semibold mb-4">Danh sách sản phẩm</h2>
+      <h2 className="text-2xl font-semibold mb-4 overflow-y-auto">Danh sách sản phẩm</h2>
       <table className="min-w-full border-collapse">
         <thead>
           <tr>
@@ -135,12 +145,10 @@ function ViewProduct() {
                     >
                       Edit
                     </button>
-                    <button
-                      onClick={() => handleDelete(product.id)}
-                      className="text-red-600 hover:underline"
-                    >
-                      Delete
-                    </button>
+                    <DeleteProduct
+                      productId={product.id} // Truyền ID sản phẩm cần xóa
+                      onDelete={handleDelete} // Callback để cập nhật danh sách sản phẩm
+                    />
                   </td>
                 </tr>
               );
@@ -154,6 +162,13 @@ function ViewProduct() {
           )}
         </tbody>
       </table>
+      {selectedProduct && (
+        <EditProduct
+          product={selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+          onUpdate={handleUpdateProduct}
+        />
+      )}
     </div>
   );
 }
