@@ -40,8 +40,15 @@ const FileList = ({ page, limit }) => {
           <thead>
             <tr>
               <th>ID</th>
+              <th>User ID</th>
               <th>File Name</th>
+              <th>File Path</th>
+              <th>File Size (KB)</th>
+              <th>Sort</th>
               <th>Uploaded At</th>
+              <th>Active</th>
+              <th>Target</th>
+              <th>Target ID</th>
               <th>Description</th>
             </tr>
           </thead>
@@ -49,8 +56,15 @@ const FileList = ({ page, limit }) => {
             {files.map((file) => (
               <tr key={file.id}>
                 <td>{file.id}</td>
+                <td>{file.userId}</td>
                 <td>{file.fileName}</td>
+                <td>{file.filePath}</td>
+                <td>{(file.fileSize / 1024).toFixed(2)}</td>
+                <td>{file.sort || "-"}</td>
                 <td>{file.uploadedAt}</td>
+                <td>{file.isActive ? "Yes" : "No"}</td>
+                <td>{file.target || "N/A"}</td>
+                <td>{file.targetId || "N/A"}</td>
                 <td>{file.description || "No description"}</td>
               </tr>
             ))}

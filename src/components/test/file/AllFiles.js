@@ -44,8 +44,8 @@ const AllFiles = () => {
               <th>Sort</th>
               <th>Uploaded At</th>
               <th>Active</th>
-              <th>Product ID</th>
-              <th>Review ID</th>
+              <th>Target</th>
+              <th>Target ID</th>
               <th>Description</th>
             </tr>
           </thead>
@@ -60,8 +60,8 @@ const AllFiles = () => {
                 <td>{file.sort || "-"}</td>
                 <td>{file.uploadedAt}</td>
                 <td>{file.isActive ? "Yes" : "No"}</td>
-                <td>{file.productId || "-"}</td>
-                <td>{file.reviewId || "-"}</td>
+                <td>{file.target || "N/A"}</td>
+                <td>{file.targetId || "N/A"}</td>
                 <td>{file.description || "No description"}</td>
               </tr>
             ))}
