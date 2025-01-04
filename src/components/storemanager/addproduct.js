@@ -1,223 +1,94 @@
 import React, { useState } from "react";
-import productApi from "../../api/productApi"; // Import hàm createProduct từ API (đảm bảo API này được export đúng cách)
+import Input from "../storemanager/input";
+import Select from "./treeSelect";
+import Text from "../storemanager/text";
+import Attributes from "../storemanager/attributes";
+import mapCategories from "../storemanager/treemapCategories";
+import productApi from "../../api/productApi";
 
-function AddProduct() {
+const AddProduct = () => {
   const [formData, setFormData] = useState({
     name: "",
+    locationAddress: "",
+    description: "",
     price: "",
     stock: "",
-    category: "",
-    description: "",
-    image: null,
-    interfaceImage: null,
+    categoryId: "",
+    attributes: {}, // Lưu thuộc tính ở đây
   });
 
-  const [errors, setErrors] = useState({
-    price: "",
-  });
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
-  const [loading, setLoading] = useState(false);  // Để theo dõi trạng thái đang gửi
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const categories = mapCategories();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "price") {
-      const regex = /^\d+(\.\d{1,2})?$/;
-      
-      if (value === "") {
-        setErrors({
-          ...errors,
-          price: "",
-        });
-      } else if (regex.test(value)) {
-        setErrors({
-          ...errors,
-          price: "",
-        });
-        setFormData({
-          ...formData,
-          [name]: value,
-        });
-      } else {
-        setErrors({
-          ...errors,
-          price: "Giá không hợp lệ. Vui lòng nhập số hợp lệ với tối đa 2 chữ số thập phân.",
-        });
-      }
-    } else {
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
-    }
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleImageChange = (e) => {
-    const { name, files } = e.target;
-    
-    if (name === "interfaceImage") {
-      setFormData({
-        ...formData,
-        interfaceImage: files[0],
-      });
-    } else if (name === "image") {
-      setFormData({
-        ...formData,
-        image: files[0],
-      });
-    }
+  const handleAttributesChange = (updatedAttributes) => {
+    console.log(updatedAttributes);
+    // Chuyển mảng thành đối tượng để lưu trong formData.attributes
+    const attributesObject = updatedAttributes.reduce((acc, row) => {
+      const [key, ...values] = row;
+      if (key.trim() !== "") {
+        acc[key] = values.filter((val) => typeof val === "string" && val.trim() !== "");
+        console.log(acc)
+      }
+      return acc;
+    }, {});
+  
+    setFormData((prev) => ({ ...prev, attributes: attributesObject }));
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let formErrors = {};
-
-    // Kiểm tra nếu giá trị không hợp lệ trước khi gửi
-    if (!formData.name || !formData.price || !formData.category || !formData.description || !formData.image || !formData.interfaceImage) {
-      formErrors.general = "Vui lòng điền đầy đủ thông tin sản phẩm!";
-    }
-
-    if (Object.keys(formErrors).length > 0) {
-      setErrors(formErrors);
-      return;
-    }
-
+    setLoading(true);
+    console.log(formData) 
     try {
-      setLoading(true);
-      setSuccessMessage("");
-      setErrorMessage("");
-
-      // Gửi dữ liệu đến API createProduct
-      const response = await productApi.createProduct(formData);
-
-      if (response.success) {
-        setSuccessMessage("Sản phẩm đã được thêm thành công!");
-        setFormData({
-          name: "",
-          price: "",
-          category: "",
-          description: "",
-          image: null,
-          interfaceImage: null,
-        });
-        setErrors({});
-      } else {
-        setErrorMessage("Đã có lỗi xảy ra: " + response.message);
-      }
+      const product = await productApi.createProduct(formData);
+      console.log(product)
+      setMessage(`Sản phẩm "${product.name}" đã được thêm thành công!`);
+      setFormData({
+        name: "",
+        locationAddress: "",
+        description: "",
+        price: "",
+        stock: "",
+        categoryId: "",
+        attributes: {}, // Reset attributes
+      });
     } catch (error) {
-      setErrorMessage("Lỗi kết nối với server: " + error.message);
+      setMessage("Lỗi khi tạo sản phẩm: " + error.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-semibold mb-6">Thêm sản phẩm</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Tên sản phẩm */}
-        <div>
-          <label className="block text-sm font-medium">Tên</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded"
-            required
-          />
-        </div>
+    <form onSubmit={handleSubmit}>
+      <Input label="Tên sản phẩm" name="name" value={formData.name} onChange={handleChange} error={errors.name} />
+      <Input label="Địa chỉ" name="locationAddress" value={formData.locationAddress} onChange={handleChange} error={errors.locationAddress} />
+      <Input label="Giá" name="price" value={formData.price} onChange={handleChange} error={errors.price} />
+      <Input label="Số lượng" name="stock" value={formData.stock} onChange={handleChange} error={errors.stock} />
+      <Select label="Danh mục" name="categoryId" value={formData.categoryId} onChange={handleChange} options={categories} error={errors.categoryId} />
+      <Text label="Mô tả" name="description" value={formData.description} onChange={handleChange} error={errors.description} />
+      
+      {/* Component Attributes */}
+      <Attributes
+        initialData={Object.entries(formData.attributes)} // Chuyển attributes thành mảng
+        onChange={handleAttributesChange} // Xử lý khi dữ liệu thuộc tính thay đổi
+      />
 
-        {/* Giá */}
-        <div>
-          <label className="block text-sm font-medium">Giá</label>
-          <input
-            type="text"
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded"
-            required
-          />
-          {errors.price && <p className="text-red-500 text-sm">{errors.price}</p>}
-        </div>
-
-        {/* Loại sản phẩm */}
-        <div>
-          <label className="block text-sm font-medium">Loại sản phẩm</label>
-          <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded"
-            required
-          >
-            <option value="" disabled>Chọn loại sản phẩm</option>
-            <option value="fashion">Thời trang</option>
-            <option value="shoes">Giày dép</option>
-            <option value="book-bag">Túi sách</option>
-            <option value="electronics">Điện tử</option>
-            <option value="mobile-and-accessories">Điện thoại</option>
-            <option value="computers-and-accessories">Máy tính</option>
-            <option value="healthy">Sức khỏe</option>
-            <option value="beauty">Làm đẹp</option>
-            <option value="housewares">Đồ gia dụng</option>
-            <option value="decoration">Đồ trang trí</option>
-            <option value="mother-and-baby">Mẹ và bé</option>
-            <option value="book">Sách</option>
-            <option value="stationery">Văn phòng phẩm</option>
-          </select>
-        </div>
-
-        {/* Mô tả */}
-        <div>
-          <label className="block text-sm font-medium">Mô tả</label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded"
-            rows="4"
-            required
-          ></textarea>
-        </div>
-
-        {/* Ảnh giao diện */}
-        <div>
-          <label className="block text-sm font-medium">Ảnh giao diện</label>
-          <input
-            type="file"
-            name="interfaceImage"
-            onChange={handleImageChange}
-            className="w-full p-2 border border-gray-300 rounded"
-            required
-          />
-        </div>
-
-        {/* Ảnh sản phẩm */}
-        <div>
-          <label className="block text-sm font-medium">Ảnh giới thiệu</label>
-          <input
-            type="file"
-            name="image"
-            onChange={handleImageChange}
-            className="w-full p-2 border border-gray-300 rounded"
-            required
-          />
-        </div>
-
-        {/* Hiển thị trạng thái gửi */}
-        {loading && <p>Đang gửi sản phẩm...</p>}
-        {successMessage && <p className="text-green-500">{successMessage}</p>}
-        {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-
-        <button type="submit" className="w-full p-2 bg-blue-600 text-white rounded">
-          Thêm sản phẩm
-        </button>
-      </form>
-    </div>
+      <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+        {loading ? "Đang xử lý..." : "Thêm sản phẩm"}
+      </button>
+      {message && <p>{message}</p>}
+    </form>
   );
-}
+};
 
 export default AddProduct;
