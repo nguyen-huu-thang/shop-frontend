@@ -5,12 +5,12 @@ const UpdateCategory = () => {
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [parent, setParent] = useState(null);
+  const [parentId, setParent] = useState(null);
   const [message, setMessage] = useState("");
 
   const handleUpdate = async () => {
     try {
-      const category = await categoryApi.updateCategory(id, { name, description, parent });
+      const category = await categoryApi.updateCategory(id, { name, description, parentId });
       setMessage(`Category "${category.name}" updated successfully!`);
     } catch (error) {
       setMessage("Failed to update category.");
@@ -40,7 +40,7 @@ const UpdateCategory = () => {
       <input
         type="number"
         placeholder="Parent Category ID (optional)"
-        value={parent || ""}
+        value={parentId || ""}
         onChange={(e) => setParent(e.target.value || null)}
       />
       <button onClick={handleUpdate}>Update</button>
