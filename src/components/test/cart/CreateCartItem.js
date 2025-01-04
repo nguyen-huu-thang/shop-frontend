@@ -5,8 +5,7 @@ import cartApi from '../../../api/cartApi';
 const CreateCartItem = () => {
   const [formData, setFormData] = useState({
     quantity: '',
-    userId: '',
-    productId: '',
+    productOptionId: '',
   });
   const [message, setMessage] = useState(null);
 
@@ -28,12 +27,10 @@ const CreateCartItem = () => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
+        <label>Product ID:</label>
+        <input type="text" name="productOptionId" value={formData.productOptionId} onChange={handleChange} required />
         <label>Quantity:</label>
         <input type="text" name="quantity" value={formData.quantity} onChange={handleChange} required />
-        <label>User ID:</label>
-        <input type="text" name="userId" value={formData.userId} onChange={handleChange} required />
-        <label>Product ID:</label>
-        <input type="text" name="productId" value={formData.productId} onChange={handleChange} required />
         <button type="submit">Create Cart Item</button>
       </form>
       {message && <p>{message}</p>}

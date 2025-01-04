@@ -1,10 +1,8 @@
-// src/components/test/order/CreateOrder.js
 import React, { useState } from 'react';
 import orderApi from '../../../api/orderApi';
 
 const CreateOrder = () => {
   const [formData, setFormData] = useState({
-    userId: '',
     totalAmount: '',
     paymentMethod: '',
     shippingStatus: '',
@@ -14,6 +12,14 @@ const CreateOrder = () => {
     couponId: null,
   });
   const [message, setMessage] = useState(null);
+
+  const paymentMethods = [
+    'Momo',
+    'ZaloPay',
+    'ViettelPay',
+    'Chuyển khoản ngân hàng',
+    'Tiền mặt khi nhận hàng',
+  ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,14 +39,6 @@ const CreateOrder = () => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <label>User ID:</label>
-        <input
-          type="text"
-          name="userId"
-          value={formData.userId}
-          onChange={handleChange}
-        />
-        <br />
         <label>Total Amount:</label>
         <input
           type="text"
@@ -50,12 +48,18 @@ const CreateOrder = () => {
         />
         <br />
         <label>Payment Method:</label>
-        <input
-          type="text"
+        <select
           name="paymentMethod"
           value={formData.paymentMethod}
           onChange={handleChange}
-        />
+        >
+          <option value="">-- Chọn phương thức thanh toán --</option>
+          {paymentMethods.map((method, index) => (
+            <option key={index} value={method}>
+              {method}
+            </option>
+          ))}
+        </select>
         <br />
         <label>Shipping Status:</label>
         <input
