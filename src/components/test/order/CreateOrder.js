@@ -3,23 +3,13 @@ import orderApi from '../../../api/orderApi';
 
 const CreateOrder = () => {
   const [formData, setFormData] = useState({
-    totalAmount: '',
     paymentMethod: '',
-    shippingStatus: '',
-    paymentStatus: '',
-    shippingFee: '',
-    discount: '',
-    couponId: null,
+    shipCouponId: '',
+    productCouponId: '',
+    address: '',
+    cart: '',
   });
   const [message, setMessage] = useState(null);
-
-  const paymentMethods = [
-    'Momo',
-    'ZaloPay',
-    'ViettelPay',
-    'Chuyển khoản ngân hàng',
-    'Tiền mặt khi nhận hàng',
-  ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,8 +18,21 @@ const CreateOrder = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Chuyển cart từ chuỗi sang mảng số
+    const cartItems = formData.cart
+      .split(',')
+      .map((item) => parseInt(item.trim(), 10));
+
+    const dataToSend = {
+      ...formData,
+      cart: cartItems,
+      shipCouponId: parseInt(formData.shipCouponId, 10) || null,
+      productCouponId: parseInt(formData.productCouponId, 10) || null,
+    };
+
     try {
-      const newOrder = await orderApi.createOrder(formData);
+      const newOrder = await orderApi.createOrder(dataToSend);
       setMessage(`Order created with ID ${newOrder.id}`);
     } catch (err) {
       setMessage(`Failed to create order: ${err.message}`);
@@ -39,66 +42,47 @@ const CreateOrder = () => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <label>Total Amount:</label>
+        <label>Payment Method:</label>
         <input
           type="text"
-          name="totalAmount"
-          value={formData.totalAmount}
-          onChange={handleChange}
-        />
-        <br />
-        <label>Payment Method:</label>
-        <select
           name="paymentMethod"
           value={formData.paymentMethod}
           onChange={handleChange}
-        >
-          <option value="">-- Chọn phương thức thanh toán --</option>
-          {paymentMethods.map((method, index) => (
-            <option key={index} value={method}>
-              {method}
-            </option>
-          ))}
-        </select>
+          placeholder="e.g., COD"
+        />
         <br />
-        <label>Shipping Status:</label>
+        <label>Ship Coupon ID:</label>
         <input
           type="text"
-          name="shippingStatus"
-          value={formData.shippingStatus}
+          name="shipCouponId"
+          value={formData.shipCouponId}
           onChange={handleChange}
         />
         <br />
-        <label>Payment Status:</label>
+        <label>Product Coupon ID:</label>
         <input
           type="text"
-          name="paymentStatus"
-          value={formData.paymentStatus}
+          name="productCouponId"
+          value={formData.productCouponId}
           onChange={handleChange}
         />
         <br />
-        <label>Shipping Fee:</label>
+        <label>Address:</label>
         <input
           type="text"
-          name="shippingFee"
-          value={formData.shippingFee}
+          name="address"
+          value={formData.address}
           onChange={handleChange}
+          placeholder="Enter your address"
         />
         <br />
-        <label>Discount:</label>
+        <label>Cart (comma-separated IDs):</label>
         <input
           type="text"
-          name="discount"
-          value={formData.discount}
+          name="cart"
+          value={formData.cart}
           onChange={handleChange}
-        />
-        <br />
-        <label>Coupon ID:</label>
-        <input
-          type="text"
-          name="couponId"
-          value={formData.couponId || ''}
-          onChange={handleChange}
+          placeholder="e.g., 1, 2, 3"
         />
         <br />
         <button type="submit">Create Order</button>

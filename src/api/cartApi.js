@@ -6,6 +6,15 @@ const cartApi = {
 
   getAllCartItems: async () => {
     try{
+      const response = await api.get("/cart/all");
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+
+  getAllCartItemUser: async () => {
+    try{
       const response = await api.get("/cart");
       return response.data;
     } catch (error) {
