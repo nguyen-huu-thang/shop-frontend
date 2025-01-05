@@ -24,6 +24,10 @@ const Test = () => {
       <File />
       <h2 class="xxx">Cart</h2>
       <Cart />
+      <h2 class="xxx">Order</h2>
+      <Order />
+      <h2 class="xxx">OrderDetail</h2>
+      <OrderDetail />
     </div>
   );
 };

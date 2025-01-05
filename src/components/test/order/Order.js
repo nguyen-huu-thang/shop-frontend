@@ -29,8 +29,7 @@ const Order = () => {
       </section>
 
       <section>
-        <h2>Delete Order</h2>
-        <DeleteOrder />
+        <h2>Trả hàng, hoàn tiền. tính sau đi</h2>
       </section>
     </div>
   );
