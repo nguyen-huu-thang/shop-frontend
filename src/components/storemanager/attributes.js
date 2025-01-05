@@ -63,9 +63,9 @@ const Attributes = ({ initialData = [], onChange }) => {
       >
         + Thêm thuộc tính
       </button>
-      <div className="border border-gray-300 p-4">
+      <div className="border border-gray-300 p-4 overflow-auto">
         {dataArray.map((row, rowIdx) => (
-          <div key={rowIdx} className="mb-2 flex items-center">
+          <div key={rowIdx} className="mb-2 flex items-center flex-wrap">
             {row.map((col, colIdx) => (
               <div key={`${rowIdx}-${colIdx}`} className="flex items-center">
                 <input
@@ -73,33 +73,30 @@ const Attributes = ({ initialData = [], onChange }) => {
                   placeholder={colIdx === 0 ? "Tên thuộc tính" : "Giá trị"}
                   value={col}
                   onChange={(e) => handleInputChange(e, rowIdx, colIdx)}
-                  className="border p-2 mr-2"
+                  className="border p-2 mr-2 flex-grow min-w-[100px]"
                 />
-                {/* Nút xóa giá trị */}
                 {colIdx > 0 && (
                   <button
                     type="button"
                     onClick={() => handleDeleteColumn(rowIdx, colIdx)}
-                    className="border p-1 text-red-500 bg-red-100 hover:bg-red-200 rounded"
+                    className="border p-2 text-gray-500 bg-gray-100 hover:bg-gray-200 rounded ml-2 flex-shrink-0"
                   >
-                    -
+                    - Giá trị
                   </button>
                 )}
               </div>
             ))}
-            {/* Nút thêm giá trị */}
             <button
               type="button"
               onClick={() => handleAddColumn(rowIdx)}
-              className="border p-2 text-gray-500 bg-gray-100 hover:bg-gray-200 rounded ml-2"
+              className="border p-2 text-gray-500 bg-gray-100 hover:bg-gray-200 rounded ml-2 flex-shrink-0"
             >
               + Giá trị
             </button>
-            {/* Nút xóa hàng */}
             <button
               type="button"
               onClick={() => handleDeleteRow(rowIdx)}
-              className="border p-2 text-red-500 bg-red-100 hover:bg-red-200 rounded ml-2"
+              className="border p-2 text-red-500 bg-red-100 hover:bg-red-200 rounded ml-2 flex-shrink-0"
             >
               Xóa hàng
             </button>
