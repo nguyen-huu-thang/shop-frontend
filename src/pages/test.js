@@ -18,6 +18,8 @@ const Test = () => {
       <Security />
       <h2 class="xxx">User</h2>
       <User />
+      <h2 class="xxx">Product</h2>
+      <Product />
       <h2 class="xxx">Category</h2>
       <Category />
       <h2 class="xxx">File</h2>

@@ -100,3 +100,16 @@ function cleanDataArray() {
         return row.length > 0;
     });
 }
+
+// Function to export the data array as JSON
+function exportToJson() {
+    const jsonObject = dataArray.reduce((acc, row) => {
+        if (row.length > 1) {
+            const [key, ...values] = row;
+            acc[key] = values;
+        }
+        return acc;
+    }, {});
+
+    console.log("Exported JSON:", JSON.stringify(jsonObject, null, 4));
+}
