@@ -76,6 +76,7 @@ function ViewProduct() {
         product.id === updatedProduct.id ? updatedProduct : product
       )
     );
+    setSelectedProduct(null);
   };
   // Hiển thị loading hoặc lỗi nếu có
   if (loading) {
@@ -140,11 +141,18 @@ function ViewProduct() {
                   </td>
                   <td className="border p-2">
                     <button
-                      onClick={() => handleEdit(product.id)}
+                      onClick={() => handleEdit(product)}
                       className="text-blue-600 hover:underline mr-2"
                     >
                       Edit
                     </button>
+                    {selectedProduct && (
+                      <EditProduct
+                        product={selectedProduct}
+                        onClose={() => setSelectedProduct(null)}
+                        onUpdate={handleUpdateProduct}
+                      />
+                    )}
                     <DeleteProduct
                       productId={product.id} // Truyền ID sản phẩm cần xóa
                       onDelete={handleDelete} // Callback để cập nhật danh sách sản phẩm
@@ -155,7 +163,7 @@ function ViewProduct() {
             })
           ) : (
             <tr>
-              <td colSpan="5" className="border p-2 text-center">
+              <td colSpan="8" className="border p-2 text-center">
                 Không có sản phẩm nào.
               </td>
             </tr>
