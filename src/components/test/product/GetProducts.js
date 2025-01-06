@@ -27,14 +27,11 @@ const GetProducts = () => {
             <tr>
               <th>ID</th>
               <th>Name</th>
-              <th>Price</th>
+              <th>Prices</th>
               <th>Stock</th>
               <th>Description</th>
-              <th>Unique Features</th>
-              <th>Is Featured</th>
-              <th>City</th>
-              <th>District</th>
-              <th>Category</th>
+              <th>Location</th>
+              <th>Attributes</th>
             </tr>
           </thead>
           <tbody>
@@ -42,14 +39,23 @@ const GetProducts = () => {
               <tr key={product.id}>
                 <td>{product.id}</td>
                 <td>{product.name}</td>
-                <td>${product.price}</td>
+                <td>{product.prices !== null ? `$${product.prices}` : "Not available"}</td>
                 <td>{product.stock}</td>
-                <td>{product.description}</td>
-                <td>{product.uniqueFeatures}</td>
-                <td>{product.isFeatured ? "Yes" : "No"}</td>
-                <td>{product.city}</td>
-                <td>{product.district}</td>
-                <td>{product.categoryId}</td>
+                <td>{product.description || "No description"}</td>
+                <td>{product.locationAddress}</td>
+                <td>
+                  {product.attributes ? (
+                    <ul>
+                      {Object.entries(product.attributes).map(([key, values]) => (
+                        <li key={key}>
+                          <strong>{key}:</strong> {values.join(", ")}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    "No attributes"
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>

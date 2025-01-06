@@ -34,13 +34,19 @@ const GetProductsByCategory = () => {
             {products.map((product) => (
               <li key={product.id}>
                 <h4>{product.name}</h4>
+                <p>Description: {product.description}</p>
                 <p>Price: ${product.price}</p>
                 <p>Stock: {product.stock}</p>
-                <p>Description: {product.description}</p>
-                <p>Unique Features: {product.uniqueFeatures}</p>
-                <p>Featured: {product.isFeatured ? "Yes" : "No"}</p>
-                <p>Location: {product.city}, {product.district}</p>
-                <p>Category: {product.categoryId}</p>
+                <p>Location: {product.locationAddress}</p>
+                <p>Category ID: {product.categoryId}</p>
+                <h5>Attributes:</h5>
+                <ul>
+                  {Object.keys(product.attributes).map((key) => (
+                    <li key={key}>
+                      <strong>{key}:</strong> {product.attributes[key].join(", ")}
+                    </li>
+                  ))}
+                </ul>
               </li>
             ))}
           </ul>

@@ -13,6 +13,7 @@ const GetProductById = () => {
       setMessage("");
     } catch (error) {
       setMessage("Failed to fetch product.");
+      setProduct(null);
     }
   };
 
@@ -30,13 +31,29 @@ const GetProductById = () => {
       {product && (
         <div>
           <h3>{product.name}</h3>
-          <p>Price: ${product.price}</p>
-          <p>Stock: {product.stock}</p>
           <p>Description: {product.description}</p>
-          <p>Unique Features: {product.uniqueFeatures}</p>
-          <p>Featured: {product.isFeatured ? "Yes" : "No"}</p>
-          <p>Location: {product.city}, {product.district}</p>
-          <p>Category: {product.categoryId}</p>
+          <p>Price: {product.prices || "Not available"}</p>
+          <p>Stock: {product.stock}</p>
+          <p>Location: {product.locationAddress}</p>
+          <p>Category ID: {product.categoryId || "None"}</p>
+
+          <h4>Attributes:</h4>
+          {product.attributes ? (
+            <div>
+              {Object.entries(product.attributes).map(([key, values]) => (
+                <div key={key}>
+                  <strong>{key}:</strong>
+                  <ul>
+                    {values.map((value, index) => (
+                      <li key={index}>{value}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p>No attributes available.</p>
+          )}
         </div>
       )}
     </div>

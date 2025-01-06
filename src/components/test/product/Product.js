@@ -39,7 +39,7 @@ const Product = () => {
       <section>
         <GetProductsByCategory />
       </section>
-
+      <h2>Các API khác của product thì đọc file README.md của API</h2>
     </div>
   );
 };
