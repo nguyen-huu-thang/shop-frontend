@@ -1,20 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import productApi from "../../api/productApi";
+import fileApi from "../../api/fileApi";
 import Input from "../storemanager/input";
 import Select from "./treeSelect";
 import Text from "../storemanager/text";
 import Attributes from "../storemanager/attributes";
 import mapCategories from "../storemanager/treemapCategories";
+import GetInterfaceProduct from "./getInterfaceProduct"; // Hiển thị ảnh
+import AddInterfaceProduct from "./addInterfaceProduct"; // Tải ảnh mới
 
 const EditProduct = () => {
-  console.log("Edit Product");
   const { id } = useParams();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
+  const [fileId, setFileId] = useState(null); // ID của ảnh hiện tại
+  const [formDataFile, setFormDataFile] = useState(null);
+  const [isChangingImage, setIsChangingImage] = useState(false); // Trạng thái thay đổi ảnh
+  const [newImage, setNewImage] = useState(null); // Ảnh mới được chọn
 
   const categories = mapCategories();
 
@@ -22,8 +28,6 @@ const EditProduct = () => {
     const fetchProduct = async () => {
       try {
         const product = await productApi.getProductById(id);
-        console.log(product);
-        console.log(product.attributes)
         setFormData({
           id: product.id,
           name: product.name || "",
@@ -34,6 +38,18 @@ const EditProduct = () => {
           categoryId: product.categoryId || "",
           attribute: product.attributes || {},
         });
+
+        // Lấy ID file ảnh hiện tại
+        const files = await fileApi.getFilesByProduct(product.id, true);
+        if (files && files.length > 0) {
+          const currentFile = files[0];
+          setFileId(currentFile.id); // Lấy file ID
+          setFormDataFile({
+            description: currentFile.description,
+            sort: currentFile.sort,
+            productId: currentFile.productId,
+          });
+        }
       } catch (error) {
         setMessage("Không thể tải thông tin sản phẩm.");
       } finally {
@@ -61,10 +77,31 @@ const EditProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(isChangingImage);
     try {
+      if (isChangingImage && newImage) {
+        // Đánh dấu ảnh cũ là không hoạt động
+        if (fileId && formDataFile) {
+          console.log(fileId);
+          console.log(formDataFile);
+          await fileApi.updateFile(fileId, { ...formDataFile, isActive: false });
+        }
+
+        // Tải ảnh mới lên và đặt isActive = true
+        const formDataFileNew = {
+          description: "Ảnh giao diện sản phẩm",
+          sort: 1,
+          isActive: true, // Ảnh mới được kích hoạt
+          productId: formData.id,
+        };
+        const response = await fileApi.uploadFile(newImage, formDataFileNew);
+        setFileId(response.fileId); // Cập nhật ID ảnh mới
+      }
+
+      // Cập nhật thông tin sản phẩm
       await productApi.updateProduct(formData.id, formData);
       setMessage("Cập nhật sản phẩm thành công!");
-      navigate("/storemanager/view");
+      // navigate("/storemanager/view");
     } catch (error) {
       setMessage("Lỗi khi cập nhật sản phẩm.");
     }
@@ -134,6 +171,39 @@ const EditProduct = () => {
           initialData={Object.entries(formData.attribute || {})}
           onChange={handleAttributesChange}
         />
+
+        {/* Hiển thị ảnh hiện tại */}
+        <div className="mt-4">
+          <h3>Ảnh hiện tại:</h3>
+          {!isChangingImage ? (
+            <>
+              <GetInterfaceProduct
+                productId={formData.id}
+                onFileLoaded={(loadedFileId) => setFileId(loadedFileId)} // Cập nhật ID của ảnh hiện tại
+              />
+              <button
+                type="button"
+                onClick={() => setIsChangingImage(true)}
+                className="mt-2 px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+              >
+                Thay đổi ảnh
+              </button>
+            </>
+          ) : (
+            <>
+              <AddInterfaceProduct
+                onFileSelected={(file) => setNewImage(file)} // Lưu ảnh mới vào state
+              />
+              <button
+                type="button"
+                onClick={() => setIsChangingImage(false)}
+                className="mt-2 px-4 py-2 text-white bg-gray-500 rounded hover:bg-gray-600"
+              >
+                Hủy thay đổi
+              </button>
+            </>
+          )}
+        </div>
 
         <div className="flex justify-end space-x-4 mt-4">
           <button

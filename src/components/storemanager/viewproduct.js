@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
 import productApi from "../../api/productApi";
 import DeleteProduct from "./deleteproduct";
+import GetInterfaceProduct from "./getInterfaceProduct";
 function ViewProduct() {
   const [productList, setProductList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -67,11 +68,12 @@ function ViewProduct() {
                 <tr key={product.id}>
                   <td className="border p-2 break-words">{product.name}</td>
                   <td className="border p-2">
-                    <img
+                    {/* <img
                       src={product.imageUrl || "/default-image.png"}
                       alt={product.name}
                       className="w-16 h-16 object-cover"
-                    />
+                    /> */}
+                    <GetInterfaceProduct productId={product.id} />
                   </td>
                   <td className="border p-2">
                     {product.price ? product.price.toLocaleString() + " đ" : "N/A"}

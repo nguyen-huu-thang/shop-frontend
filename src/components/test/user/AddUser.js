@@ -20,6 +20,7 @@ const AddUser = () => {
     e.preventDefault();
     try {
       const newUser = await userApi.createUser(formData);
+      console.log('New user:', newUser);
       setMessage(`User "${newUser.username}" created successfully!`);
       setFormData({
         username: '',

@@ -17,6 +17,7 @@ const FilesByProduct = () => {
     try {
       setLoading(true);
       const response = await fileApi.getFilesByProduct(productId, onlyActive);
+      console.log(response);
       setFiles(response);
       setError(null);
     } catch (err) {
