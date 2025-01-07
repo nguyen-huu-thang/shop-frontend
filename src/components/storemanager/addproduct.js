@@ -3,8 +3,8 @@ import Input from "../storemanager/input";
 import Select from "./treeSelect";
 import Text from "../storemanager/text";
 import Attributes from "../storemanager/attributes";
-import mapCategories from "../storemanager/treemapCategories";
 import productApi from "../../api/productApi";
+import { useSelector } from 'react-redux';
 
 const AddProduct = () => {
   const [formData, setFormData] = useState({
@@ -16,12 +16,10 @@ const AddProduct = () => {
     categoryId: "",
     attribute: {}, // Lưu thuộc tính ở đây
   });
-
+  const { items: categories, loading: categoryLoading } = useSelector((state) => state.categories);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-
-  const categories = mapCategories();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,19 +28,15 @@ const AddProduct = () => {
 
   const handleAttributesChange = (updatedAttributes) => {
     console.log(updatedAttributes);
-    // Chuyển mảng thành đối tượng để lưu trong formData.attributes
-    const attributesObject = updatedAttributes.reduce((acc, row) => {
-      const [key, ...values] = row;
-      if (key.trim() !== "") {
-        acc[key] = values.filter((val) => typeof val === "string" && val.trim() !== "");
-        console.log(acc)
+    const attributesObject = updatedAttributes.reduce((acc, [key,value]) => {
+      if (key.trim() !== "" && value.trim() !== "") {
+        acc[key] = value.split(",").map((v) => v.trim()); // Chuyển value thành mảng
       }
       return acc;
     }, {});
   
     setFormData((prev) => ({ ...prev, attribute: attributesObject }));
   };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -76,12 +70,7 @@ const AddProduct = () => {
       <Input label="Số lượng" name="stock" value={formData.stock} onChange={handleChange} error={errors.stock} />
       <Select label="Danh mục" name="categoryId" value={formData.categoryId} onChange={handleChange} options={categories} error={errors.categoryId} />
       <Text label="Mô tả" name="description" value={formData.description} onChange={handleChange} error={errors.description} />
-      
-      {/* Component Attributes */}
-      <Attributes
-        initialData={Object.entries(formData.attribute)} // Chuyển attributes thành mảng
-        onChange={handleAttributesChange} // Xử lý khi dữ liệu thuộc tính thay đổi
-      />
+      <Attributes initialData={[]} onChange={handleAttributesChange} />
 
       <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
         {loading ? "Đang xử lý..." : "Thêm sản phẩm"}

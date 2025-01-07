@@ -13,13 +13,13 @@ import Payments from './pages/payments';
 import Love from './pages/love';
 import Category from './pages/category';
 import Testpage from './components/testpage';
-import ScrollToTop from './components/scroll';
 import ProtectedRoute from "./components/ProtectedRoute";
+import CategoryList from './utils/categoryList';
 function App() {
   return (
     <BrowserRouter>
       <TokenRefresher />
-      <ScrollToTop />
+      <CategoryList />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login"

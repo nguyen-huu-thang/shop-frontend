@@ -10,8 +10,8 @@ const DeleteProduct = ({ productId, onDelete, onClose }) => {
     try {
       await productApi.deleteProduct(productId); // Gọi API để xóa sản phẩm
       onDelete(productId); // Gọi callback để cập nhật danh sách sản phẩm
-      setShowConfirm(false); // Đóng Confirm
-      onClose(); // Đóng modal DeleteProduct nếu có
+      setShowConfirm(false);
+      onClose();
     } catch (err) {
       setError("Failed to delete product. Please try again.");
     }
@@ -26,7 +26,7 @@ const DeleteProduct = ({ productId, onDelete, onClose }) => {
       {/* Hiển thị nút Delete */}
       <button
         onClick={() => setShowConfirm(true)} // Hiển thị Confirm khi nhấn Delete
-        className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+        className="text-red-600 hover:underline mr-2"
       >
         Delete
       </button>

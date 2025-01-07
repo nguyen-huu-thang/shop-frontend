@@ -1,29 +1,9 @@
-import React, { useState } from "react";
-import useTreeMapCategories from "./treemapCategories";
+import React from "react";
+import { useSelector } from "react-redux";
 
 const TreeSelect = ({ label, name, value, onChange, error }) => {
-  const categories = useTreeMapCategories();
+  const { items: categories, loading } = useSelector((state) => state.categories);
 
-  const renderOptions = (nodes, level = 0) => {
-    return nodes.map((node) => {
-      if (node.children && node.children.length > 0) {
-        // Sử dụng dấu "--" để biểu thị cấp độ danh mục
-        return [
-          // <option key={node.id} value={node.id}>
-          //   {`${"--".repeat(level)} ${node.description}`}
-          // </option>,
-          ...renderOptions(node.children, level + 1),
-        ];
-      } else {
-        return (
-          <option key={node.id} value={node.id}>
-            {`${node.description}`}
-          </option>
-        );
-      }
-    });
-  };
-  
   return (
     <div>
       <label className="block text-sm font-medium">{label}</label>
@@ -34,7 +14,13 @@ const TreeSelect = ({ label, name, value, onChange, error }) => {
         className="w-full p-2 border border-gray-300 rounded"
       >
         <option value="">-- Chọn danh mục --</option>
-        {renderOptions(categories.categories)}
+        {!loading && categories.length > 0
+          ? categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.description}
+              </option>
+            ))
+          : <option disabled>Đang tải...</option>}
       </select>
       {error && <p className="text-red-500 text-sm">{error}</p>}
     </div>

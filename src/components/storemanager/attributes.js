@@ -2,54 +2,67 @@ import React, { useState } from "react";
 
 const Attributes = ({ initialData = [], onChange }) => {
   const [dataArray, setDataArray] = useState([...initialData]); // Tạo bản sao của initialData
+  const [errors, setErrors] = useState([]); // Quản lý lỗi cho từng hàng
 
+  // Regex để kiểm tra ô `key` (Tên thuộc tính)
+  const keyRegex = /^[a-zA-Z0-9]+$/;
+
+  // Regex để kiểm tra ô `value` (Giá trị thuộc tính)
+  const valueRegex = /^[a-zA-Z0-9]+(,[a-zA-Z0-9]+)*$/;
+
+  // Xử lý khi thay đổi giá trị trong ô nhập
   const handleInputChange = (e, rowIdx, colIdx) => {
     const value = e.target.value;
     const updatedArray = [...dataArray];
-    updatedArray[rowIdx][colIdx] = value; // Cập nhật giá trị ô cụ thể
-    setDataArray(updatedArray);
+    updatedArray[rowIdx][colIdx] = value;
 
-    if (onChange) {
-      onChange(updatedArray); // Gửi dữ liệu đã cập nhật lên cha
+    // Kiểm tra lỗi dựa trên regex
+    const updatedErrors = [...errors];
+    if (colIdx === 0) {
+      // Kiểm tra ô `key`
+      updatedErrors[rowIdx] = !keyRegex.test(value) ? "Tên thuộc tính không hợp lệ." : null;
+    } else if (colIdx === 1) {
+      // Kiểm tra ô `value`
+      updatedErrors[rowIdx] = !valueRegex.test(value) ? "Giá trị không hợp lệ. Dùng dấu phẩy để phân cách." : null;
+    }
+
+    setDataArray(updatedArray);
+    setErrors(updatedErrors);
+
+    // Chỉ gọi `onChange` nếu dữ liệu hợp lệ
+    if (onChange && updatedErrors.every((err) => err === null)) {
+      onChange(updatedArray);
     }
   };
 
+  // Thêm một hàng mới
   const handleAddRow = () => {
-    const updatedArray = [...dataArray, [""]]; // Thêm hàng mới với một ô nhập rỗng
-    setDataArray(updatedArray);
+    const updatedArray = [...dataArray, ["", ""]];
+    const updatedErrors = [...errors, null]; // Không có lỗi cho hàng mới
 
-    if (onChange) {
-      onChange(updatedArray); // Gửi dữ liệu đã cập nhật lên cha
-    }
+    setDataArray(updatedArray);
+    setErrors(updatedErrors);
   };
 
-  const handleAddColumn = (rowIdx) => {
-    const updatedArray = [...dataArray];
-    updatedArray[rowIdx] = [...updatedArray[rowIdx], ""]; // Thêm một ô nhập rỗng vào cuối hàng hiện tại
-    setDataArray(updatedArray);
-
-    if (onChange) {
-      onChange(updatedArray); // Gửi dữ liệu đã cập nhật lên cha
-    }
-  };
-
+  // Xóa một hàng
   const handleDeleteRow = (rowIdx) => {
     const updatedArray = [...dataArray];
-    updatedArray.splice(rowIdx, 1); // Xóa hàng dựa trên chỉ mục
+    updatedArray.splice(rowIdx, 1);
+
+    const updatedErrors = [...errors];
+    updatedErrors.splice(rowIdx, 1);
+
+    // // Đảm bảo ít nhất có một hàng rỗng
+    // if (updatedArray.length === 0) {
+    //   updatedArray.push(["", ""]);
+    //   updatedErrors.push(null);
+    // }
+
     setDataArray(updatedArray);
+    setErrors(updatedErrors);
 
     if (onChange) {
-      onChange(updatedArray); // Gửi dữ liệu đã cập nhật lên cha
-    }
-  };
-
-  const handleDeleteColumn = (rowIdx, colIdx) => {
-    const updatedArray = [...dataArray];
-    updatedArray[rowIdx].splice(colIdx, 1); // Xóa ô cụ thể dựa trên chỉ mục
-    setDataArray(updatedArray);
-
-    if (onChange) {
-      onChange(updatedArray); // Gửi dữ liệu đã cập nhật lên cha
+      onChange(updatedArray);
     }
   };
 
@@ -67,32 +80,24 @@ const Attributes = ({ initialData = [], onChange }) => {
         {dataArray.map((row, rowIdx) => (
           <div key={rowIdx} className="mb-2 flex items-center flex-wrap">
             {row.map((col, colIdx) => (
-              <div key={`${rowIdx}-${colIdx}`} className="flex items-center">
+              <div key={`${rowIdx}-${colIdx}`} className="flex items-center flex-grow">
                 <input
                   type="text"
-                  placeholder={colIdx === 0 ? "Tên thuộc tính" : "Giá trị"}
+                  placeholder={colIdx === 0 ? "Tên thuộc tính (e.g., size)" : "Giá trị (e.g., value1,value2)"}
                   value={col}
                   onChange={(e) => handleInputChange(e, rowIdx, colIdx)}
-                  className="border p-2 mr-2 flex-grow min-w-[100px]"
+                  className={`border p-2 mr-2 flex-grow min-w-[150px] ${
+                    errors[rowIdx] && colIdx === 0 && errors[rowIdx] === "Tên thuộc tính không hợp lệ."
+                      ? "border-red-500"
+                      : ""
+                  } ${
+                    errors[rowIdx] && colIdx === 1 && errors[rowIdx] === "Giá trị không hợp lệ. Dùng dấu phẩy để phân cách."
+                      ? "border-red-500"
+                      : ""
+                  }`}
                 />
-                {colIdx > 0 && (
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteColumn(rowIdx, colIdx)}
-                    className="border p-2 text-gray-500 bg-gray-100 hover:bg-gray-200 rounded ml-2 flex-shrink-0"
-                  >
-                    - Giá trị
-                  </button>
-                )}
               </div>
             ))}
-            <button
-              type="button"
-              onClick={() => handleAddColumn(rowIdx)}
-              className="border p-2 text-gray-500 bg-gray-100 hover:bg-gray-200 rounded ml-2 flex-shrink-0"
-            >
-              + Giá trị
-            </button>
             <button
               type="button"
               onClick={() => handleDeleteRow(rowIdx)}
@@ -100,6 +105,11 @@ const Attributes = ({ initialData = [], onChange }) => {
             >
               Xóa hàng
             </button>
+            <br></br>
+            {/* Hiển thị lỗi nếu có */}
+            {errors[rowIdx] && (
+              <p className="text-red-500 text-sm mt-1 ml-2">{errors[rowIdx]}</p>
+            )}
           </div>
         ))}
       </div>

@@ -2,6 +2,7 @@ import React from "react";
 import { Link, Route, Routes } from "react-router-dom";
 import ViewProduct from "../components/storemanager/viewproduct";
 import AddProduct from "../components/storemanager/addproduct";
+import EditProduct from "../components/storemanager/editproduct";
 import Logo from "../assets/logo1.png";
 import { HiChevronRight } from "react-icons/hi";
 import { FaStore } from "react-icons/fa";
@@ -53,6 +54,7 @@ function StoreManager() {
           <Routes>
             <Route path="/view" element={<ViewProduct />} />
             <Route path="/add" element={<AddProduct />} />
+            <Route path="/view/edit/:id" element={<EditProduct />} />
             <Route
               path="/"
               element={
