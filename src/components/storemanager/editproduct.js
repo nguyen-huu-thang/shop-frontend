@@ -43,11 +43,12 @@ const EditProduct = () => {
         const files = await fileApi.getFilesByProduct(product.id, true);
         if (files && files.length > 0) {
           const currentFile = files[0];
+          console.log(currentFile)
           setFileId(currentFile.id); // Lấy file ID
           setFormDataFile({
             description: currentFile.description,
             sort: currentFile.sort,
-            productId: currentFile.productId,
+            productId: currentFile.targetId,
           });
         }
       } catch (error) {
@@ -91,11 +92,11 @@ const EditProduct = () => {
         const formDataFileNew = {
           description: "Ảnh giao diện sản phẩm",
           sort: 1,
-          isActive: true, // Ảnh mới được kích hoạt
+          isActive: true,
           productId: formData.id,
         };
         const response = await fileApi.uploadFile(newImage, formDataFileNew);
-        setFileId(response.fileId); // Cập nhật ID ảnh mới
+        setFileId(response.fileId);
       }
 
       // Cập nhật thông tin sản phẩm

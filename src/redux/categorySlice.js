@@ -2,9 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 import categoryApi from '../api/categoryApi';
 
 const initialState = {
-  items: [], // Danh sách danh mục
-  loading: false, // Trạng thái tải
-  error: null, // Trạng thái lỗi
+  items: JSON.parse(sessionStorage.getItem('categories')) || [], // Lấy danh mục từ sessionStorage nếu có
+  loading: false,
+  error: null,
 };
 
 const categorySlice = createSlice({
@@ -31,6 +31,14 @@ export const { startLoading, loadCategoriesSuccess, loadCategoriesFailure } = ca
 
 // Thunk để tải danh mục
 export const fetchCategories = () => async (dispatch) => {
+  // Kiểm tra nếu danh mục đã được lưu trong sessionStorage
+  const storedCategories = sessionStorage.getItem('categories');
+  if (storedCategories) {
+    dispatch(loadCategoriesSuccess(JSON.parse(storedCategories)));
+    return;
+  }
+
+  // Nếu chưa có trong sessionStorage, gọi API
   dispatch(startLoading());
   try {
     const data = await categoryApi.getAllCategories();
@@ -38,12 +46,10 @@ export const fetchCategories = () => async (dispatch) => {
     // Xây dựng cây danh mục
     const categoryMap = {};
 
-    // Tạo map để quản lý danh mục
     data.forEach((category) => {
       categoryMap[category.id] = { ...category, children: [] };
     });
 
-    // Gán children cho từng danh mục dựa trên parentId
     data.forEach((category) => {
       const parentId = category.hierarchyPathById
         .split("/")
@@ -54,12 +60,14 @@ export const fetchCategories = () => async (dispatch) => {
       }
     });
 
-    // Lọc ra các node cuối (leaf nodes)
     const leafNodes = Object.values(categoryMap).filter(
       (category) => category.children.length === 0
     );
 
-    // Thành công: Dispatch node cuối cùng
+    // Lưu danh mục vào sessionStorage
+    sessionStorage.setItem('categories', JSON.stringify(leafNodes));
+
+    // Thành công: Dispatch danh mục
     dispatch(loadCategoriesSuccess(leafNodes));
   } catch (error) {
     dispatch(loadCategoriesFailure(error.message));

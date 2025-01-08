@@ -3,6 +3,7 @@ import { Link, Route, Routes } from "react-router-dom";
 import ViewProduct from "../components/storemanager/viewproduct";
 import AddProduct from "../components/storemanager/addproduct";
 import EditProduct from "../components/storemanager/editproduct";
+import SuggestProduct from "../components/storemanager/suggestProduct";
 import Logo from "../assets/logo1.png";
 import { HiChevronRight } from "react-icons/hi";
 import { FaStore } from "react-icons/fa";
@@ -42,9 +43,15 @@ function StoreManager() {
             </Link>
             <Link
               to="/storemanager/add"
-              className="block py-2 px-4 text-left bg-gray-400 rounded hover:bg-blue-600 hover:text-white"
+              className="block py-2 px-4 mb-2 text-left bg-gray-400 rounded hover:bg-blue-600 hover:text-white"
             >
               Thêm sản phẩm
+            </Link>
+            <Link
+              to="/storemanager/suggest"
+              className="block py-2 px-4 mb-2 text-left bg-gray-400 rounded hover:bg-blue-600 hover:text-white"
+            >
+              Danh sách sản phẩm đề xuất
             </Link>
           </div>
         </div>
@@ -55,6 +62,7 @@ function StoreManager() {
             <Route path="/view" element={<ViewProduct />} />
             <Route path="/add" element={<AddProduct />} />
             <Route path="/view/edit/:id" element={<EditProduct />} />
+            <Route path="/suggest" element={<SuggestProduct />} />
             <Route
               path="/"
               element={

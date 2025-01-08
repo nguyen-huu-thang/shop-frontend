@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import productApi from "../../api/productApi";
 import DeleteProduct from "./deleteproduct";
 import GetInterfaceProduct from "./getInterfaceProduct";
+import AddToSuggest from "./addToSuggest";
 function ViewProduct() {
   const [productList, setProductList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -50,12 +51,12 @@ function ViewProduct() {
       <table className="min-w-full border-collapse table-fixed">
         <thead>
           <tr>
-            <th className="border p-2 text-left w-1/6">Tên</th>
+            <th className="border p-2 text-left w-1/12">Tên</th>
             <th className="border p-2 text-left w-1/6">Ảnh mô tả</th>
             <th className="border p-2 text-left w-1/12">Giá tiền</th>
             <th className="border p-2 text-left w-1/12">Số lượng</th>
-            <th className="border p-2 text-left w-1/6">Loại sản phẩm</th>
-            <th className="border p-2 text-left w-1/6">Đặc tính</th>
+            <th className="border p-2 text-left w-1/12">Loại sản phẩm</th>
+            <th className="border p-2 text-left w-1/12">Đặc tính</th>
             <th className="border p-2 text-left w-1/3">Mô tả</th>
             <th className="border p-2 text-left w-1/12">Hành động</th>
           </tr>
@@ -123,6 +124,7 @@ function ViewProduct() {
                       productId={product.id}
                       onDelete={handleDelete}
                     />
+                    <AddToSuggest productId={product.id} />
                   </td>
                 </tr>
               );
