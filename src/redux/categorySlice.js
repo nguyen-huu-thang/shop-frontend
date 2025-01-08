@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import categoryApi from '../api/categoryApi';
 
 const initialState = {
-  items: JSON.parse(sessionStorage.getItem('categories')) || [], // Lấy danh mục từ sessionStorage nếu có
+  items: JSON.parse(sessionStorage.getItem('categories')) || [],
   loading: false,
   error: null,
 };

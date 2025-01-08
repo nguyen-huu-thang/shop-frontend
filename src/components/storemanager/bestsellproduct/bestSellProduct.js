@@ -1,5 +1,5 @@
 import React from 'react'
-import productApi from '../../api/productApi'
+import productApi from '../../../api/productApi'
 
 const bestSellProduct = () => {
   return (

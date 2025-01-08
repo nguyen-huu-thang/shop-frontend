@@ -173,14 +173,14 @@ const EditProduct = () => {
           onChange={handleAttributesChange}
         />
 
-        {/* Hiển thị ảnh hiện tại */}
         <div className="mt-4">
           <h3>Ảnh hiện tại:</h3>
           {!isChangingImage ? (
             <>
               <GetInterfaceProduct
                 productId={formData.id}
-                onFileLoaded={(loadedFileId) => setFileId(loadedFileId)} // Cập nhật ID của ảnh hiện tại
+                className="w-16 h-16 object-cover"
+                onFileLoaded={(loadedFileId) => setFileId(loadedFileId)}
               />
               <button
                 type="button"

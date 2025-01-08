@@ -1,44 +1,58 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
-import { products } from '../product';
+import React, { useState, useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import Navbar from '../components/navbar';
 import { LiaCartPlusSolid } from "react-icons/lia";
 import { AiOutlineDollarCircle } from "react-icons/ai";
-import { useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { addToCart } from '../redux/cartSlice';
-import {addToLove, removeFromLove} from '../redux/loveSlice';
+import { addToLove, removeFromLove } from '../redux/loveSlice';
+import productApi from '../api/productApi';
+import GetInterfaceProduct from '../components/storemanager/getInterfaceProduct';
 const Details = () => {
   const carts = useSelector((store) => store.cart.items);
   const lovedItems = useSelector((store) => store.love.items);
-  console.log(carts);
-  console.log(lovedItems);
   const dispatch = useDispatch();
-  const [quantity, setQuantity] = useState(1);
 
+  const [product, setProduct] = useState(null); // Trạng thái lưu thông tin sản phẩm
+  const [loading, setLoading] = useState(true); // Trạng thái tải dữ liệu
+  const [error, setError] = useState(null); // Trạng thái lỗi
+  const [quantity, setQuantity] = useState(1); // Số lượng sản phẩm
+  const [notification, setNotification] = useState({ show: false, message: '' });
+
+  const { id } = useParams(); // Lấy id từ URL
+
+  // Lấy thông tin sản phẩm từ API
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await productApi.getProductById(id); // API lấy sản phẩm theo id
+        setProduct(response); // Lưu thông tin sản phẩm
+      } catch (error) {
+        setError("Không thể tải thông tin sản phẩm.");
+      } finally {
+        setLoading(false); // Hoàn tất tải dữ liệu
+      }
+    };
+
+    fetchProduct();
+  }, [id]);
+
+  // Xử lý số lượng sản phẩm
   const increaseQuantity = () => {
     if (quantity < product.stock) setQuantity(quantity + 1);
   };
 
   const decreaseQuantity = () => {
-    if (quantity > 0) setQuantity(quantity - 1);
+    if (quantity > 1) setQuantity(quantity - 1);
   };
 
-  const { slug } = useParams();
-  const product = products.find((item) => item.slug === slug);
-  const isFavorite = lovedItems.findIndex(item => item.productId === product.id) !== -1;
-  console.log(isFavorite);
-  const [notification, setNotification] = useState({ show: false, message: '' });
-
-  if (!product) {
-    return <div className="text-center text-red-500">Sản phẩm không tồn tại!</div>;
-  }
-
+  // Thông báo
   const showNotification = (message) => {
     setNotification({ show: true, message });
     setTimeout(() => setNotification({ show: false, message: '' }), 400);
   };
 
+  // Xử lý thêm vào giỏ hàng
   const handleAddToCart = () => {
     dispatch(addToCart({
       productId: product.id,
@@ -47,19 +61,25 @@ const Details = () => {
     showNotification(`${product.name} đã được thêm vào giỏ hàng!`);
   };
 
+  // Xử lý mua ngay
   const handleBuyNow = () => {
     showNotification(`Bạn đã mua ngay sản phẩm: ${product.name}`);
   };
 
+  // Xử lý thêm / xóa khỏi yêu thích
   const handleToggleFavorite = () => {
+    const isFavorite = lovedItems.findIndex(item => item.productId === product.id) !== -1;
+
     if (isFavorite) {
-      dispatch(removeFromLove({productId : product.id})); // Xóa khỏi yêu thích
+      dispatch(removeFromLove({ productId: product.id }));
       showNotification(`${product.name} đã được xóa khỏi yêu thích!`);
     } else {
-      dispatch(addToLove({ productId : product.id })); // Thêm vào yêu thích
+      dispatch(addToLove({ productId: product.id }));
       showNotification(`${product.name} đã được thêm vào yêu thích!`);
     }
   };
+
+  // Xử lý chia sẻ
   const handleShare = () => {
     navigator.share
       ? navigator.share({
@@ -71,6 +91,21 @@ const Details = () => {
       : showNotification('Tính năng chia sẻ không khả dụng trên trình duyệt của bạn.');
   };
 
+  // Hiển thị khi đang tải
+  if (loading) {
+    return <div className="text-center text-gray-500">Đang tải thông tin sản phẩm...</div>;
+  }
+
+  // Hiển thị lỗi
+  if (error) {
+    return <div className="text-center text-red-500">{error}</div>;
+  }
+
+  // Hiển thị nếu không tìm thấy sản phẩm
+  if (!product) {
+    return <div className="text-center text-red-500">Sản phẩm không tồn tại!</div>;
+  }
+
   return (
     <div className='bg-gray-300'>
       <Navbar />
@@ -78,68 +113,46 @@ const Details = () => {
         <div className="grid md:grid-cols-2 gap-4">
           {/* Hình ảnh sản phẩm */}
           <div className="flex flex-col items-center">
-            <img src={product.interfaceImage} alt={product.name} className="w-full h-auto border border-2"/>
+            <div className="w-full aspect-square overflow-hidden flex items-center justify-center bg-gray-100">
+              <GetInterfaceProduct productId={id} className="max-w-full max-h-full object-contain" />
+            </div>
             <div className="mt-4 flex gap-3">
               <button onClick={handleShare} className="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 transition">
                 Chia sẻ
               </button>
               <button 
                 onClick={handleToggleFavorite} 
-                className={`flex items-center px-4 py-2 rounded-lg border transition ${isFavorite ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-800'}`}
+                className={`flex items-center px-4 py-2 rounded-lg border transition ${lovedItems.findIndex(item => item.productId === product.id) !== -1 ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-800'}`}
               >
-                <span className={`mr-2 ${isFavorite ? 'text-white' : 'text-red-500'}`}>♥</span>
+                <span className={`mr-2 ${lovedItems.findIndex(item => item.productId === product.id) !== -1 ? 'text-white' : 'text-red-500'}`}>♥</span>
                 Yêu thích
               </button>
             </div>
           </div>
           {/* Thông tin sản phẩm */}
           <div className="flex flex-col">
-            <div>
-              {/* Tên sản phẩm */}
-              <h1 className="text-3xl font-bold text-gray-800">{product.name}</h1>
-              
-              {/* Khung nền cho 3 thông tin */}
-              <div className="flex items-center space-x-4 mt-2">
-                {/* Placeholder Số sao */}
-                <div className="flex items-center">
-                  <span className="bg-gray-300 w-4 h-4 rounded-full mr-1"></span>
-                  <span className="bg-gray-300 w-8 h-4 rounded"></span>
-                </div>
-                {/* Placeholder Số đánh giá */}
-                <div className="bg-gray-300 w-20 h-4 rounded"></div>
-                {/* Placeholder Số lượng đã bán */}
-                <div className="bg-gray-300 w-24 h-4 rounded"></div>
-              </div>
-
-              {/* Giá sản phẩm */}
-              <p className="text-xl text-red-500 my-3">Giá: {product.price}đ</p>
-              <p className="text-gray-700">{product.description}</p>
-            </div>
+            <h1 className="text-3xl font-bold text-gray-800">{product.name}</h1>
+            <p className="text-xl text-red-500 my-3">Giá: {new Intl.NumberFormat('vi-VN').format(product.price)}đ</p>
+            <p className="text-gray-700">{product.description}</p>
             <div className="mt-4 flex items-center space-x-3">
-              {/* Hiển thị số lượng */}
               <p className="text-gray-700">Số lượng:</p>
               <div className="flex items-center space-x-2">
-                {/* Nút giảm */}
                 <button onClick={decreaseQuantity} className="w-8 h-8 bg-gray-200 border border-gray-400 text-gray-600 rounded flex items-center justify-center hover:bg-gray-300">
                   -
                 </button>
-                {/* Hiển thị số lượng */}
                 <div className="w-12 h-8 flex items-center justify-center border border-gray-400 rounded bg-white">
                   {quantity}
                 </div>
-                {/* Nút tăng */}
                 <button onClick={increaseQuantity} className="w-8 h-8 bg-gray-200 border border-gray-400 text-gray-600 rounded flex items-center justify-center hover:bg-gray-300">
                   +
                 </button>
               </div>
-              {/* Số lượng sản phẩm còn lại */}
               <p className="text-gray-500 ml-4">Số lượng sản phẩm có sẵn: {product.stock}</p>
             </div>
-            {/* Các nút chức năng */}
             <div className="mt-5 flex gap-2">
               <Link to="/payments">
                 <button onClick={handleBuyNow} className="flex bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
-                <AiOutlineDollarCircle className="mr-2 text-white text-2xl"/>Mua ngay
+                  <AiOutlineDollarCircle className="mr-2 text-white text-2xl"/>Mua ngay
                 </button>
               </Link>
               <button onClick={handleAddToCart} className="flex bg-red-800 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
@@ -150,16 +163,12 @@ const Details = () => {
         </div>
       </div>
 
-      {/* Modal thông báo */}
       {notification.show && (
         <div className="fixed inset-0 flex items-center justify-center">
-          {/* Container của thông báo */}
           <div className="bg-black bg-opacity-80 rounded-lg p-5 w-1/4 h-1/4 flex flex-col items-center justify-center">
-            {/* Biểu tượng tích */}
             <div className="bg-white rounded-full w-12 h-12 flex items-center justify-center mb-4 text-black">
               <span className="text-2xl font-bold">✔</span>
             </div>
-            {/* Nội dung thông báo */}
             <p className="text-white text-center">{notification.message}</p>
           </div>
         </div>

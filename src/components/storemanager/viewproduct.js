@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import productApi from "../../api/productApi";
 import DeleteProduct from "./deleteproduct";
 import GetInterfaceProduct from "./getInterfaceProduct";
-import AddToSuggest from "./addToSuggest";
+import AddToSuggest from "./suggestproduct/addToSuggest";
 function ViewProduct() {
   const [productList, setProductList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -74,7 +74,7 @@ function ViewProduct() {
                       alt={product.name}
                       className="w-16 h-16 object-cover"
                     /> */}
-                    <GetInterfaceProduct productId={product.id} />
+                    <GetInterfaceProduct productId={product.id} className="w-16 h-16 object-cover"/>
                   </td>
                   <td className="border p-2">
                     {product.price ? product.price.toLocaleString() + " đ" : "N/A"}

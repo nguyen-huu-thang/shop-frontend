@@ -32,7 +32,7 @@ function App() {
             <ProtectedRoute>
               <Register />
             </ProtectedRoute>} />
-        <Route path="/details/:slug" element={<Details />} />
+        <Route path="/details/:id" element={<Details />} />
         <Route path="/storemanager/*" element={<StoreManager />} />
         <Route path="/test" element={<Test />} />
         <Route path="/account/*" element={<Account />} />

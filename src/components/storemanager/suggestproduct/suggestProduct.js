@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import productApi from "../../api/productApi";
+import productApi from "../../../api/productApi";
 import DeleteFromSuggest from "./deleteFromSuggest";
 import DeleteAllSuggestProduct from "./deleteAllFromSuggest";
-import GetInterfaceProduct from "./getInterfaceProduct"; // Import GetInterfaceProduct
+import GetInterfaceProduct from "../getInterfaceProduct";
 
 function SuggestProduct() {
   const [suggestedProducts, setSuggestedProducts] = useState([]);
@@ -78,7 +78,7 @@ function SuggestProduct() {
           ) : (
             <tr>
               <td colSpan="5" className="border p-2 text-center">
-                Không có sản phẩm nào được gợi ý.
+                Không có sản phẩm.
               </td>
             </tr>
           )}

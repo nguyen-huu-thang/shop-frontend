@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { clearSuggestions } from "../../redux/suggestSlice";
-import Confirm from "../confirm";
+import { clearSuggestions } from "../../../redux/suggestSlice";
+import Confirm from "../../confirm";
 
 const DeleteAllSuggestProduct = ({onRefresh}) => {
   const dispatch = useDispatch();

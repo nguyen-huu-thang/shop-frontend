@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { removeSuggestion } from "../../redux/suggestSlice";
+import { removeSuggestion } from "../../../redux/suggestSlice";
 
 const DeleteFromSuggest = ({ productId, onRefresh }) => {
   const dispatch = useDispatch();

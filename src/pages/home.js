@@ -5,40 +5,64 @@ import { products } from '../product';
 import ProductCart from '../components/productcart';
 import ConnectWidget from '../components/connectwidget';
 import Footer from '../components/footer';
+import Suggest from '../components/home/suggest';
 function Home() {
   return (
     <div>
       <Navbar />
       <Banner />
       <ConnectWidget />
-      <h1 className="text-2xl my-5 text-center font-bold relative before:content-['']
-      before:absolute before:top-1/2 before:left-0 before:w-1/4 before:h-0.5 before:bg-gray-300 
-      before:translate-y-[-50%] after:content-[''] after:absolute after:top-1/2 
-      after:right-0 after:w-1/4 after:h-0.5 after:bg-gray-300 after:translate-y-[-50%]">SẢN PHẨM BÁN CHẠY</h1>
+      <div className="flex justify-center items-center mt-3 mb-3 relative">
+        <div className="flex items-center justify-center relative px-5 py-2 text-orange-600 font-bold w-full">
+            <div
+            className="absolute bottom-[-3px] left-0 right-0 w-full h-[3px] bg-orange-600 rounded-md"
+            ></div>
+            <div
+            tabIndex="0"
+            className="text-xl uppercase text-center"
+            >
+            <span>sản phẩm bán chạy</span>
+            </div>
+        </div>
+      </div>
       <div className='grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 m-20'>
         {products.map((product, key) => (
           <ProductCart key={key} data={product} />
         ))}
       </div>
-      <h1 className="text-2xl my-5 text-center font-bold relative before:content-['']
-      before:absolute before:top-1/2 before:left-0 before:w-1/4 before:h-0.5 before:bg-gray-300 
-      before:translate-y-[-50%] after:content-[''] after:absolute after:top-1/2 
-      after:right-0 after:w-1/4 after:h-0.5 after:bg-gray-300 after:translate-y-[-50%]">GIÁ ƯU ĐÃI</h1>
+      <div className="flex justify-center items-center mt-3 mb-3 relative">
+        <div className="flex items-center justify-center relative px-5 py-2 text-orange-600 font-bold w-full">
+            <div
+            className="absolute bottom-[-3px] left-0 right-0 w-full h-[3px] bg-orange-600 rounded-md"
+            ></div>
+            <div
+            tabIndex="0"
+            className="text-xl uppercase text-center"
+            >
+            <span>giá ưu đãi</span>
+            </div>
+        </div>
+      </div>
       <div className='grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 m-20'>
         {products.map((product, key) => (
           <ProductCart key={key} data={product} />
         ))}
       </div>
-      <h1 className="text-2xl my-5 text-center font-bold relative before:content-['']
-      before:absolute before:top-1/2 before:left-0 before:w-1/4 before:h-0.5 before:bg-gray-300 
-      before:translate-y-[-50%] after:content-[''] after:absolute after:top-1/2 
-      after:right-0 after:w-1/4 after:h-0.5 after:bg-gray-300 after:translate-y-[-50%]">GỢI Ý HÔM NAY</h1>
-      <div className='grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 m-20'>
-        {products.map((product, key) => (
-          <ProductCart key={key} data={product} />
-        ))}
+      <div className="flex justify-center items-center mt-3 mb-3 relative">
+        <div className="flex items-center justify-center relative px-5 py-2 text-orange-600 font-bold w-full">
+            <div
+            className="absolute bottom-[-3px] left-0 right-0 w-full h-[3px] bg-orange-600 rounded-md"
+            ></div>
+            <div
+            tabIndex="0"
+            className="text-xl uppercase text-center"
+            >
+            <span>GỢI Ý HÔM NAY</span>
+            </div>
+        </div>
       </div>
-        <Footer/>
+      <Suggest />
+      <Footer/>
     </div>
   );
 }

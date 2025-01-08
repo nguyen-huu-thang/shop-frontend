@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { addSuggestion } from "../../redux/suggestSlice";
+import { addSuggestion } from "../../../redux/suggestSlice";
 
 const AddToSuggest = ({ productId }) => {
   const dispatch = useDispatch();

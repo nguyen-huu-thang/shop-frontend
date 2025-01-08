@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  items: localStorage.getItem('suggestions') ? JSON.parse(localStorage.getItem('suggestions')) : [], // Load danh sách từ localStorage
-  statusTab: false, // Trạng thái hiển thị
+  items: localStorage.getItem('suggestions') ? JSON.parse(localStorage.getItem('suggestions')) : [],
+  statusTab: false, 
 };
 
 const suggestSlice = createSlice({

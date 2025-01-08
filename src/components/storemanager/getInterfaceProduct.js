@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import fileApi from "../../api/fileApi";
 
-const GetInterfaceProduct = ({ productId }) => {
+const GetInterfaceProduct = ({ productId, className }) => {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -66,7 +66,7 @@ const GetInterfaceProduct = ({ productId }) => {
     <img
       src={file.fullPath}
       alt={file.fileName || "Ảnh sản phẩm"}
-      className="w-16 h-16 object-cover"
+      className={`object-cover ${className}`} //
       loading="lazy"
       onError={(e) => {
         e.target.src = "/default-image.png";

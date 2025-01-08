@@ -3,7 +3,7 @@ import { Link, Route, Routes } from "react-router-dom";
 import ViewProduct from "../components/storemanager/viewproduct";
 import AddProduct from "../components/storemanager/addproduct";
 import EditProduct from "../components/storemanager/editproduct";
-import SuggestProduct from "../components/storemanager/suggestProduct";
+import SuggestProduct from "../components/storemanager/suggestproduct/suggestProduct";
 import Logo from "../assets/logo1.png";
 import { HiChevronRight } from "react-icons/hi";
 import { FaStore } from "react-icons/fa";
