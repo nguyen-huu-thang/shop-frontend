@@ -10,8 +10,19 @@ function SpecialProduct() {
   const [error, setError] = useState(null);
 
   const refreshSpecialProducts = async () => {
+    const specialProduct = JSON.parse(localStorage.getItem("specialProducts")) || [];
+    if (specialProduct.length === 0) {
+      setSpecialProducts([]);
+      return;
+    }
+
     try {
-      const products = await productApi.getSpecialProducts(); // API call lấy sản phẩm bán chạy
+      const products = await Promise.all(
+        specialProduct.map(async (id) => {
+          const product = await productApi.getProductById(id);
+          return product;
+        })
+      );
       setSpecialProducts(products);
     } catch (err) {
       setError("Không thể tải danh sách sản phẩm ưu đãi.");
@@ -34,7 +45,7 @@ function SpecialProduct() {
   return (
     <div>
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold mb-2">Danh sách sản phẩm bán chạy</h2>
+        <h2 className="text-xl font-semibold mb-2">Danh sách sản phẩm ưu đãi</h2>
         <DeleteAllSpecialProduct onRefresh={refreshSpecialProducts} />
       </div>
       <table className="min-w-full border-collapse table-fixed">

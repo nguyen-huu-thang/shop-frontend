@@ -16,8 +16,16 @@ function ViewProduct() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const products = await productApi.getProducts();
-        setProductList(products);
+        const storedProducts = sessionStorage.getItem("products");
+        if (storedProducts) {
+          setProductList(JSON.parse(storedProducts))
+        } else {
+          const products = await productApi.getProducts();
+          if (products) {
+            sessionStorage.setItem("products", JSON.stringify(products));
+            setProductList(products);
+          }
+        }  
       } catch (err) {
         setError("Không thể tải danh sách sản phẩm.");
       } finally {

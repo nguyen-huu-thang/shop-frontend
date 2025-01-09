@@ -4,6 +4,8 @@ import cartReducer from "./cartSlice";
 import loveReducer from "./loveSlice";
 import categoryReducer from "./categorySlice";
 import suggestReducer from "./suggestSlice";
+import specialReducer from "./specialSlice";
+import bestSellReducer from "./bestSellSlice";
 const store = configureStore({
     reducer: {
         user: userReducer,
@@ -11,6 +13,8 @@ const store = configureStore({
         love: loveReducer,
         categories: categoryReducer,
         suggest: suggestReducer,
+        special: specialReducer,
+        bestSell: bestSellReducer,
     },
 });
 

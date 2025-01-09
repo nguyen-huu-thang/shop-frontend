@@ -1,13 +1,13 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { addSpecial, addSpecialProduct } from "../../../redux/specialSlice";
+import { addSpecialProduct } from "../../../redux/specialSlice";
 
 const AddToSpecial = ({ productId }) => {
     const dispatch = useDispatch();
 
     const handleAdd = () => {
         dispatch(addSpecialProduct({ productId }));
-        alert("Sản phẩm đã được thêm vào danh sách gợi ý!");
+        alert("Sản phẩm đã được thêm vào danh sách ưu đãi!");
     };
 
     return (

@@ -6,6 +6,8 @@ import ProductCart from '../components/productcart';
 import ConnectWidget from '../components/connectwidget';
 import Footer from '../components/footer';
 import Suggest from '../components/home/suggest';
+import BestSell from '../components/home/bestSell';
+import Special from '../components/home/special';
 function Home() {
   return (
     <div>
@@ -25,6 +27,7 @@ function Home() {
             </div>
         </div>
       </div>
+      <BestSell />
       <div className='grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 m-20'>
         {products.map((product, key) => (
           <ProductCart key={key} data={product} />
@@ -43,11 +46,12 @@ function Home() {
             </div>
         </div>
       </div>
-      <div className='grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 m-20'>
+      <Special/>
+      {/* <div className='grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 m-20'>
         {products.map((product, key) => (
           <ProductCart key={key} data={product} />
         ))}
-      </div>
+      </div> */}
       <div className="flex justify-center items-center mt-3 mb-3 relative">
         <div className="flex items-center justify-center relative px-5 py-2 text-orange-600 font-bold w-full">
             <div

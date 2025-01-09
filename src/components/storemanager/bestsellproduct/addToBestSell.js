@@ -7,7 +7,7 @@ const AddToBestSell = ({ productId }) => {
 
     const handleAdd = () => {
         dispatch(addBestSell({ productId }));
-        alert("Sản phẩm đã được thêm vào danh sách gợi ý!");
+        alert("Sản phẩm đã được thêm vào danh sách bán chạy!");
     };
 
     return (

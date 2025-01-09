@@ -6,7 +6,7 @@ const initialState = {
 };
 
 const specialProductSlice = createSlice({
-    name: 'specialProduct',
+    name: 'special',
     initialState,
     reducers: {
         addSpecialProduct: (state, action) => {

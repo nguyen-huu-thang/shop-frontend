@@ -1,8 +1,8 @@
-import React,{ useEffect, useState } from 'react'
-import productApi from '../../../api/productApi'
-import DeleteFromBestSell from "./deleteFromBestSell";
+import React, { useEffect, useState } from "react";
+import productApi from "../../../api/productApi";
 import DeleteAllBestSellProduct from "./deleteAllFromBestSell";
 import GetInterfaceProduct from "../getInterfaceProduct";
+import DeleteFromBestSell from "./deleteFromBestSell";
 
 function BestSellProduct() {
   const [bestSellProducts, setBestSellProducts] = useState([]);
@@ -10,8 +10,19 @@ function BestSellProduct() {
   const [error, setError] = useState(null);
 
   const refreshBestSellProducts = async () => {
+    const bestsell = JSON.parse(localStorage.getItem("bestSells")) || [];
+    if (bestsell.length === 0) {
+      setBestSellProducts([]);
+      return;
+    }
+
     try {
-      const products = await productApi.getBestSellProducts(); // API call lấy sản phẩm bán chạy
+      const products = await Promise.all(
+        bestsell.map(async (id) => {
+          const product = await productApi.getProductById(id);
+          return product;
+        })
+      );
       setBestSellProducts(products);
     } catch (err) {
       setError("Không thể tải danh sách sản phẩm bán chạy.");
@@ -76,6 +87,7 @@ function BestSellProduct() {
     </div>
   );
 }
+
 
 export default BestSellProduct;
 
