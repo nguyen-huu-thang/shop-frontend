@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import userApi from "../api/userApi";
-import Confirm from "../components/confirm";
-import AddressData from "../components/addressdata";
+import userApi from "../../api/userApi";
+import Confirm from "../../components/confirm";
+import AddressData from "../account/addressdata";
 
 const ChangeProfile = () => {
   const [user, setUser] = useState({

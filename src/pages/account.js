@@ -1,12 +1,11 @@
 import React from 'react';
 import { Link, Route, Routes } from "react-router-dom";
-import Profile from '../components/profile';
-import ChangePassword from '../components/changepassword';
-import PurchaseHistory from '../components/purchasehistory';
+import Profile from '../components/account/profile';
+import ChangePassword from '../components/account/changepassword';
+import PurchaseHistory from '../components/account/purchasehistory';
 import { LuUserCircle } from "react-icons/lu";
 import Navbar from '../components/navbar';
-import ChangeProfile from '../components/changeprofile';
-import userApi from '../api/userApi';
+import ChangeProfile from '../components/account/changeprofile';
 import { HiChevronRight } from "react-icons/hi";
 const Account = () => {
   return (

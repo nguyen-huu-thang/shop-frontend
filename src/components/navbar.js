@@ -6,21 +6,17 @@ import { AiOutlineUser } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { CiHeart } from "react-icons/ci";
 import { useSelector, useDispatch } from "react-redux";
-import ShoppingCart from "./shoppingcart";
+import ShoppingCartIcon from "./cart/shoppingCartIcon";
 import { CiMenuBurger } from "react-icons/ci";
 import { BsChevronDown, BsChevronRight } from "react-icons/bs";
 import { logout, fetchCurrentUser } from '../redux/userSlice';
-
-function Testpage() {
+import CartTotalQuantity from "./cart/cartTotalQuantity";
+function Navbar() {
     const [sidebarVisible, setSidebarVisible] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [totalQuantity, setTotalQuantity] = useState(0);
+    // const [totalQuantity, setTotalQuantity] = useState(0);
     const [isCategoryOpen, setIsCategoryOpen] = useState(false);
-    const carts = useSelector(store => store.cart.items);
     const [searchSidebarOpen, setSearchSidebarOpen] = useState(false);
-    useEffect(() => {
-        setTotalQuantity(carts.reduce((total, item) => total + item.quantity, 0));
-    }, [carts]);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -154,17 +150,18 @@ function Testpage() {
                     <div className="relative">
                         <div className="flex text-xl cursor-pointer" onClick={() => setSidebarVisible(true)}>
                             <CiShoppingCart size={25} color="black" />
-                            <span className="absolute h-4 w-4 left-4 top-[-20%] bg-gray-600 text-white text-sm rounded-full flex justify-center items-center ">{totalQuantity}</span>
+                            <CartTotalQuantity />
+                            {/* <span className="absolute h-4 w-4 left-4 top-[-20%] bg-gray-600 text-white text-sm rounded-full flex justify-center items-center ">{totalQuantity}</span> */}
                         </div>
                         {sidebarVisible && (
                             <>
                                 <div className="fixed inset-0 bg-black bg-opacity-50 z-40 h-full" onClick={() => setSidebarVisible(false)}></div>
-                                <div className="fixed top-0 right-0 h-full w-[300px] lg:w-[350px] bg-gray-900 text-white z-50 shadow-lg p-4">
+                                <div className="fixed top-0 right-0 h-full w-[300px] lg:w-[400px] bg-gray-900 text-white z-50 shadow-lg p-4">
                                     <button className="absolute top-4 right-4 text-white text-xl" onClick={() => setSidebarVisible(false)}>X</button>
                                     <h3 className="text-xl border-b border-gray-700 pb-2">Giỏ hàng của bạn</h3>
                                     <p className="mt-4 text-gray-400">Danh sách sản phẩm</p>
                                     <div className="grid grid-rows p-1 gap-1">
-                                        {carts.map((item, key) => <ShoppingCart key={key} data={item} />)}
+                                        <ShoppingCartIcon />
                                     </div>
                                     <div className="grid grid-cols-2 gap-2 absolute bottom-10 left-0 w-full p-4">
                                         <Link to="/cart">
@@ -249,7 +246,6 @@ function Testpage() {
                 </div>
             </div>
 
-
             {/* Sidebar menu (menu that slides in from the right) */}
             {isMenuOpen && (
                 <div>
@@ -314,4 +310,4 @@ function Testpage() {
     );
 };
 
-export default Testpage;
+export default Navbar;

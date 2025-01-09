@@ -7,18 +7,18 @@ const CategoryList = ({ children }) => {
   const { loading, error } = useSelector((state) => state.categories);
 
   useEffect(() => {
-    dispatch(fetchCategories()); // Tải danh mục khi component được render
+    dispatch(fetchCategories());
   }, [dispatch]);
 
-  if (loading) {
-    return <div>Đang tải danh mục...</div>;
-  }
+  // if (loading) {
+  //   return <div>Đang tải danh mục...</div>;
+  // }
 
   if (error) {
     return <div>Không thể tải danh mục: {error}</div>;
   }
 
-  return <>{children}</>; // Render các component con khi dữ liệu sẵn sàng
+  return <>{children}</>;
 };
 
 export default CategoryList;
