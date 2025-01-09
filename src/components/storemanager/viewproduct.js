@@ -5,6 +5,8 @@ import productApi from "../../api/productApi";
 import DeleteProduct from "./deleteproduct";
 import GetInterfaceProduct from "./getInterfaceProduct";
 import AddToSuggest from "./suggestproduct/addToSuggest";
+import AddToBestSell from "./bestsellproduct/addToBestSell";
+import AddToSpecial from "./specialproduct/addToSpecial";
 function ViewProduct() {
   const [productList, setProductList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -125,6 +127,9 @@ function ViewProduct() {
                       onDelete={handleDelete}
                     />
                     <AddToSuggest productId={product.id} />
+                    <AddToBestSell productId={product.id} />
+                    <AddToSpecial productId={product.id} />
+
                   </td>
                 </tr>
               );

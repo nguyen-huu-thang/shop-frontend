@@ -4,6 +4,8 @@ import ViewProduct from "../components/storemanager/viewproduct";
 import AddProduct from "../components/storemanager/addproduct";
 import EditProduct from "../components/storemanager/editproduct";
 import SuggestProduct from "../components/storemanager/suggestproduct/suggestProduct";
+import BestSellProduct from "../components/storemanager/bestsellproduct/bestSellProduct";
+import SpecialProduct from "../components/storemanager/specialproduct/specialProduct";
 import Logo from "../assets/logo1.png";
 import { HiChevronRight } from "react-icons/hi";
 import { FaStore } from "react-icons/fa";
@@ -53,6 +55,18 @@ function StoreManager() {
             >
               Danh sách sản phẩm đề xuất
             </Link>
+            <Link
+              to="/storemanager/bestSell"
+              className="block py-2 px-4 mb-2 text-left bg-gray-400 rounded hover:bg-blue-600 hover:text-white"
+            >
+              Danh sách sản phẩm bán chạy
+            </Link>
+            <Link
+              to="/storemanager/special"
+              className="block py-2 px-4 mb-2 text-left bg-gray-400 rounded hover:bg-blue-600 hover:text-white"
+            >
+              Danh sách sản phẩm ưu đãi
+            </Link>
           </div>
         </div>
 
@@ -63,6 +77,8 @@ function StoreManager() {
             <Route path="/add" element={<AddProduct />} />
             <Route path="/view/edit/:id" element={<EditProduct />} />
             <Route path="/suggest" element={<SuggestProduct />} />
+            <Route path="/bestSell" element={<BestSellProduct />} />
+            <Route path="/special" element={<SpecialProduct />} />
             <Route
               path="/"
               element={
