@@ -54,22 +54,27 @@ const GetInterfaceProduct = ({ productId, className }) => {
     return <p>Đang tải ảnh...</p>;
   }
 
-  if (error) {
-    return <p style={{ color: "red" }}>{error}</p>;
-  }
-
-  if (!file) {
-    return <p>Không có ảnh đại diện</p>;
+  // Nếu có lỗi hoặc không có ảnh, hiển thị ảnh mặc định
+  if (error || !file) {
+    return (
+      <img
+        src="/default-image.png" // Đường dẫn đến ảnh mặc định
+        alt="Ảnh mặc định"
+        className={`object-cover ${className}`}
+        loading="lazy"
+      />
+    );
   }
 
   return (
     <img
       src={file.fullPath}
       alt={file.fileName || "Ảnh sản phẩm"}
-      className={`object-cover ${className}`} //
+      className={`object-cover ${className}`}
       loading="lazy"
       onError={(e) => {
-        e.target.src = "/default-image.png";
+        e.target.onerror = null; // Ngăn chặn lặp lại onError
+        e.target.src = "/default-image.png"; // Đặt ảnh mặc định khi lỗi tải ảnh
       }}
     />
   );

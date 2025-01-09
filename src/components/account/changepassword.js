@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import userApi from "../api/userApi";
+import userApi from "../../api/userApi";
 
 const ChangePassword = () => {
   const [formData, setFormData] = useState({

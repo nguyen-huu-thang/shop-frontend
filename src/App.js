@@ -12,7 +12,6 @@ import Cart from './pages/cart';
 import Payments from './pages/payments';
 import Love from './pages/love';
 import Category from './pages/category';
-import Testpage from './components/testpage';
 import ProtectedRoute from "./components/ProtectedRoute";
 import CategoryList from './utils/categoryList';
 function App() {
@@ -40,7 +39,6 @@ function App() {
         <Route path="/payments" element={<Payments />} />
         <Route path="/love" element={<Love />} />
         <Route path="/category/:category" element={<Category />} />
-        <Route path="/testpage" element={<Testpage />} />
       </Routes>
     </BrowserRouter>
   );

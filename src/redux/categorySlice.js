@@ -17,11 +17,11 @@ const categorySlice = createSlice({
     },
     loadCategoriesSuccess(state, action) {
       state.loading = false;
-      state.items = action.payload; // Cập nhật danh sách danh mục
+      state.items = action.payload;
     },
     loadCategoriesFailure(state, action) {
       state.loading = false;
-      state.error = action.payload; // Lưu thông báo lỗi
+      state.error = action.payload;
     },
   },
 });
@@ -29,7 +29,6 @@ const categorySlice = createSlice({
 // Actions
 export const { startLoading, loadCategoriesSuccess, loadCategoriesFailure } = categorySlice.actions;
 
-// Thunk để tải danh mục
 export const fetchCategories = () => async (dispatch) => {
   // Kiểm tra nếu danh mục đã được lưu trong sessionStorage
   const storedCategories = sessionStorage.getItem('categories');

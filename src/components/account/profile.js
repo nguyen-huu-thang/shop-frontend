@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import userApi from '../api/userApi';
+import userApi from '../../api/userApi';
 
 const Profile = () => {
   const [user, setUser] = useState(null);  // Để lưu thông tin người dùng
