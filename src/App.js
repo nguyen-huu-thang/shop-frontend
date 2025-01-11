@@ -14,11 +14,17 @@ import Love from './pages/love';
 import Category from './pages/category';
 import ProtectedRoute from "./components/ProtectedRoute";
 import CategoryList from './utils/categoryList';
+import BestSell from './pages/bestsell';
+import Special from './pages/special';
+import CartList from './utils/cartList';
+// import FileList from './utils/fileList';
 function App() {
   return (
     <BrowserRouter>
       <TokenRefresher />
       <CategoryList />
+      <CartList />
+      {/* <FileList /> */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login"
@@ -39,6 +45,8 @@ function App() {
         <Route path="/payments" element={<Payments />} />
         <Route path="/love" element={<Love />} />
         <Route path="/category/:category" element={<Category />} />
+        <Route path="/bestsell" element={<BestSell />} />
+        <Route path="/special" element={<Special />} />
       </Routes>
     </BrowserRouter>
   );

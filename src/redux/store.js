@@ -6,6 +6,7 @@ import categoryReducer from "./categorySlice";
 import suggestReducer from "./suggestSlice";
 import specialReducer from "./specialSlice";
 import bestSellReducer from "./bestSellSlice";
+import fileReducer from "./fileSlice";
 const store = configureStore({
     reducer: {
         user: userReducer,
@@ -15,6 +16,7 @@ const store = configureStore({
         suggest: suggestReducer,
         special: specialReducer,
         bestSell: bestSellReducer,
+        file: fileReducer
     },
 });
 

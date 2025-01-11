@@ -1,59 +1,119 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import {products} from '../product';
-import Navbar from '../components/navbar';
-import ProductCart from '../components/productcart';
+import React, { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
+import { useSelector } from "react-redux"; // Lấy dữ liệu từ Redux
+import Navbar from "../components/navbar";
+import ProductCart from "../components/productcart"; // Component hiển thị sản phẩm
+import productApi from "../api/productApi";
+import Banner from "../components/banner";
 const Category = () => {
-  const { category } = useParams(); // Lấy category từ URL
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  
+  const { category } = useParams(); // Lấy danh mục từ URL
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const categoryMap = {
-    "fashion": "Thời trang",
-    "shoes": "Giày dép",
-    "book-bag": "Túi sách",
-    "electronics": "Điện tử",
-    "mobile-and-accessories": "Điện thoại",
-    "computers-and-accessories": "Máy tính",
-    "healthy": "Sức khỏe",
-    "beauty": "Làm đẹp",
-    "housewares": "Đồ gia dụng",
-    "decoration": "Đồ trang trí",
-    "mother-and-baby": "Mẹ và bé",
-    "book": "Sách",
-    "stationery": "Văn phòng phẩm"
+    fashion: { name: "Thời trang", id: "2" },
+    shoes: { name: "Giày dép", id: "10" },
+    "book-bag": { name: "Túi sách", id: "11" },
+    electronics: { name: "Điện tử", id: "3" },
+    healthy: { name: "Sức khỏe", id: "12" },
+    beauty: { name: "Làm đẹp", id: "4" },
+    housewares: { name: "Đồ gia dụng", id: "5" },
+    decoration: { name: "Đồ trang trí", id: "6" },
+    "mother-and-baby": { name: "Mẹ và bé", id: "9" },
+    book: { name: "Sách", id: "7" },
+    stationery: { name: "Văn phòng phẩm", id: "8" },
   };
 
-  // Lấy tên tiếng Việt từ category
-  const categoryName = categoryMap[category] || "Danh mục không xác định";
+  const categoryInfo = categoryMap[category] || { name: "Danh mục không xác định", id: null };
+  const categoryTree = useSelector((state) => state.categories.categoryTree);
 
-  useEffect(() => {
-    if (category) {
-      const filtered = products.filter(product => product.category === category);
-      setFilteredProducts(filtered);
+  const findLowestNodes = (parentId, tree) => {
+    if (!tree || tree.length === 0) return [];
+  
+    const lowestNodeIds = [];
+    const stack = [...tree];
+  
+    while (stack.length > 0) {
+      const currentNode = stack.pop();
+  
+      if (currentNode.hierarchyPathById.includes(`/${parentId}`)) {
+        if (!currentNode.children || currentNode.children.length === 0) {
+          lowestNodeIds.push(currentNode.id);
+        } else {
+          stack.push(...currentNode.children);
+        }
+      }
     }
-  }, [category]);
+  
+    return lowestNodeIds;
+  };
+  
+  useEffect(() => {
+    const fetchProducts = async () => {
+      if (!categoryInfo.id) {
+        setLoading(false);
+        setError("Danh mục không hợp lệ.");
+        return;
+      }
+  
+      try {
+        setLoading(true);
+        setError(null);
+  
+        const childIds = findLowestNodes(categoryInfo.id, categoryTree);
+        console.log("Các node thấp nhất của danh mục:", childIds);
+  
+        const allProducts = [];
+  
+        for (const childId of childIds) {
+          try {
+            const response = await productApi.getProductsByCategoryId(childId);
+  
+            if (response) {
+              allProducts.push(...response);
+            }
+          } catch (error) {
+            if (error.response && error.response.status === 404) {
+              console.warn(`Không tìm thấy sản phẩm cho categoryId ${childId}`);
+            } else {
+              console.error(`Lỗi khi gọi API cho categoryId ${childId}:`, error);
+            }
+          }
+        }
+  
+        setProducts(allProducts);
+      } catch (err) {
+        console.error("Lỗi khi tải sản phẩm:", err);
+        setError("Lỗi khi tải sản phẩm.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchProducts();
+  }, [categoryInfo.id, categoryTree]);
 
   return (
     <div>
-        <Navbar />
-        <div className="container mx-auto p-5">
-        {/* Hiển thị tên danh mục bằng tiếng Việt */}
-        <h1 className="text-2xl font-bold mb-5">{categoryName}</h1>
-        {filteredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {filteredProducts.map(product => (
-                <div key={product.id} className="border rounded-lg p-4 shadow-md">
-                <h2 className="text-lg font-semibold">{product.name}</h2>
-                <p>Giá: {product.price}đ</p>
-                </div>
-            ))}
-            </div>
-        ) : (
-            <p>Không có sản phẩm nào trong danh mục này.</p>
-        )}
+      <Navbar />
+      <Banner />
+      <div className="container mx-auto p-5">
+        <nav className="text-gray-600 mb-5">
+          <Link to="/" className="hover:underline">Trang chủ</Link>
+          <span className="mx-2">/</span>
+          <span>{categoryInfo.name}</span>
+        </nav>
+        <h1 className="text-2xl font-bold mb-5">{categoryInfo.name}</h1>
+        <div className="grid lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 gap-2 m-20">
+          {products
+            .filter((product) => product && product.price !== null)
+            .map((product, key) => (
+              <ProductCart key={key} data={product} />
+          ))}
         </div>
+      </div>
     </div>
-
   );
 };
 

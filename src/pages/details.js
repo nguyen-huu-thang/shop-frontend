@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import productApi from "../api/productApi";
 import ProductOverview from "../components/details/productOverview";
-import DetailsProductActions from "../components/details/detailsProductActions";
 import ProductDetails from "../components/details/productDetails";
 import Notification from "../components/details/notification";
 import Navbar from "../components/navbar";
@@ -76,16 +75,6 @@ const DetailsPage = () => {
           decreaseQuantity={decreaseQuantity}
         />
       </div>
-
-      {/* Hiển thị các hành động */}
-      <div className="container mx-auto p-5 bg-white mb-5">
-        <DetailsProductActions
-          product={product}
-          quantity={quantity}
-          showNotification={showNotification}
-        />
-      </div>
-
       {/* Hiển thị chi tiết sản phẩm */}
       <ProductDetails product={product} categoryLoading={categoryLoading} categories={categories} />
 

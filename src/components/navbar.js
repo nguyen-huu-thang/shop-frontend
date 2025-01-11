@@ -35,8 +35,6 @@ function Navbar() {
         { name: "Giày dép", path: "shoes" },
         { name: "Túi sách", path: "book-bag"},
         { name: "Điện tử", path: "electronics" },
-        { name: "Điện thoại",path: "mobile-and-accessories"},
-        { name: "Máy tính", path: "computers-and-accessories"},
         { name: "Sức khỏe", path: "healthy"},
         { name: "Làm đẹp", path: "beauty"},
         { name: "Đồ gia dụng", path: "housewares" },
@@ -48,7 +46,6 @@ function Navbar() {
 
     const toggleSearchSidebar = () => setSearchSidebarOpen(!searchSidebarOpen);
     const { accessToken, user } = useSelector((state) => state.user);
-    console.log(user, accessToken)
     const dispatch = useDispatch();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Trạng thái dropdown
 
@@ -82,8 +79,6 @@ function Navbar() {
         dispatch(logout()); // Cập nhật trạng thái đăng xuất  
     };
 
-    console.log("AccessToken:", accessToken);
-    console.log("User:", user); // Đảm bảo `user` được log đầy đủ
     if (user?.username) {
         console.log("Username:", user.username);
     }
@@ -120,8 +115,8 @@ function Navbar() {
                             ))}
                         </div>
                     </div>
-                    <a href="/" className="text-lg hover:text-gray-300">Giá Ưu Đãi</a>
-                    <a href="/" className="text-lg hover:text-gray-300">Sản Phẩm Bán Chạy</a>
+                    <a href="/special" className="text-lg hover:text-gray-300">Giá Ưu Đãi</a>
+                    <a href="/bestsell" className="text-lg hover:text-gray-300">Sản Phẩm Bán Chạy</a>
                 </div>
 
                 {/* Right side icons (Search, Heart, Cart, User) */}

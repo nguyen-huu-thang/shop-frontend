@@ -6,7 +6,6 @@ import GetInterfaceProduct from "./storemanager/getInterfaceProduct";
 const ProductCart = (props) => {
     const { id, name, price } = props.data;
     const [isFavorite, setIsFavorite] = useState(false);
-
     // const slugify = (text) => {
     //     return text
     //         .toLowerCase()

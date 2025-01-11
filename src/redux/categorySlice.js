@@ -1,14 +1,15 @@
-import { createSlice } from '@reduxjs/toolkit';
-import categoryApi from '../api/categoryApi';
+import { createSlice } from "@reduxjs/toolkit";
+import categoryApi from "../api/categoryApi";
 
 const initialState = {
-  items: JSON.parse(sessionStorage.getItem('categories')) || [],
+  items: JSON.parse(sessionStorage.getItem("categories")) || [], // Node lá
+  categoryTree: JSON.parse(sessionStorage.getItem("categoryTree")) || [], // Node cấp 2
   loading: false,
   error: null,
 };
 
 const categorySlice = createSlice({
-  name: 'categories',
+  name: "categories",
   initialState,
   reducers: {
     startLoading(state) {
@@ -17,7 +18,8 @@ const categorySlice = createSlice({
     },
     loadCategoriesSuccess(state, action) {
       state.loading = false;
-      state.items = action.payload;
+      state.items = action.payload.items;
+      state.categoryTree = action.payload.categoryTree;
     },
     loadCategoriesFailure(state, action) {
       state.loading = false;
@@ -31,9 +33,16 @@ export const { startLoading, loadCategoriesSuccess, loadCategoriesFailure } = ca
 
 export const fetchCategories = () => async (dispatch) => {
   // Kiểm tra nếu danh mục đã được lưu trong sessionStorage
-  const storedCategories = sessionStorage.getItem('categories');
-  if (storedCategories) {
-    dispatch(loadCategoriesSuccess(JSON.parse(storedCategories)));
+  const storedCategories = sessionStorage.getItem("categories");
+  const storedCategoryTree = sessionStorage.getItem("categoryTree");
+
+  if (storedCategories && storedCategoryTree) {
+    dispatch(
+      loadCategoriesSuccess({
+        items: JSON.parse(storedCategories),
+        categoryTree: JSON.parse(storedCategoryTree),
+      })
+    );
     return;
   }
 
@@ -42,7 +51,7 @@ export const fetchCategories = () => async (dispatch) => {
   try {
     const data = await categoryApi.getAllCategories();
 
-    // Xây dựng cây danh mục
+    // Xây dựng bản đồ danh mục
     const categoryMap = {};
 
     data.forEach((category) => {
@@ -59,19 +68,33 @@ export const fetchCategories = () => async (dispatch) => {
       }
     });
 
+    // Xác định node cấp 2
+    const rootNodes = Object.values(categoryMap).filter(
+      (category) => !category.hierarchyPathById.includes("/")
+    );
+
+    // Lấy danh sách node cấp 2 từ các node gốc
+    const secondLevelNodes = rootNodes.flatMap((rootNode) => rootNode.children);
+
+    // Lọc ra node lá
     const leafNodes = Object.values(categoryMap).filter(
       (category) => category.children.length === 0
     );
 
-    // Lưu danh mục vào sessionStorage
-    sessionStorage.setItem('categories', JSON.stringify(leafNodes));
+    // Lưu cây danh mục bắt đầu từ node cấp 2 và node lá vào sessionStorage
+    sessionStorage.setItem("categoryTree", JSON.stringify(secondLevelNodes));
+    sessionStorage.setItem("categories", JSON.stringify(leafNodes));
 
-    // Thành công: Dispatch danh mục
-    dispatch(loadCategoriesSuccess(leafNodes));
+    // Dispatch cả hai
+    dispatch(
+      loadCategoriesSuccess({
+        items: leafNodes,
+        categoryTree: secondLevelNodes,
+      })
+    );
   } catch (error) {
     dispatch(loadCategoriesFailure(error.message));
   }
 };
-
 
 export default categorySlice.reducer;

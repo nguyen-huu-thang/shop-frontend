@@ -1,62 +1,3 @@
-// import { createSlice } from '@reduxjs/toolkit';
-
-// const initialState = {
-//   items: localStorage.getItem("carts") ? JSON.parse(localStorage.getItem("carts")) : [],
-//   statusTab: false,
-//   isConfirmingRemove: false,  // Trạng thái hiển thị thông báo xác nhận
-//   productToRemove: null,
-// };
-
-// const cartSlice = createSlice({
-//   name: 'cart',
-//   initialState,
-//   reducers: {
-//     addToCart: (state, action) => {
-//       const { productId, quantity } = action.payload;
-//       const indexProductId = state.items.findIndex(item => item.productId === productId);
-//       if (indexProductId >= 0) {
-//         state.items[indexProductId].quantity += quantity;
-//       } else {
-//         state.items.push({ productId, quantity });
-//       }
-//       localStorage.setItem("carts", JSON.stringify(state.items));
-//     },
-    
-//     changeQuantity(state, action) {
-//       const { productId, quantity } = action.payload;
-//       const indexProductId = state.items.findIndex(item => item.productId === productId);
-      
-//       if (quantity > 0) {
-//         state.items[indexProductId].quantity = quantity;
-//       } else if (quantity === 0) {
-//         // Nếu số lượng giảm về 0, yêu cầu xác nhận
-//         state.isConfirmingRemove = true;
-//         state.productToRemove = productId; // Gán sản phẩm cần xóa
-//       }
-      
-//       localStorage.setItem("carts", JSON.stringify(state.items));
-//     },
-
-//     confirmRemoveItem(state) {
-//       // Xóa sản phẩm sau khi người dùng xác nhận
-//       if (state.productToRemove !== null) {
-//         state.items = state.items.filter(item => item.productId !== state.productToRemove);
-//         state.productToRemove = null; // Reset sản phẩm cần xóa
-//         state.isConfirmingRemove = false; // Tắt thông báo xác nhận
-//       }
-//       localStorage.setItem("carts", JSON.stringify(state.items));
-//     },
-
-//     cancelRemoveItem(state) {
-//       // Hủy bỏ việc xóa sản phẩm
-//       state.productToRemove = null;
-//       state.isConfirmingRemove = false; // Tắt thông báo xác nhận
-//     }
-//   },
-// });
-
-// export const { addToCart, changeQuantity, confirmRemoveItem, cancelRemoveItem } = cartSlice.actions;
-// export default cartSlice.reducer;
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import cartApi from "../api/cartApi";
 
@@ -65,6 +6,7 @@ export const fetchCartItems = createAsyncThunk("cart/fetchCartItems", async (_, 
   try {
     const response = await cartApi.getAllCartItemUser();
     console.log(response);
+    sessionStorage.setItem("cartItems", JSON.stringify(response)); // Lưu vào sessionStorage
     return response;
   } catch (error) {
     return rejectWithValue(error.message);
@@ -72,8 +14,16 @@ export const fetchCartItems = createAsyncThunk("cart/fetchCartItems", async (_, 
 });
 
 // Thunk để thêm sản phẩm vào giỏ hàng
-export const createCartItem = createAsyncThunk("cart/createCartItem", async (data, { rejectWithValue }) => {
+export const createCartItem = createAsyncThunk("cart/createCartItem", async (data, { getState, rejectWithValue }) => {
   try {
+    const { cart } = getState(); // Lấy giỏ hàng từ Redux state
+
+    // Kiểm tra sản phẩm đã tồn tại
+    const existingItem = cart.items.find((item) => item.productId === data.productId);
+    if (existingItem) {
+      throw new Error("Sản phẩm đã có trong giỏ hàng");
+    }
+
     const response = await cartApi.createCartItem(data);
     return response;
   } catch (error) {
@@ -101,14 +51,38 @@ export const deleteCartItem = createAsyncThunk("cart/deleteCartItem", async (id,
   }
 });
 
+// Lấy trạng thái ban đầu từ sessionStorage
+const initialState = {
+  items: JSON.parse(sessionStorage.getItem("cartItems")) || [],
+  isLoading: false,
+  error: null,
+};
+
 const cartSlice = createSlice({
   name: "cart",
   initialState: {
-    items: [], // Danh sách sản phẩm trong giỏ hàng
-    isLoading: false, // Trạng thái đang tải
-    error: null, // Trạng thái lỗi
+    items: JSON.parse(sessionStorage.getItem("cartItems")) || [],
+    isLoading: false,
+    error: null,
+    isConfirmingRemove: false,
+    productToRemove: null,
   },
-  reducers: {},
+  reducers: {
+    requestRemoveItem(state, action) {
+      state.isConfirmingRemove = true;
+      state.productToRemove = action.payload;
+    },
+    confirmRemoveItem(state) {
+      state.items = state.items.filter((item) => item.id !== state.productToRemove.id);
+      state.isConfirmingRemove = false;
+      state.productToRemove = null;
+      sessionStorage.setItem("cartItems", JSON.stringify(state.items));
+    },
+    cancelRemoveItem(state) {
+      state.isConfirmingRemove = false;
+      state.productToRemove = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchCartItems.pending, (state) => {
@@ -118,6 +92,7 @@ const cartSlice = createSlice({
       .addCase(fetchCartItems.fulfilled, (state, action) => {
         state.isLoading = false;
         state.items = action.payload;
+        sessionStorage.setItem("cartItems", JSON.stringify(state.items));
       })
       .addCase(fetchCartItems.rejected, (state, action) => {
         state.isLoading = false;
@@ -125,18 +100,27 @@ const cartSlice = createSlice({
       })
       .addCase(createCartItem.fulfilled, (state, action) => {
         state.items.push(action.payload);
+        sessionStorage.setItem("cartItems", JSON.stringify(state.items));
+      })
+      .addCase(createCartItem.rejected, (state, action) => {
+        state.error = action.payload;
       })
       .addCase(updateCartItem.fulfilled, (state, action) => {
         const index = state.items.findIndex((item) => item.id === action.payload.id);
         if (index !== -1) {
-          state.items[index].quantity = action.payload.quantity; // Cập nhật số lượng
+          state.items[index].quantity = action.payload.quantity;
+          sessionStorage.setItem("cartItems", JSON.stringify(state.items));
         }
       })
       .addCase(deleteCartItem.fulfilled, (state, action) => {
-        state.items = state.items.filter((item) => item.id !== action.payload.id); // Xóa sản phẩm
+        state.items = state.items.filter((item) => item.id !== action.payload.id);
+        sessionStorage.setItem("cartItems", JSON.stringify(state.items));
       });
   },
 });
 
-export default cartSlice.reducer;
 
+export const { requestRemoveItem, confirmRemoveItem, cancelRemoveItem } = cartSlice.actions;
+
+
+export default cartSlice.reducer;
