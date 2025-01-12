@@ -4,6 +4,7 @@ import orderApi from "../../api/orderApi";
 import PaymentStatusModal from "./paymentStatus"; // Modal hiển thị trạng thái thanh toán
 import { useDispatch } from "react-redux";
 import { deleteCartItem, fetchCartItems } from "../../redux/cartSlice";
+import { clearPayment } from "../../redux/paymentSlice";
 const ConfirmPayment = ({ formData }) => {
   const cartItems = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
@@ -41,6 +42,7 @@ const ConfirmPayment = ({ formData }) => {
       setStatus("success");
       setMessage("Cảm ơn bạn đã mua sắm! Đơn hàng của bạn đã được xử lý.");
       dispatch(deleteCartItem(cartItems.map((item) => item.id)));
+      dispatch(clearPayment()); // Xóa thông tin thanh toán trong Redux
       dispatch(fetchCartItems());
     } catch (error) {
       console.error("Lỗi khi thanh toán:", error);
