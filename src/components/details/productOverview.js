@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createCartItem } from "../../redux/cartSlice";
-import { addToLove, removeFromLove } from "../../redux/loveSlice";
+import { addToLove, removeFromLove, setCurrentUser } from "../../redux/loveSlice";
 import { AiOutlineHeart, AiFillHeart, AiOutlineShareAlt } from "react-icons/ai";
 import GetInterfaceProduct from "../storemanager/getInterfaceProduct";
 
@@ -9,7 +9,7 @@ const ProductOverview = ({ product, quantity, increaseQuantity, decreaseQuantity
   const dispatch = useDispatch();
   const lovedItems = useSelector((state) => state.love.items);
   const [notification, setNotification] = useState({ show: false, message: "" });
-
+  // dispatch(setCurrentUser(userId))
   const isFavorite = lovedItems.some((item) => item.productId === product.id);
 
   const showNotification = (message) => {

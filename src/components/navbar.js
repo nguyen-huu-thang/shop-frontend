@@ -11,6 +11,7 @@ import { CiMenuBurger } from "react-icons/ci";
 import { BsChevronDown, BsChevronRight } from "react-icons/bs";
 import { logout, fetchCurrentUser } from '../redux/userSlice';
 import CartTotalQuantity from "./cart/cartTotalQuantity";
+
 function Navbar() {
     const [sidebarVisible, setSidebarVisible] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -46,6 +47,7 @@ function Navbar() {
 
     const toggleSearchSidebar = () => setSearchSidebarOpen(!searchSidebarOpen);
     const { accessToken, user } = useSelector((state) => state.user);
+    console.log(user);
     const dispatch = useDispatch();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Trạng thái dropdown
 

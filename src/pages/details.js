@@ -6,6 +6,7 @@ import ProductOverview from "../components/details/productOverview";
 import ProductDetails from "../components/details/productDetails";
 import Notification from "../components/details/notification";
 import Navbar from "../components/navbar";
+
 const DetailsPage = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);

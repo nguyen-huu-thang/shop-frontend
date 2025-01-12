@@ -98,14 +98,35 @@ const Category = () => {
     <div>
       <Navbar />
       <Banner />
-      <div className="container mx-auto p-5">
-        <nav className="text-gray-600 mb-5">
-          <Link to="/" className="hover:underline">Trang chủ</Link>
-          <span className="mx-2">/</span>
-          <span>{categoryInfo.name}</span>
+      <div className="mx-auto w-full">
+        <nav className="text-gray-700 mb-3 border-t border-b py-3 bg-gray-200 w-full">
+          <div className="mx-auto px-5">
+            <Link to="/" className="hover:underline">Trang chủ</Link>
+            <span className="mx-2">/</span>
+            <span>{categoryInfo.name}</span>
+          </div>
         </nav>
-        <h1 className="text-2xl font-bold mb-5">{categoryInfo.name}</h1>
-        <div className="grid lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 gap-2 m-20">
+        <div className="flex justify-between">
+          <h1 className="text-2xl font-bold mb-3 py-3 px-5">{categoryInfo.name}</h1>
+          <div className="flex justify-center items-center space-x-2 mb-3 py-3 px-5">
+            <span className="text-lg font-semibold underline">Sản phẩm nổi bật</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+              />
+            </svg>
+          </div>
+        </div>
+        <div className="grid lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 gap-2 m-10">
           {products
             .filter((product) => product && product.price !== null)
             .map((product, key) => (

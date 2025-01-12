@@ -17,11 +17,12 @@ import CategoryList from './utils/categoryList';
 import BestSell from './pages/bestsell';
 import Special from './pages/special';
 import CartList from './utils/cartList';
-// import FileList from './utils/fileList';
+import User from './utils/user';
 function App() {
   return (
     <BrowserRouter>
       <TokenRefresher />
+      <User />
       <CategoryList />
       <CartList />
       {/* <FileList /> */}

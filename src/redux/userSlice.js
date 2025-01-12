@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { setCurrentUser } from './loveSlice';
 import securityApi from "../api/securityApi";
 import userApi from "../api/userApi";
 // Thunk để làm mới Access Token
@@ -66,13 +67,31 @@ const userSlice = createSlice({
         state.accessToken = action.payload;
       })
       .addCase(fetchCurrentUser.fulfilled, (state, action) => {
-        state.user = action.payload; // Gán toàn bộ đối tượng làm user
+        state.user = action.payload;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.user = action.payload;
       });
   },
 });
+export const loginUser = (userData) => async (dispatch) => {
+  dispatch(userSlice.actions.setUser(userData));
+  try {
+    const user = await dispatch(fetchCurrentUser()).unwrap(); // Lấy user từ backend
+    if (user && user.id) {
+      dispatch(setCurrentUser(user.id)); // Đồng bộ currentUserId với loveSlice
+    } else {
+      console.warn("No valid user ID found after login.");
+    }
+  } catch (error) {
+    console.error("Failed to fetch user after login:", error);
+  }
+};
+
+export const logoutUser = () => (dispatch) => {
+  dispatch(userSlice.actions.logout()); // Đăng xuất người dùng
+  dispatch(setCurrentUser(null)); // Xóa danh mục yêu thích
+};
 
 export const { setUser, logout } = userSlice.actions;
 export default userSlice.reducer;
