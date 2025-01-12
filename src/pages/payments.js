@@ -22,6 +22,10 @@ const Payments = () => {
               Trang chủ
               </Link>
               <span className="mx-2">&gt;</span> {/* Dấu > */}
+              <Link to="/cart" className="text-white hover:text-gray-300 font-medium">
+              Giỏ hàng
+              </Link>
+              <span className="mx-2">&gt;</span> {/* Dấu > */}
               <span>Thanh toán</span>
           </div>
 

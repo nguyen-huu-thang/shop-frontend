@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { updateCartItem, deleteCartItem, fetchCartItems } from "../../redux/cartSlice";
 import GetInterfaceProduct from "../storemanager/getInterfaceProduct";
 import Confirm from "../../components/confirm";
-import { addToPayment, removeFromPayment } from "../../redux/paymentSlice";
+import { addToPayment, removeFromPayment, updatePaymentQuantity} from "../../redux/paymentSlice";
 import productApi from "../../api/productApi";
 
 const CartItem = ({ item }) => {
@@ -34,11 +34,13 @@ const CartItem = ({ item }) => {
 
   const handleIncrease = () => {
     dispatch(updateCartItem({ id: item.id, data: { quantity: item.quantity + 1 } }));
+    dispatch(updatePaymentQuantity({ id: item.id, quantity: item.quantity + 1 }));
   };
 
   const handleDecrease = () => {
     if (item.quantity > 1) {
       dispatch(updateCartItem({ id: item.id, data: { quantity: item.quantity - 1 } }));
+      dispatch(updatePaymentQuantity({ id: item.id, quantity: item.quantity - 1 }));
     } else {
       handleShowConfirm();
     }
@@ -46,6 +48,7 @@ const CartItem = ({ item }) => {
 
   const handleDelete = () => {
     dispatch(deleteCartItem(item.id));
+    dispatch(removeFromPayment(item));
     dispatch(fetchCartItems());
     setShowConfirm(false);
   };
