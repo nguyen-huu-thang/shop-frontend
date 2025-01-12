@@ -11,6 +11,10 @@ const Category = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+    // Phân trang
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 18; // Số sản phẩm trên mỗi trang
+
   const categoryMap = {
     fashion: { name: "Thời trang", id: "2" },
     shoes: { name: "Giày dép", id: "10" },
@@ -94,6 +98,12 @@ const Category = () => {
     fetchProducts();
   }, [categoryInfo.id, categoryTree]);
 
+  // Tính toán danh sách sản phẩm hiển thị
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentProducts = products.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(products.length / itemsPerPage);
+
   return (
     <div>
       <Navbar />
@@ -127,10 +137,30 @@ const Category = () => {
           </div>
         </div>
         <div className="grid lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 gap-2 m-10">
-          {products
-            .filter((product) => product && product.price !== null)
-            .map((product, key) => (
-              <ProductCart key={key} data={product} />
+          {loading ? (
+            <p>Đang tải...</p>
+          ) : error ? (
+            <p>{error}</p>
+          ) : currentProducts.length > 0 ? (
+            currentProducts
+              .filter((product) => product && product.price !== null)
+              .map((product, key) => <ProductCart key={key} data={product} />)
+          ) : (
+            <p>Không tìm thấy sản phẩm.</p>
+          )}
+        </div>
+        {/* Phân trang */}
+        <div className="flex justify-center items-center my-4">
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i + 1}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`px-4 py-2 mx-1 border rounded ${
+                currentPage === i + 1 ? "bg-blue-600 text-white" : "bg-gray-200"
+              }`}
+            >
+              {i + 1}
+            </button>
           ))}
         </div>
       </div>

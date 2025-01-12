@@ -160,13 +160,13 @@ function Navbar() {
                                     <div className="grid grid-rows p-1 gap-1">
                                         <ShoppingCartIcon />
                                     </div>
-                                    <div className="grid grid-cols-2 gap-2 absolute bottom-10 left-0 w-full p-4">
+                                    <div className="grid grid-cols-1 gap-2 absolute bottom-10 left-0 w-full p-4">
                                         <Link to="/cart">
                                             <button className="bg-red-500 text-white py-2 px-2 rounded-md w-full">Xem giỏ hàng</button>
                                         </Link>
-                                        <Link to="/payments">
+                                        {/* <Link to="/payments">
                                             <button className="bg-red-500 text-white py-2 px-2 rounded-md w-full">Thanh toán</button>
-                                        </Link>
+                                        </Link> */}
                                     </div>
                                 </div>
                             </>

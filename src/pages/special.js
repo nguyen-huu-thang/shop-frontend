@@ -40,8 +40,9 @@ const Special = () => {
           </div>
         </div>
         <SpecialProducts />
+      </div>
     </div>
   )
 }
 
-export default Special
+export default Special;

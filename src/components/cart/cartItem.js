@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { updateCartItem, deleteCartItem, fetchCartItems } from "../../redux/cartSlice";
 import GetInterfaceProduct from "../storemanager/getInterfaceProduct";
 import Confirm from "../../components/confirm";
+import { addToPayment, removeFromPayment } from "../../redux/paymentSlice";
 import productApi from "../../api/productApi";
 
 const CartItem = ({ item }) => {
@@ -11,6 +13,8 @@ const CartItem = ({ item }) => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const paymentItems = useSelector((state) => state.payment.selectedItems);
+  const isSelected = paymentItems.some((i) => i.id === item.id);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -54,19 +58,40 @@ const CartItem = ({ item }) => {
     setShowConfirm(false);
   };
 
+  const handleToggleSelect = (e) => {
+    if (e.target.checked) {
+      dispatch(addToPayment(item));
+    } else {
+      dispatch(removeFromPayment(item));
+    }
+  };
+
   if (loading) return null;
   if (error) return null;
 
   return (
     <>
+      {/* Cột chọn sản phẩm */}
+      <td className="border border-gray-300 p-2 text-center">
+        <input
+          type="checkbox"
+          checked={isSelected}
+          onChange={handleToggleSelect}
+        />
+      </td>
+
       {/* Cột 1: Hình ảnh sản phẩm */}
       <td className="border border-gray-300 p-2 text-center">
-        <GetInterfaceProduct productId={item.productId} className="w-20 h-20 object-cover rounded-md" />
+        <Link to={`/details/${item.productId}`}>
+          <GetInterfaceProduct productId={item.productId} className="w-20 h-20 object-cover rounded-md" />
+        </Link>
       </td>
 
       {/* Cột 2: Thông tin sản phẩm */}
       <td className="border border-gray-300 p-2">
-        <h3 className="text-lg font-semibold">{product.name}</h3>
+        <Link to={`/details/${item.productId}`} className="hover:underline text-lg font-semibold">
+          {product.name}
+        </Link>
         <p className="text-sm text-gray-600">
           Giá: {new Intl.NumberFormat("vi-VN").format(item.price)}đ
         </p>
