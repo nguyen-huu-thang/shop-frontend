@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import cartApi from "../api/cartApi";
-
 // Thunk để lấy tất cả sản phẩm trong giỏ hàng
 export const fetchCartItems = createAsyncThunk("cart/fetchCartItems", async (_, { rejectWithValue }) => {
   try {
@@ -23,7 +22,6 @@ export const createCartItem = createAsyncThunk("cart/createCartItem", async (dat
     if (existingItem) {
       throw new Error("Sản phẩm đã có trong giỏ hàng");
     }
-
     const response = await cartApi.createCartItem(data);
     return response;
   } catch (error) {
@@ -50,13 +48,6 @@ export const deleteCartItem = createAsyncThunk("cart/deleteCartItem", async (id,
     return rejectWithValue(error.message);
   }
 });
-
-// Lấy trạng thái ban đầu từ sessionStorage
-const initialState = {
-  items: JSON.parse(sessionStorage.getItem("cartItems")) || [],
-  isLoading: false,
-  error: null,
-};
 
 const cartSlice = createSlice({
   name: "cart",

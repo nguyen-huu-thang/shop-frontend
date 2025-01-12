@@ -12,6 +12,7 @@ const CartList = () => {
           {/* Header của bảng */}
           <thead>
             <tr className="bg-gray-100 text-center">
+              <th className="border border-gray-300 p-2">Chọn mua</th>
               <th className="border border-gray-300 p-2">Ảnh</th>
               <th className="border border-gray-300 p-2">Thông tin</th>
               <th className="border border-gray-300 p-2">Số lượng</th>

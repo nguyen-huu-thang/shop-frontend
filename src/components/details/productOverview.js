@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createCartItem } from "../../redux/cartSlice";
-import { addToLove, removeFromLove, setCurrentUser } from "../../redux/loveSlice";
+import { createCartItem, fetchCartItems } from "../../redux/cartSlice";
+import { addToLove, removeFromLove} from "../../redux/loveSlice";
 import { AiOutlineHeart, AiFillHeart, AiOutlineShareAlt } from "react-icons/ai";
 import GetInterfaceProduct from "../storemanager/getInterfaceProduct";
-
+import api from "../../api/api";
+import { useNavigate } from "react-router-dom";
 const ProductOverview = ({ product, quantity, increaseQuantity, decreaseQuantity }) => {
   const dispatch = useDispatch();
   const lovedItems = useSelector((state) => state.love.items);
   const [notification, setNotification] = useState({ show: false, message: "" });
-  // dispatch(setCurrentUser(userId))
   const isFavorite = lovedItems.some((item) => item.productId === product.id);
-
+  const navigate = useNavigate();
   const showNotification = (message) => {
     setNotification({ show: true, message });
     setTimeout(() => setNotification({ show: false, message: "" }), 3000);
@@ -19,16 +19,39 @@ const ProductOverview = ({ product, quantity, increaseQuantity, decreaseQuantity
 
   const handleAddToCart = async () => {
     try {
-      await dispatch(createCartItem({ productOptionId: product.id, quantity })).unwrap();
+      const response = await api.get(`/products/${product.id}/option-default`);
+      console.log(response);
+      await dispatch(createCartItem({ productOptionId: response.data.id, quantity })).unwrap();
       showNotification(`${product.name} đã được thêm vào giỏ hàng!`);
     } catch (error) {
       showNotification("Thêm vào giỏ hàng thất bại!");
     }
   };
 
-  const handleBuyNow = () => {
-    showNotification(`Bạn đã mua ngay sản phẩm: ${product.name}`);
-  };
+  const handleBuyNow = async () => {
+    try {
+      // Gọi API để lấy thông tin product option
+      const response = await api.get(`/products/${product.id}/option-default`);
+  
+      // Thêm sản phẩm vào giỏ hàng
+      const cartItem = {
+        productOptionId: response.data.id,
+        quantity : 1,
+      };
+      await dispatch(createCartItem(cartItem)).unwrap();
+      await dispatch(fetchCartItems(cartItem))
+      // Thêm sản phẩm vào danh sách thanh toán
+      // const paymentItem = {
+      //   ...cartItem,
+      //   name: product.name,
+      //   price: product.price,
+      // };
+      // dispatch(addToPayment(paymentItem));
+      navigate("/cart");
+    } catch (error) {
+      showNotification("Không thể mua ngay sản phẩm này!");
+    }
+  };  
 
   const handleToggleFavorite = () => {
     if (isFavorite) {
