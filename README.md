@@ -7,29 +7,31 @@
 
 ---
 
-
 ## Yêu cầu hệ thống
 
 - **Node.js**: Phiên bản `22.11.0` hoặc tương thích.
+
 - **npm**: Được cài đặt kèm Node.js.
+
 ---
-
-
 
 ## Hướng dẫn cài đặt
 
 1. **Clone dự án từ GitHub**:
+
    ```bash
    git clone https://github.com/Huutkang/shop-frontend.git
    cd shop-frontend
    ```
 
 2. **Cài đặt các thư viện**:
+
    ```bash
    npm install
    ```
 
 3. **Khởi chạy ứng dụng**:
+
    ```bash
    npm start
    ```
@@ -47,16 +49,20 @@
 
 2. **Pull mã nguồn trước khi làm việc**:
    - Để đảm bảo mã nguồn của bạn luôn cập nhật:
+
      ```bash
      git pull origin main
      ```
 
 3. **Commit và đẩy lên nhánh cá nhân**:
    - chuyển sang nhánh các nhân nếu bạn ở nhánh khác
+
       ```bash
       git branch -M <tên_nhánh cá nhân>
       ```
+
    - Sau khi hoàn thành công việc, hãy commit và đẩy mã lên nhánh của bạn:
+
      ```bash
      git add .
      git commit -m "Mô tả thay đổi"
@@ -75,9 +81,11 @@
 
 2. **Cài đặt thư viện mới**:
    - Nếu cần cài đặt thư viện mới, hãy chạy:
+
      ```bash
      npm install <tên_thư_viện>
      ```
+
    - Sau đó, commit thay đổi trong file `package.json` và `package-lock.json`.
 
 3. **Liên hệ**:
