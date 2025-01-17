@@ -93,7 +93,7 @@ const ChangeProfile = () => {
         </div>
         <input
           type="email"
-          value={""}
+          value={newData.email || ""}
           onChange={(e) => setNewData({ ...newData, email: e.target.value })}
           className="w-full p-2 border rounded-lg"
           placeholder="Nhập email mới"
@@ -106,7 +106,7 @@ const ChangeProfile = () => {
         </div>
         <input
           type="text"
-          value={""}
+          value={newData.phone || ""}
           onChange={(e) => setNewData({ ...newData, phone: e.target.value })}
           className="w-full p-2 border rounded-lg"
           placeholder="Nhập số điện thoại mới"
