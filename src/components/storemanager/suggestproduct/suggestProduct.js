@@ -3,22 +3,31 @@ import productApi from "../../../api/productApi";
 import DeleteFromSuggest from "./deleteFromSuggest";
 import DeleteAllSuggestProduct from "./deleteAllFromSuggest";
 import GetInterfaceProduct from "../getInterfaceProduct";
+import Pagination from "./paginationSuggestProduct"; // Import component Pagination
 
 function SuggestProduct() {
   const [suggestedProducts, setSuggestedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1); // Trạng thái của trang hiện tại
+  const productsPerPage = 10; // Số sản phẩm mỗi trang
 
-  const refreshSuggestedProducts = async () => {
+  // Hàm tính toán phân trang và lấy sản phẩm cho mỗi trang
+  const refreshSuggestedProducts = async (page) => {
     const suggestions = JSON.parse(localStorage.getItem("suggestions")) || [];
     if (suggestions.length === 0) {
       setSuggestedProducts([]);
       return;
     }
 
+    // Giới hạn sản phẩm theo trang
+    const startIndex = (page - 1) * productsPerPage;
+    const endIndex = startIndex + productsPerPage;
+    const paginatedSuggestions = suggestions.slice(startIndex, endIndex);
+
     try {
       const products = await Promise.all(
-        suggestions.map(async (id) => {
+        paginatedSuggestions.map(async (id) => {
           const product = await productApi.getProductById(id);
           return product;
         })
@@ -30,9 +39,9 @@ function SuggestProduct() {
   };
 
   useEffect(() => {
-    refreshSuggestedProducts();
+    refreshSuggestedProducts(currentPage);
     setLoading(false);
-  }, []);
+  }, [currentPage]); // Khi currentPage thay đổi, sẽ tải lại sản phẩm cho trang đó
 
   if (loading) {
     return <div>Đang tải...</div>;
@@ -41,6 +50,10 @@ function SuggestProduct() {
   if (error) {
     return <div>{error}</div>;
   }
+
+  // Tính tổng số trang dựa trên số lượng sản phẩm trong localStorage
+  const suggestions = JSON.parse(localStorage.getItem("suggestions")) || [];
+  const totalPages = Math.ceil(suggestions.length / productsPerPage);
 
   return (
     <div>
@@ -84,6 +97,13 @@ function SuggestProduct() {
           )}
         </tbody>
       </table>
+
+      {/* Component Pagination */}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage} // Cập nhật trang khi người dùng chọn trang mới
+      />
     </div>
   );
 }

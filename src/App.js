@@ -12,6 +12,7 @@ import Cart from './pages/cart';
 import Payments from './pages/payments';
 import Love from './pages/love';
 import Category from './pages/category';
+import SearchResults from "./pages/searchResult";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CategoryList from './utils/categoryList';
 import BestSell from './pages/bestsell';
@@ -48,6 +49,7 @@ function App() {
         <Route path="/category/:category" element={<Category />} />
         <Route path="/bestsell" element={<BestSell />} />
         <Route path="/special" element={<Special />} />
+        <Route path="/search/products" element={<SearchResults />} />
       </Routes>
     </BrowserRouter>
   );

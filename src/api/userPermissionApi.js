@@ -7,7 +7,7 @@ const userPermissionApi = {
    */
   getAllPermissions: async () => {
     try {
-      const response = await api.get("/api/user-permissions");
+      const response = await api.get("/api/permission");
       return response.data;
     } catch (error) {
       console.error("Error fetching permissions:", error);
@@ -33,48 +33,63 @@ const userPermissionApi = {
   /**
    * Gán quyền mới cho người dùng.
    * @param {Object} permissionData - Dữ liệu quyền cần gán.
+   * @param {number} userId
    * @returns {Promise<Object>} Quyền vừa được gán.
    */
-  assignPermission: async (permissionData) => {
+  assignPermissions: async ({ userId, permissionData }) => {
     try {
-      const response = await api.post("/api/user-permissions", permissionData);
-      return response.data;
+      const response = await api.post("/api/user-permissions", {
+        user_id: userId,
+        permissions:permissionData ,
+      });
+      return response.data; // Trả về kết quả gán quyền
     } catch (error) {
-      console.error("Error assigning permission:", error);
+      console.error("Error assigning permissions:", error);
       throw error;
     }
   },
 
   /**
    * Cập nhật quyền của người dùng.
-   * @param {number} id - ID của quyền cần cập nhật.
+   * @param {number} userId - ID của người dùng cần cập nhật quyền.
    * @param {Object} permissionData - Dữ liệu cập nhật.
    * @returns {Promise<Object>} Quyền đã được cập nhật.
    */
-  updatePermission: async (id, permissionData) => {
+  // Cập nhật quyền cho người dùng
+  updatePermissions: async ({ userId, permissionData }) => {
     try {
-      const response = await api.put(`/api/user-permissions/${id}`, permissionData);
-      return response.data;
+      const response = await api.put("/api/user-permissions", {
+        user_id: userId,
+        permissions: permissionData,
+      });
+      return response.data; // Trả về kết quả cập nhật quyền
     } catch (error) {
-      console.error(`Error updating permission with ID ${id}:`, error);
+      console.error("Error updating permissions:", error);
       throw error;
     }
   },
 
   /**
-   * Xóa quyền của người dùng.
-   * @param {number} id - ID của quyền cần xóa.
-   * @returns {Promise<Object>} Kết quả xóa quyền.
-   */
-  deletePermission: async (id) => {
+ * Thu hồi quyền của người dùng.
+ * @param {Object} params - Thông tin cần thiết để thu hồi quyền.
+ * @param {number} params.userId - ID của người dùng.
+ * @param {string[]} params.permissions - Danh sách quyền cần thu hồi.
+ * @returns {Promise<Object>} Thông báo kết quả thu hồi quyền.
+ */
+  revokePermissions: async ({ userId, permissions }) => {
     try {
-      const response = await api.delete(`/api/user-permissions/${id}`);
-      return response.data;
+      const response = await api.delete("/api/user-permissions", {
+        data: {
+          user_id: userId,
+          permissions: permissions,
+        },
+      });
+      return response.data; // Trả về thông báo kết quả
     } catch (error) {
-      console.error(`Error deleting permission with ID ${id}:`, error);
+      console.error("Error revoking permissions:", error);
       throw error;
     }
-  },
+  }
 };
 
 export default userPermissionApi;

@@ -1,40 +1,58 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from 'react-redux';
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import productApi from "../../api/productApi";
 import DeleteProduct from "./deleteproduct";
 import GetInterfaceProduct from "./getInterfaceProduct";
 import AddToSuggest from "./suggestproduct/addToSuggest";
 import AddToBestSell from "./bestsellproduct/addToBestSell";
 import AddToSpecial from "./specialproduct/addToSpecial";
+import Pagination from "../pagination"; // Import component Pagination
+
 function ViewProduct() {
   const [productList, setProductList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [expandedProducts, setExpandedProducts] = useState({});
   const { items: categories, loading: categoryLoading } = useSelector((state) => state.categories);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
+  const [totalPages, setTotalPages] = useState(20); // Default to 1 or calculated from the totalItems
+  const { search } = useLocation();  // Đọc tham số trong URL
+  const navigate = useNavigate();
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const storedProducts = sessionStorage.getItem("products");
-        if (storedProducts) {
-          setProductList(JSON.parse(storedProducts))
-        } else {
-          const products = await productApi.getProducts();
-          if (products) {
-            sessionStorage.setItem("products", JSON.stringify(products));
-            setProductList(products);
-          }
-        }  
-      } catch (err) {
-        setError("Không thể tải danh sách sản phẩm.");
-      } finally {
-        setLoading(false);
+    fetchProducts(currentPage);
+  }, [currentPage]);
+  useEffect(() => {
+    const queryParams = new URLSearchParams(search);
+    const pageFromUrl = parseInt(queryParams.get("page") || "1"); // Lấy số trang từ URL
+    setCurrentPage(pageFromUrl);
+    fetchProducts(pageFromUrl);  // Lấy sản phẩm theo trang
+  }, [search]);
+  const fetchProducts = async (page = 1) => {
+    try {
+      const result = await productApi.getPaginatedProducts(page, itemsPerPage);
+      if (Array.isArray(result)) {
+        setProductList(result);
+        setTotalPages(20); // Dynamically calculate total pages
+      } else {
+        console.error("API response không đúng định dạng:", result);
+        setProductList([]);
+        setTotalPages(1); // Fallback to a default value
       }
-    };
+    } catch (err) {
+      setError("Không thể tải danh sách sản phẩm.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchProducts();
-  }, []);
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+      navigate(`/storemanager/view?page=${page}`);  // Thay đổi URL khi chuyển trang
+    }
+  };
 
   const handleToggleDescription = (productId) => {
     setExpandedProducts((prev) => ({
@@ -79,12 +97,7 @@ function ViewProduct() {
                 <tr key={product.id}>
                   <td className="border p-2 break-words">{product.name}</td>
                   <td className="border p-2">
-                    {/* <img
-                      src={product.imageUrl || "/default-image.png"}
-                      alt={product.name}
-                      className="w-16 h-16 object-cover"
-                    /> */}
-                    <GetInterfaceProduct productId={product.id} className="w-16 h-16 object-cover"/>
+                    <GetInterfaceProduct productId={product.id} className="w-16 h-16 object-cover" />
                   </td>
                   <td className="border p-2">
                     {product.price ? product.price.toLocaleString() + " đ" : "N/A"}
@@ -137,7 +150,6 @@ function ViewProduct() {
                     <AddToSuggest productId={product.id} />
                     <AddToBestSell productId={product.id} />
                     <AddToSpecial productId={product.id} />
-
                   </td>
                 </tr>
               );
@@ -151,6 +163,13 @@ function ViewProduct() {
           )}
         </tbody>
       </table>
+
+      {/* Pagination Component */}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 }

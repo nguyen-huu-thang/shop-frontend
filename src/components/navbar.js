@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import Logo from '../assets/logo1.png';
-import { MdSearch } from "react-icons/md";
 import { CiShoppingCart } from "react-icons/ci";
 import { AiOutlineUser } from "react-icons/ai";
 import { Link } from "react-router-dom";
@@ -11,7 +10,7 @@ import { CiMenuBurger } from "react-icons/ci";
 import { BsChevronDown, BsChevronRight } from "react-icons/bs";
 import { logout, fetchCurrentUser } from '../redux/userSlice';
 import CartTotalQuantity from "./cart/cartTotalQuantity";
-
+import SearchBar from "./searchbar";
 function Navbar() {
     const [sidebarVisible, setSidebarVisible] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -124,17 +123,7 @@ function Navbar() {
                 {/* Right side icons (Search, Heart, Cart, User) */}
                 <div className="flex items-center space-x-6">
                     {/* Search */}
-                    <button className="lg:hidden text-xl cursor-pointer" onClick={toggleSearchSidebar}>
-                        <MdSearch />
-                    </button>
-                    <div className="relative hidden lg:block">
-                        <input
-                            type="text"
-                            placeholder="Search"
-                            className="w-80 h-10 px-4 pr-10 rounded-full border border-gray-400 focus:border-gray-300 focus:outline-none"
-                        />
-                        <MdSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
-                    </div>
+                    <SearchBar></SearchBar>
 
                     {/* Heart (Favorites) */}
                     <Link to="/love">

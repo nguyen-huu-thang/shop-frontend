@@ -1,38 +1,48 @@
-import React, { useEffect, useState } from "react";
-import productApi from "../../../api/productApi";
-import DeleteAllBestSellProduct from "./deleteAllFromBestSell";
+import React, { useEffect, useState } from 'react';
+import productApi from '../../../api/productApi';
 import GetInterfaceProduct from "../getInterfaceProduct";
-import DeleteFromBestSell from "./deleteFromBestSell";
+
+import Pagination from "./paginationBestSellProduct"; // Import component Pagination
+import DeleteAllBestSellProduct from './deleteAllFromBestSell';
+import DeleteFromBestSell from './deleteFromBestSell';
 
 function BestSellProduct() {
   const [bestSellProducts, setBestSellProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1); // Trạng thái của trang hiện tại
+  const productsPerPage = 10; // Số sản phẩm mỗi trang
 
-  const refreshBestSellProducts = async () => {
-    const bestsell = JSON.parse(localStorage.getItem("bestSells")) || [];
-    if (bestsell.length === 0) {
+  // Hàm tính toán phân trang và lấy sản phẩm cho mỗi trang
+  const refreshBestSellProducts = async (page) => {
+    const bestSellProduct = JSON.parse(localStorage.getItem("bestSells")) || [];
+    if (bestSellProduct.length === 0) {
       setBestSellProducts([]);
       return;
     }
 
+    // Giới hạn sản phẩm theo trang
+    const startIndex = (page - 1) * productsPerPage;
+    const endIndex = startIndex + productsPerPage;
+    const paginationBestSellProducts = bestSellProduct.slice(startIndex, endIndex);
+
     try {
       const products = await Promise.all(
-        bestsell.map(async (id) => {
+        paginationBestSellProducts.map(async (id) => {
           const product = await productApi.getProductById(id);
           return product;
         })
       );
       setBestSellProducts(products);
     } catch (err) {
-      setError("Không thể tải danh sách sản phẩm bán chạy.");
+      setError("Không thể tải danh sách sản phẩm ưu đãi.");
     }
   };
 
   useEffect(() => {
-    refreshBestSellProducts();
+    refreshBestSellProducts(currentPage);
     setLoading(false);
-  }, []);
+  }, [currentPage]); // Khi currentPage thay đổi, sẽ tải lại sản phẩm cho trang đó
 
   if (loading) {
     return <div>Đang tải...</div>;
@@ -42,10 +52,14 @@ function BestSellProduct() {
     return <div>{error}</div>;
   }
 
+  // Tính tổng số trang dựa trên số lượng sản phẩm trong localStorage
+  const bestSellProduct = JSON.parse(localStorage.getItem("bestSells")) || [];
+  const totalPages = Math.ceil(bestSellProduct.length / productsPerPage);
+
   return (
     <div>
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold mb-2">Danh sách sản phẩm bán chạy</h2>
+        <h2 className="text-xl font-semibold mb-2">Danh sách sản phẩm ưu đãi</h2>
         <DeleteAllBestSellProduct onRefresh={refreshBestSellProducts} />
       </div>
       <table className="min-w-full border-collapse table-fixed">
@@ -84,10 +98,15 @@ function BestSellProduct() {
           )}
         </tbody>
       </table>
+
+      {/* Component Pagination */}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage} // Cập nhật trang khi người dùng chọn trang mới
+      />
     </div>
   );
 }
 
-
 export default BestSellProduct;
-

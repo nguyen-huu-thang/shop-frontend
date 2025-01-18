@@ -5,10 +5,10 @@ const productApi = {
    * Lấy danh sách sản phẩm.
    * @returns {Promise<Array>} Danh sách sản phẩm.
    */
-  getProducts: async () => {
+  getProducts: async ({ page, pageSize }) => {
     try {
-      const response = await api.get("/products");
-      return response.data; // Trả về danh sách sản phẩm
+      const response = await api.get(`/products?page=${page}&pageSize=${pageSize}`);
+      return response.data; // Giả sử API trả về { products, totalItems }
     } catch (error) {
       handleError(error);
     }
@@ -99,6 +99,31 @@ const productApi = {
     } catch (error) {
       handleError(error);
     }
+  },
+  /**
+ * Lấy danh sách sản phẩm có phân trang.
+ * @param {number} page - Trang hiện tại.
+ * @param {number} limit - Số sản phẩm trên mỗi trang.
+ * @returns {Promise<Object>} Danh sách sản phẩm và thông tin phân trang.
+ */
+  getPaginatedProducts: async (page = 1, limit = 10) => {
+    try {
+      const response = await api.get(`/products`, {
+        params: { page, limit }, // Tham số phân trang
+      });
+      console.log("Fetching Products with:", response.data);
+      return response.data; // Trả về dữ liệu sản phẩm
+    } catch (error) {
+      handleError(error);
+    }
+  },
+  searchProductsByKeywords: async (keywords) => {
+    const response = await api.get(`/search/products?keywords=${keywords}`);
+    console.log(response)
+    if (response.data.status !== "success") {
+      throw new Error("Không thể tải dữ liệu.");
+    }
+    return response.data;
   },
 
 };
