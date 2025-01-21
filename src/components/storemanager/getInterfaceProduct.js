@@ -35,7 +35,7 @@ const GetInterfaceProduct = ({ productId, className }) => {
             return;
           }
 
-          fileData.fullPath = `https://localhost:8000/data/${fileData.filePath.replace(/\\/g, "/")}`;
+          fileData.fullPath = `https://scime.click/data/${fileData.filePath.replace(/\\/g, "/")}`;
           setFile(fileData);
           setError(null); // Xóa lỗi sau khi thành công
         } else {
