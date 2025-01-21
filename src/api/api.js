@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Định nghĩa baseURL duy nhất
-const BASE_URL = 'https://localhost:8000/api';
+const BASE_URL = 'https://scime.click/api';
 
 // Tạo instance của Axios với baseURL
 const api = axios.create({
